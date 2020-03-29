@@ -17,13 +17,13 @@ We’re assuming that you set up a Cypress project and ran the example test suit
 
 We will start with extending the commands.js file.
 
-<iframe src="https://medium.com/media/37836aafe54b81c1a55eb3f452d5c991" frameborder=0></iframe>
+{% gist 401b6c37ed3191879a6292977ba09470 %}
 
-Append this code to your commands.js file. Now you can use cy.getWithinIframe('a selector') to target any element within the iframe.
+Append this code to your commands.js file. Now you can use `cy.getWithinIframe('a selector')` to target any element within the iframe.
 
-<iframe src="https://medium.com/media/a6af7bed4fd8d4a8b9bb76884faf0ab2" frameborder=0></iframe>
+{% gist 6f4d7e6a51013548508e513d47fde557 %}
 
-If you need greater flexibility you can use iframeLoaded and getInDocument as shown on the left. You can chain many Cypress commands after getInDocument.
+If you need greater flexibility you can use `iframeLoaded` and `getInDocument` as shown above. You can chain many Cypress commands after `getInDocument`.
 
 **Typing into Stripe Elements**
 
@@ -31,9 +31,9 @@ Now we’re able to fill out credit card details. In your browser’s [dev tools
 
 ![Iframe structure of Stripe Elements](https://cdn-images-1.medium.com/max/3300/1*uyKds_NEMJzxz3uJqJuE2Q.png)
 
-As you can see in the highlighted area, there’s an input that we can select with [name="cardnumber"]. With this information we can tell Cypress to fill out the test credit card number 4242 4242 4242 4242 as well as the other required information. The other input parts are exp-date, cvc and postal.
+As you can see in the highlighted area, there’s an input that we can select with `[name="cardnumber"]`. With this information we can tell Cypress to fill out the test credit card number `4242 4242 4242 4242` as well as the other required information. The other input parts are exp-date, cvc and postal.
 
-<iframe src="https://medium.com/media/60396f0258a3ad4f10d47665718634ec" frameborder=0></iframe>
+{% gist 6ad17009aae4709802e8211de3dd6264 %}
 
 Integrate the code into your test suite and run it. You should see Cypress filling out the credit details.
 
@@ -43,7 +43,7 @@ That’s it! You can now test your complete order process without any hacks.
 
 **Troubleshooting**
 
-If you’re running Cypress with Chrome you might have to disable [web security](https://docs.cypress.io/guides/guides/web-security.html#Limitations) by adding "chromeWebSecurity": false to the cypress.json file.
+If you’re running Cypress with Chrome you might have to disable [web security](https://docs.cypress.io/guides/guides/web-security.html#Limitations) by adding `"chromeWebSecurity": false` to the `cypress.json` file.
 
 **Open issues**
 
