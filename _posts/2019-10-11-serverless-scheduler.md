@@ -10,9 +10,9 @@ AWS offers many great services, but when it comes to ad hoc scheduling there is 
 
 ![Comparison of regular and irregular invocations](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)
 
-[Zac Charles](undefined) has shown [a couple ways to do serverless scheduling](https://medium.com/@zaccharles/there-is-more-than-one-way-to-schedule-a-task-398b4cdc2a75), each with their own drawbacks in terms of cost, accuracy or time in the future.
+[Zac Charles](https://twitter.com/zaccharles) has shown [a couple ways to do serverless scheduling](https://medium.com/@zaccharles/there-is-more-than-one-way-to-schedule-a-task-398b4cdc2a75), each with their own drawbacks in terms of cost, accuracy or time in the future.
 
-In [Yan Cui](undefined)’s [analysis](https://theburningmonk.com/2019/06/step-functions-as-an-ad-hoc-scheduling-mechanism/) of step functions as an ad hoc scheduling mechanism he lists three major criteria:
+In [Yan Cui](https://twitter.com/theburningmonk)’s [analysis](https://theburningmonk.com/2019/06/step-functions-as-an-ad-hoc-scheduling-mechanism/) of step functions as an ad hoc scheduling mechanism he lists three major criteria:
 
 1. **Precision**: how close to my scheduled time is the task executed? The closer, the better.
 
@@ -60,8 +60,9 @@ That’s it. You can use the [quickstart project](https://github.com/bahrmichael
 
 Let’s come back to the criteria mentioned in the intro: Precision, Scale and Hotspots.
 
-**Precision
-**Precision is probably the most important of all. Not many use cases are tolerant to events arriving minutes to hours late. A sub second delay however is viable for most use cases.
+**Precision**
+
+Precision is probably the most important of all. Not many use cases are tolerant to events arriving minutes to hours late. A sub second delay however is viable for most use cases.
 
 Over the last five days I create a base load of roughly 1000 events per hour. The emitter function logs the target timestamp and the current timestamp which are then compared to calculate the delay. Plotting this data gives us the graph below.
 
@@ -71,27 +72,33 @@ As you can see, the vast majority is well below 100 ms with the maximum getting 
 
 ![](https://cdn-images-1.medium.com/max/2000/1*LNkXRQ4Oaskb_DoDGpKJSg.png)
 
-**Scale
-**Scaling for many open tasks is an easy one here. SQS and DynamoDB don’t put a hard limit on how many items you can process. Therefore the serverless scheduler can hold millions and billions of events in storage for later processing.
+**Scale**
 
-<iframe src="https://medium.com/media/31e2ab38f0e6df13bd2f40deab8e77ed" frameborder=0></iframe>
+Scaling for many open tasks is an easy one here. SQS and DynamoDB don’t put a hard limit on how many items you can process. Therefore the serverless scheduler can hold millions and billions of events in storage for later processing.
 
-Based on a discussion with [Daniel Vassallo](undefined) I don’t believe SQS to become a bottleneck.
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The precision shouldn&#39;t be affected by the queue depth or the enqueue rate. It&#39;s more affected by the ability of the consumers to pull the data out. Once the data is enqueued, and it&#39;s timestamp (+ delay) is greater than the current timestamp, the message becomes available.</p>&mdash; Daniel Vassallo (@dvassallo) <a href="https://twitter.com/dvassallo/status/1182405324222779392?ref_src=twsrc%5Etfw">October 10, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
+
+Based on a discussion with [Daniel Vassallo](https://twitter.com/dvassallo) I don’t believe SQS to become a bottleneck.
 
 The only bottleneck is the event loader function. It does however use a dedicated index which helps to identify which items are soon to be scheduled. It then only loads the database IDs and hands them over to a scalable lambda function which then loads the whole event into the short term queue.
 
 Tests with varying loads showed that the bottleneck lambda function is able to process more than 100.000 events every minute or 4.3 billion events per month. Due to increased costs I did not run tests at higher scales. Contributions are welcome ;)
 
-**Hotspots
-**Hotspots can arise when a lot of events arrive at the input topic or are to be emitted within a very short time.
+**Hotspots**
+
+Hotspots can arise when a lot of events arrive at the input topic or are to be emitted within a very short time.
 
 DynamoDB is configured to use pay-per-request which should allow for nearly unlimited throughput spikes, however I had to add a retry mechanism when DynamoDB does internal auto scaling. The most time critical function, the *emitter*, does any possible database operations after emitting the events to the output topic.
 
 Both the SNS input topic and the SQS short term queue are not expected to become slow under high pressure, but the consuming lambdas could.
 
-<iframe src="https://medium.com/media/425d2a739bfd869fc99b3752c09229a5" frameborder=0></iframe>
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">So, Lambda might add some delays there. It doesn&#39;t scale up instantly, so if your queue were to receive a big burst of messages, it could take a few minutes for Lambda to ramp up its polling frequency. This behavior is described here in detail: <a href="https://t.co/4rCJGtxOvy">https://t.co/4rCJGtxOvy</a> <a href="https://t.co/0oeQiLuGLt">pic.twitter.com/0oeQiLuGLt</a></p>&mdash; Daniel Vassallo (@dvassallo) <a href="https://twitter.com/dvassallo/status/1182410032727482368?ref_src=twsrc%5Etfw">October 10, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
 
-[Randall Hunt](undefined) wrote an [AWS blog article](https://aws.amazon.com/blogs/aws/aws-lambda-adds-amazon-simple-queue-service-to-supported-event-sources/#additional-info-lambda-sqs) which takes a deep dive on concurrency and automatic scaling in this situation.
+[Randall Hunt](https://twitter.com/jrhunt) wrote an [AWS blog article](https://aws.amazon.com/blogs/aws/aws-lambda-adds-amazon-simple-queue-service-to-supported-event-sources/#additional-info-lambda-sqs) which takes a deep dive on concurrency and automatic scaling in this situation.
 > […] the Lambda service will begin polling the SQS queue using five parallel long-polling connections. The Lambda service monitors the number of inflight messages, and when it detects that this number is trending up, it will increase the polling frequency by 20 ReceiveMessage requests per minute and the function concurrency by 60 calls per minute.
 
 While cold starts of lambda functions can result in a slight increase of delays, the polling behaviour or an eventual lambda concurrency limit could lead to major delays.
@@ -104,10 +111,13 @@ To sum up the Hotspots section: Very sharp spikes with very high loads can becom
 
 I’m curious about an upcoming talk at re:Invent 2019 which takes a deep dive into SQS.
 
-<iframe src="https://medium.com/media/572f35a470a00019cbe9709d8d5bb2cc" frameborder=0></iframe>
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">If you are interested in the integration of SQS and AWS Lambda, this session at AWS re:Invent 2019 looks to get pretty deep:<br><br>API304 - &quot;Scalable serverless architectures using event-driven design&quot;<br><br>Recordings should be available on YouTube afterwards.<a href="https://t.co/pPpYf339dN">https://t.co/pPpYf339dN</a></p>&mdash; Eric Hammond (@esh) <a href="https://twitter.com/esh/status/1182472004185645056?ref_src=twsrc%5Etfw">October 11, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
 
-**Troubleshooting and Error Handling
-**Due to the asynchronous nature of the service, error handling is a bit trickier. I decided against an API Gateway endpoint to publish events due to its cost of 3.5$ per million events (compared to SNS’ 0.5$ per million events). Errors can be published to another output topic, the failure topic.
+**Troubleshooting and Error Handling**
+
+Due to the asynchronous nature of the service, error handling is a bit trickier. I decided against an API Gateway endpoint to publish events due to its cost of 3.5$ per million events (compared to SNS’ 0.5$ per million events). Errors can be published to another output topic, the failure topic.
 
 If the event is not published at your output topic, please first make sure you pushed a correct event to the input topic. It must contain all of the four fields *payload*, *date*, *target* and *user*. All of those must be strings.
 
