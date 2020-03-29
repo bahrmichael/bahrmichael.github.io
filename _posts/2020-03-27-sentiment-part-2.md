@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Stock Sentiment Analysis - Part 1: Collecting opinions"
+title: "Stock Sentiment Analysis - Part 2: Analysing the sentiment"
 ---
 
 In this two part article I will show you how to build an app, that collects people's opinions about companies and how to turn that into sentiments. Disclaimer: Trade at your own risk!
