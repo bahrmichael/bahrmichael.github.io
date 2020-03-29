@@ -71,7 +71,15 @@ There’s an improved version ready for you on [Github](https://github.com/bahrm
 
 Also follow AWS hero [Yan Cui](undefined) as he might release something related soon ;)
 
+{% raw %}
 <iframe src="https://medium.com/media/0f1438965bc7488c58a828fc40f4b584" frameborder=0></iframe>
+{% endraw %}
+
+test
+
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Haha yeah, it&#39;s in my backlog of things to catch up on after reinvent! Watch this space... patiently.. (lots to do after reinvent)</p>&mdash; Yan Cui (@theburningmonk) <a href="https://twitter.com/theburningmonk/status/1203005332483559431?ref_src=twsrc%5Etfw">December 6, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
 
 ## Further Reads
 
