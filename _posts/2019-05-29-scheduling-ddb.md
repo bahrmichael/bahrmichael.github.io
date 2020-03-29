@@ -73,7 +73,7 @@ You may create new entries manually through the DynamoDB management console or t
 
 Please check that line 8 of the *scheduler* has the table name you specified during the table setup.
 
-All that this function does, is to create a database entry with an id, a payload and a TTL attribute. The payload may be a dict, array or plain value. The ttl is measured in [seconds since the epoch](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html). We use the function *delay()* to add a little delay on top of the current time. The *delay()* function is where you can configure how long to wait before the entry should be converted into an invocation of the *executor* function.
+All that this function does, is to create a database entry with an id, a payload and a TTL attribute. The payload may be a dict, array or plain value. The ttl is measured in [seconds since the epoch](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html). We use the function *delay()
 
 The *put_item* from line 24 will cause an *INSERT* event to be pushed to the stream. According to line 8 of the *executor* we ignore *INSERT* events.
 
@@ -125,7 +125,7 @@ That’s it! We invoked a single lambda execution without the use of rate or cro
 
 From here you can play around with the [example](https://github.com/bahrmichael/lambda-scheduling-with-dynamodb) and try a couple things:
 
-1. Modify the delay e.g. by using Python’s *random.randint()* function. In a project where I use this approach, the delay can be between 10 minutes and 5 days.
+1. Modify the delay e.g. by using Python’s *random.randint()
 
 1. If you are using this approach to schedule a lot of executions (read: more than 100 per day), you should look into optimising the resources of your functions away from the default of 1GB RAM. You can do this by glancing over the logs and looking for the RAM usage, then estimating a number that will fit for all those executions or by using the [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) tool to estimate the perfect fit.
 

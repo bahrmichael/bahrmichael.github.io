@@ -18,5 +18,5 @@ Learn more and contribute on [GitHub](https://github.com/poole).
 
 ## Distribution
 
-Articles on this blog will also be published on [dev.to](https://dev.to/michabahr) and [medium](https://medium.com/@michabahr) with the help of [zapier](https://zapier.com/).
+Primary hosting is done with Gihub Pages. Articles on this blog will also be published on [dev.to](https://dev.to/michabahr) and [medium](https://medium.com/@michabahr) with the help of [zapier](https://zapier.com/).
 

@@ -8,7 +8,7 @@ description: This project allows developers to quickly schedule events with prec
 
 AWS offers many great services, but when it comes to ad hoc scheduling there is still potential. We use the term ad hoc scheduling for irregular point in time invocations, e.g. one in 32 hours and another one in 4 days.
 
-![Comparison of regular and irregular invocations](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)*Comparison of regular and irregular invocations*
+![Comparison of regular and irregular invocations](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)
 
 [Zac Charles](undefined) has shown [a couple ways to do serverless scheduling](https://medium.com/@zaccharles/there-is-more-than-one-way-to-schedule-a-task-398b4cdc2a75), each with their own drawbacks in terms of cost, accuracy or time in the future.
 
@@ -28,7 +28,7 @@ The service’s two interfaces are an SNS input topic which receives events to b
 
 Each input event must contain an ARN to the SNS output topic where the payload will be published to once the scheduled time arrives.
 
-![Architecture of the scheduling service](https://cdn-images-1.medium.com/max/2000/1*Oo2ZdWCZAcmZb4-50mUjyg.png)*Architecture of the scheduling service*
+![Architecture of the scheduling service](https://cdn-images-1.medium.com/max/2000/1*Oo2ZdWCZAcmZb4-50mUjyg.png)
 
 Internally the service uses a DynamoDB table to store long term events. Events whose scheduled time is less than ten minutes away are directly put into the short term queue.
 

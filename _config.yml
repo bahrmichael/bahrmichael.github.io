@@ -16,3 +16,6 @@ author:
   url:            https://twitter.com/michabahr
 
 paginate:         5
+
+plugins:
+  - jekyll-gist

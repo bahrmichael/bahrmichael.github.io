@@ -13,7 +13,7 @@ While Cypress is elegant to work with on your own code, it might get tricky when
 
 We’re assuming that you set up a Cypress project and ran the example test suite. Your project structure should look like the picture below.
 
-![Project structure](https://cdn-images-1.medium.com/max/2000/1*2c0K0Iu7nXsrsEvOiwheww.png)*Project structure*
+![Project structure](https://cdn-images-1.medium.com/max/2000/1*2c0K0Iu7nXsrsEvOiwheww.png)
 
 We will start with extending the commands.js file.
 
@@ -29,7 +29,7 @@ If you need greater flexibility you can use iframeLoaded and getInDocument as sh
 
 Now we’re able to fill out credit card details. In your browser’s [dev tools](https://developers.google.com/web/tools/chrome-devtools/) you can see the structure of the iframe being loaded by Stripe Elements.
 
-![Iframe structure of Stripe Elements](https://cdn-images-1.medium.com/max/3300/1*uyKds_NEMJzxz3uJqJuE2Q.png)*Iframe structure of Stripe Elements*
+![Iframe structure of Stripe Elements](https://cdn-images-1.medium.com/max/3300/1*uyKds_NEMJzxz3uJqJuE2Q.png)
 
 As you can see in the highlighted area, there’s an input that we can select with [name="cardnumber"]. With this information we can tell Cypress to fill out the test credit card number 4242 4242 4242 4242 as well as the other required information. The other input parts are exp-date, cvc and postal.
 
@@ -37,7 +37,7 @@ As you can see in the highlighted area, there’s an input that we can select wi
 
 Integrate the code into your test suite and run it. You should see Cypress filling out the credit details.
 
-![Cypress fills out credit card details](https://cdn-images-1.medium.com/max/4188/1*d3CSyLxOKn8LH5OxVgVHRw.gif)*Cypress fills out credit card details*
+![Cypress fills out credit card details](https://cdn-images-1.medium.com/max/4188/1*d3CSyLxOKn8LH5OxVgVHRw.gif)
 
 That’s it! You can now test your complete order process without any hacks.
 
