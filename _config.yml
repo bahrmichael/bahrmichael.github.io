@@ -16,9 +16,3 @@ author:
   url:            https://twitter.com/michabahr
 
 paginate:         5
-
-# Custom vars
-version:          1.0.0
-
-github:
-  repo:           https://github.com/bahrmichael/bahrmichael.github.io
