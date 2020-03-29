@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Cost Analysis: Serverless scheduling of irregular invocations
+title: "Cost Analysis: Serverless scheduling of irregular invocations"
 ---
 
 In the article “[Serverless scheduling of irregular invocations](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)” we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the operational cost of that approach.
