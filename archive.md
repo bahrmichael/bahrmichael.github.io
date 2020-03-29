@@ -2,9 +2,7 @@
 layout: page
 ---
 
-# Archive
-
-{% for post in site.related_posts limit:3 %}
+{% for post in site.posts %}
 {% raw %}
 <h3>
     <a href="{{ post.url }}">
