@@ -7,11 +7,11 @@ title: Scheduling irregular AWS Lambda executions through DynamoDB TTL attribute
 
 This article describes a serverless approach to schedule AWS Lambda invocations through the usage of AWS DynamoDB TTL attributes and streams. At the time of writing there was no way to schedule an irregular point of time execution of a lambda execution (e.g. “run this function once in 2 days and 10 hours and then again in 4 days”) without [abusing CloudWatch crons](https://forums.aws.amazon.com/thread.jspa?messageID=902484) (see Alternatives for more info).
 
-<iframe src="https://medium.com/media/eec9da0dbe595735d91b5a9caa2c175e" frameborder=0></iframe>
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">hey <a href="https://twitter.com/awscloud?ref_src=twsrc%5Etfw">@awscloud</a>! is there a way to trigger a <a href="https://twitter.com/hashtag/lambda?src=hash&amp;ref_src=twsrc%5Etfw">#lambda</a> execution at a future point in time without abusing rate/cron from <a href="https://twitter.com/hashtag/CloudWatch?src=hash&amp;ref_src=twsrc%5Etfw">#CloudWatch</a> or ttl from <a href="https://twitter.com/hashtag/DynamoDB?src=hash&amp;ref_src=twsrc%5Etfw">#DynamoDB</a>? e.g. call this function in 2 hours and this function in 3 days, 7 hours and 15 minutes</p>&mdash; Michael Bahr (@michabahr) <a href="https://twitter.com/michabahr/status/1133048146270052353?ref_src=twsrc%5Etfw">May 27, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
 
-This approach scores with its clean architecture and maintainability. It only requires a function to insert events into a scheduling-table and a function that processes events that hit reach the scheduled point of time. As we build everything on serverless technology, we don’t have to run software upgrades, maintain firewalls and pay for idle time. At low usage it’s practically free and even with higher usage we only really start paying once we schedule **hundreds of thousands of events per day**. Read more in this follow up article:
-[**Cost Analysis: Serverless scheduling of irregular invocations**
-*In the article “Serverless scheduling of irregular invocations” we used the TTL attribute of DynamoDB to schedule…*medium.com](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588)
+This approach scores with its clean architecture and maintainability. It only requires a function to insert events into a scheduling-table and a function that processes events that hit reach the scheduled point of time. As we build everything on serverless technology, we don’t have to run software upgrades, maintain firewalls and pay for idle time. At low usage it’s practically free and even with higher usage we only really start paying once we schedule **hundreds of thousands of events per day**. Read more in this [follow up article](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588).
 
 While this approach allows one to schedule an execution for a certain time, it falls short on accuracy. [In our tests](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588) with a scheduling table holding 100.000 entries, the events appeared in the DynamoDB stream with a delay of up to 28 minutes. According to the [docs](https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/howitworks-ttl.html) it may take up to 48 hours for especially large workloads. Therefore this approach does not fit, if you require the function to be executed at a certain hour, minute or second. Potential use cases are status updates which run every couple hours or days or non time critical reminders.
 
@@ -37,7 +37,7 @@ Start by creating a new DynamoDB table.
 
 ![](https://cdn-images-1.medium.com/max/2000/0*Ao5j_LbjG57uLVhD)
 
-If you expect to exceed the [free-tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=categories%23alwaysfree&awsf.Free%20Tier%20Categories=productcategories%23database), we recommend switching to on-demand. Please not that exceeding a provisioned capacity may lead to DB operations being rejected, while on-demand is not limited.
+If you expect to exceed the [free tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=categories%23alwaysfree&awsf.Free%20Tier%20Categories=productcategories%23database), we recommend switching to on-demand. Please not that exceeding a provisioned capacity may lead to DB operations being rejected, while on-demand is not limited.
 
 ![](https://cdn-images-1.medium.com/max/2000/0*CJA4gL70nX8KVwbl)
 
@@ -53,7 +53,7 @@ Once DynamoDB has created the TTL and stream, you will see the stream details on
 
 Next we write an executor function in Python which consumes the stream events.
 
-<iframe src="https://medium.com/media/906020a4fcc3894cf329c19a32467823" frameborder=0></iframe>
+{% gist c5c9eaf4733bc90344de84616407017f %}
 
 A few things to keep in mind here:
 
@@ -69,7 +69,7 @@ A few things to keep in mind here:
 
 You may create new entries manually through the DynamoDB management console or through scripts. In this example we will write an AWS Lambda function in Python which creates a new entry.
 
-<iframe src="https://medium.com/media/3c3018ecb3774f3527179ba1ce46e198" frameborder=0></iframe>
+{% gist 57a60c91e637c55364ea132c47e8cca3 %}
 
 Please check that line 8 of the *scheduler* has the table name you specified during the table setup.
 
@@ -81,7 +81,7 @@ The *put_item* from line 24 will cause an *INSERT* event to be pushed to the str
 
 To deploy the functions, we use the [serverless framework](https://serverless.com). Here is the *serverless.yml*, which specifies the desired resources:
 
-<iframe src="https://medium.com/media/593af6c0e5da00565829f71e3b580935" frameborder=0></iframe>
+{% gist 304442d63324fe5865a07b54238c1160 %}
 
 From line 3 to 12 we specify the provider (AWS), the runtime (python3.7) and grant permissions to our lambda functions. Here we only need write and read access for the scheduling table. You may [extend the roles](https://serverless.com/framework/docs/providers/aws/guide/iam/) depending on what your *scheduler* and *executor* do.
 
@@ -155,7 +155,7 @@ The approach above is not the only way to schedule irregular executions, but fee
 
 If you have a limited amount of scheduled invocations, you can use the [CloudWatch PutRule API](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html) to [create a one time cron execution](https://forums.aws.amazon.com/thread.jspa?messageID=902484).
 
-    cron(23 59 31 12 ? 2019)
+`cron(23 59 31 12 ? 2019)`
 
 This cron will execute on the 31st of December 2019 at 23:59.
 
