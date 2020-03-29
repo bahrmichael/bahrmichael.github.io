@@ -4,8 +4,6 @@ title: Cost Analysis: Serverless scheduling of irregular invocations
 ---
 
 In the article “[Serverless scheduling of irregular invocations](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)” we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the operational cost of that approach.
-[**Scheduling irregular AWS Lambda executions through DynamoDB TTL attributes**
-*Introduction*medium.com](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)
 
 ## Service Prices
 
@@ -59,11 +57,11 @@ Note that the costs for stream reads might be even lower as each read request ma
 
 You can analyse the logs to get a understanding of your lambdas’ resource usage. Another option is to look into the [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/), drilling down the costs with tags.
 
-    aws logs filter-log-events --log-group-name /aws/lambda/my-log-group --filter-pattern “Billed Duration” --start-time 1559050096000 | grep “Billed Duration” > resource_usage.txt
+`aws logs filter-log-events --log-group-name /aws/lambda/my-log-group --filter-pattern “Billed Duration” --start-time 1559050096000 | grep “Billed Duration” > resource_usage.txt`
 
 In this section we are looking 180.000 consumer executions which stayed within the minimum of 128 MB RAM and showed the following distribution of billing durations:
 
-<iframe src="https://medium.com/media/c25fe24764d72292fa0486925289af7a" frameborder=0></iframe>
+{% gist 943c59a4e19b2b69d6cd0e2c24186e9c %}
 
 *No plot here because Google Docs crashed :(*
 
