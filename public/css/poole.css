@@ -204,6 +204,8 @@ img {
   display: block;
   margin: 0 0 1rem;
   border-radius: 5px;
+  /* Don't let the images exceed the text space */
+  max-width: 100%;
 }
 
 /* Tables */
