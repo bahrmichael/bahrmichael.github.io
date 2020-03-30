@@ -27,6 +27,62 @@
  * Themes
  */
 
+ img[src*='#left'] {
+  float: left;
+}
+img[src*='#right'] {
+  float: right;
+}
+img[src*='#center'] {
+  display: block;
+  margin: auto;
+}
+
+
+#header_signup .button {
+  clear:both; 
+  background-color: #aaa; 
+  border: 0 none; 
+  border-radius:0 4px 4px 0; 
+  color: #FFFFFF; 
+  cursor: pointer; 
+  display: block; 
+  font-size:15px; 
+  font-weight: normal; 
+  height: 31px; 
+  padding: 0; 
+  text-align: center; 
+  text-decoration: none; 
+  white-space: nowrap; 
+  width: auto;
+}
+
+#header_signup input {
+  border: 1px solid #ABB0B2;
+  border-radius:4px 0 0 4px; 
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  text-indent: 2%;
+}
+
+#header_signup {
+  height: 31px;
+  background-color: #268bd2;
+  display: block;
+}
+
+#recent_articles_sidebar {
+  position: absolute; 
+  right: 50px;
+  top: 100px;
+}
+
+@media (max-width: 90rem) {
+  #recent_articles_sidebar {
+    display: none;
+  }
+}
 
 /*
  * Global resets
@@ -119,6 +175,9 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
   }
   .masthead-title small {
+    display: none;
+  }
+  .masthead #header_signup {
     display: none;
   }
 }

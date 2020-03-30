@@ -10,12 +10,39 @@
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
     <div class="wrap">
+
+      <div id="recent_articles_sidebar">
+        <h3>Recent Articles</h3>
+        {% for post in site.posts limit:5 %}
+        <p>
+          <a href="{{ post.url }}">
+            <small>
+              {{ post.title | truncate: 35 }}
+            </small>
+          </a>
+        </p>
+        {% endfor %}
+      </div>
+
       <div class="masthead">
-        <div class="container">
+        <div class="container" style="display:flex; justify-content:space-between;">
           <h3 class="masthead-title">
             <a href="/" title="Home">{{ site.title }}</a>
             <small>{{ site.tagline }}</small>
           </h3>
+
+          <!-- Begin Mailchimp Signup Form -->
+          <div id="header_signup" style="position: relative">
+            <form action="https://dev.us19.list-manage.com/subscribe/post?u=60149d3a4251e09f826818ef8&amp;id=ad766562ce" method="post" class="validate" target="_blank" novalidate>
+                <div class="mc-field-group" style="width: 200px; position: absolute; right: 100px">
+                  <input type="email" value="" placeholder="Email" name="EMAIL" class="required email">
+                </div>
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_60149d3a4251e09f826818ef8_ad766562ce" tabindex="-1" value=""></div>
+                <input style="width: 100px; position: absolute; right: 0; background-color: #444;" type="submit" value="Subscribe" name="subscribe" class="button">
+              
+            </form>
+          </div>
+          <!--End mc_embed_signup-->
         </div>
       </div>
 
