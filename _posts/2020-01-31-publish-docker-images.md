@@ -15,7 +15,7 @@ Head over to Github and create a repository. The name and description don't need
 
 Once the repository is set up, create a new file. You can do this through your browser. Name it Dockerfile and add the content you want. As an example we'll create one to deploy applications with the serverless framework.
 
-```
+```Dockerfile
 FROM node:lts-slim
 
 RUN npm install -g serverless

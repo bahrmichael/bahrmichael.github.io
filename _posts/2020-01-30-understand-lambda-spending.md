@@ -64,7 +64,7 @@ As you can see there are the three projects aws-scheduler, contracts-appraisal a
 
 When I checked the projects I noticed that the projects aws-scheduler and contracts-appraisal weren't tagged at all. Three lines in each `serverless.yml` and a `sls deploy` should be enough.
 
-```
+```yaml
 provider:
   [...]
   tags:

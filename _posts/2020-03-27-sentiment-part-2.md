@@ -25,7 +25,7 @@ Here's an example tweet I collected. Do you think the text is rather negative or
 
 The [serverless framework](https://serverless.com) has a simple way to attach a lambda to a [DynamoDB stream](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html).
 
-```
+```yaml
 functions:
   tweetAnalyzer:
     handler: tweetAnalyzer.handle
@@ -41,7 +41,7 @@ Our function is invoked when an entry in our DynamoDB table changes. As I've def
 
 The event passed from the stream to our function contains a list of `Records` which each hold the entry's key in `item['dynamodb']['Keys']['id']['N']`. If your key is not a number, you have to adjust the `['id']['N']`.
 
-```
+```python
 import boto3
 table = boto3.resource('dynamodb').Table('Tweets')
 
@@ -59,13 +59,13 @@ This loop loads all the entries which don't have a `sentiment_score` yet. We nee
 
 The Comprehend API expects a list of texts. As we saved some more meta information along the tweets' text, we have to extract the raw text first. Don't change the tweets' order here as AWS Comprehend returns the results along with their `Index` from the input, which we will map back the results to the original tweets.
 
-```
+```python
 text_list = list(map(lambda tweet: tweet['text'], tweets))
 ```
 
 In the next step we send the texts to Comprehend. Note that the `text_list` must not have more than [25 entries](https://docs.aws.amazon.com/comprehend/latest/dg/API_BatchDetectSentiment.html). You must also specify a language. As we've previously told the Twitter API to only return English tweets (by best effort), we will use `en` here.
 
-```
+```python
 import boto3
 comprehend = boto3.client('comprehend')
 
@@ -77,7 +77,7 @@ comprehend_response = comprehend.batch_detect_sentiment(
 
 Each of the results contains an `Index` which is the index of the item in the `text_list`. We use that information to map the result back to our DynamoDB entries.
 
-```
+```python
 from decimal import Decimal
 
 for entry in comprehend_response.get('ResultList', []):
@@ -90,7 +90,7 @@ Note that because DynamoDB doesn't like float parameters, we have to convert the
 
 Let's see how Comprehend rated our example from above. Do you think that Comprehend catched the sarcasm?
 
-```
+```json
 {
     "neutral": 0.07,
     "positive": 0.88,

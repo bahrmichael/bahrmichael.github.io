@@ -19,7 +19,7 @@ Next we set up a serverless app. With serverless technologies like AWS Lambda we
 
 Our first function will run in a regular interval. I chose 10 minutes because that was usually enough time for for 10-50 new tweets to appear. Learn more about the scheduling options by visiting the [CloudWatch docs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html).
 
-```
+```yaml
 functions:
   tweetCollector:
     handler: tweetCollector.handle
@@ -31,7 +31,7 @@ The function needs to authenticate with Twitter, load new tweets and then store 
 
 The first step is pretty simple with [Tweepy](https://tweepy.org). In the following snippet we load the oauth1 keys from environment variables and then authenticate. Our script will abort if the authentication fails. You can find the full source code on [Github](https://github.com/bahrmichael/twitter-sentiment-analyzer).
 
-```
+```python
 import tweepy
 
 auth = tweepy.OAuthHandler(os.environ['CONSUMER_KEY'], os.environ['CONSUMER_SECRET'])
@@ -51,7 +51,7 @@ new_tweets = api.search(q=search_query, lang='en', count=tweets_per_query, max_i
 
 To store the data I'm using a [DynamoDB table](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SampleData.CreateTables.html). As this query may return tweets that we already have, we check if a tweet already exists before writing it. We could just overwrite the tweets, but this would leader to higher DynamoDB spending. As a rule of thumb [a read costs](https://aws.amazon.com/dynamodb/pricing/on-demand/) 1/5th of a write operation.
 
-```
+```python
 for tweet in new_tweets:
     existing_tweet = table.get_item(Key={'id': tweet._json['id']}).get('Item', None)
     if existing_tweet is None:

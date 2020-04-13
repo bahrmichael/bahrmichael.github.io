@@ -23,7 +23,7 @@ By default you can go with "New and old images" which will give you the most dat
 
 When you work with the [serverless framework](https://serverless.com/framework/docs/providers/aws/events/streams/), you can simply set the stream as an event source for your function by adding the ARN as a `stream` in the `events` section.
 
-```
+```yaml
 functions:
   analysis:
     handler: analysis.handle
@@ -47,7 +47,7 @@ In EVE Online's player driven economy items can be traded through contracts. A h
 
 To build an average price, we need more than one price point. For this reason the single contract we receive is not enough, but we need all the price points for an item. 
 
-```
+```json
   {
     "contract_id": 152838252,
     "date_issued": "2020-01-05T20:47:40Z",
