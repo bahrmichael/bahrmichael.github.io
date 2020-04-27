@@ -4,6 +4,8 @@ title: "Measuring Performance with CloudWatch Custom Metrics and Insights"
 description: "In this article we learn 4 approaches to generating performance metrics in serverless AWS, each with their own little trade offs."
 ---
 
+This article focuses on serveless technologies such as AWS Lambda and CloudWatch.
+
 > tl;dr: CloudWatch Insights is great if you can log JSON and only consider the last few weeks, otherwise I suggest asynchronous log analysis with a detached lambda function.
 
 In a previous article, I explained how you can use CloudWatch Custom Metrics to [monitor an application's health](https://bahr.dev/2020/04/13/custom-metrics/). In this article we will look at the serverless scheduler, and use custom metrics to monitor the performance of its most critical component.
