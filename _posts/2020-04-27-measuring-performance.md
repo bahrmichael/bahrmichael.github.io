@@ -200,9 +200,9 @@ But wait, there's another ad hoc approach which requires even less code.
 
 In the previous section we started logging JSON. These logs can be used by [CloudWatch Logs Insights](https://aws.amazon.com/blogs/aws/new-amazon-cloudwatch-logs-insights-fast-interactive-log-analytics/) to generate metrics from logs. All without building and deploying new analyzer functions! 
 
-{%raw}
+{%raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/AWSLambda?src=hash&amp;ref_src=twsrc%5Etfw">#AWSLambda</a> protip: Thou Shalt Log JSON! (and then you just use cloudwatch insights for searching across all the whole log group easily instead of fucking around with log streams)!</p>&mdash; Gojko Adzic (@gojkoadzic) <a href="https://twitter.com/gojkoadzic/status/1253246550672801793?ref_src=twsrc%5Etfw">April 23, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{%endraw}
+{%endraw %}
 
 The `emitter` now prints JSON logs like `{'log_type': 'emity_delay', 'delay': 156}`. To visualise the delays we open [CloudWatch Logs Insights](https://console.aws.amazon.com/cloudwatch/home?#logsV2:logs-insights) in the AWS console, select the right log group and use [CloudWatch Logs Query Syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) to build a query which aggregates the delay data.
 
