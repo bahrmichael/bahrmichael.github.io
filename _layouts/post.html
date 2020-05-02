@@ -2,8 +2,29 @@
 layout: default
 ---
 
+<style>
+  .post-title > a {
+    background: rgba(250,250,250,0.7);
+    bottom: 0;
+    position: absolute;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .post > p, h2, h3, h4, blockquote, div, twitter-widget, ul {
+    @media (min-width: 56rem) {
+      .container {
+        max-width: 38rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  } 
+</style>
+
 <div class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
+  <h1 class="post-title" style="background: url({{page.backgroundUrl}}) 0; background-size: cover; min-height: 10rem; position:relative;">{{ page.title }}</h1>
   <span class="post-date">{{ page.date | date_to_string }}</span>
   {{ content }}
 </div>
@@ -23,3 +44,14 @@ layout: default
     {% endfor %}
   </ul>
 </div>
+
+<script>
+  document.querySelectorAll('.post > p').forEach((p) => {
+    let c = p.children;
+    if (c && c[0] && c[0].tagName && c[0].tagName == 'IMG' && c[0].width > c[0].height * 3) {
+      p.style.maxWidth = '56rem';
+      p.style.marginLeft = 'auto';
+      p.style.marginRight = 'auto';
+    }
+  });
+</script>
