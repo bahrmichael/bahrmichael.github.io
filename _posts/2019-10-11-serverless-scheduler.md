@@ -2,6 +2,7 @@
 layout: post
 title: Serverless Scheduler
 description: This project allows developers to quickly schedule events with precision, allows a large number of open tasks, and scales
+backgroundUrl: "https://miro.medium.com/max/2000/1*IGURB6wjlNvasWOKQ_tUAw.png"
 ---
 
 ![](https://cdn-images-1.medium.com/max/5120/1*IGURB6wjlNvasWOKQ_tUAw.png)
