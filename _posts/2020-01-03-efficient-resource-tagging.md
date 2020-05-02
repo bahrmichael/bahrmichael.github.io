@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Efficiently tagging existing AWS resources
+backgroundUrl: "https://images.unsplash.com/photo-1562408590-e32931084e23?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
 ---
 
 This guide is for you if you have a bunch of untagged AWS resources and want to understand your bills better.
@@ -17,7 +18,10 @@ We can see which services cost how much, but to drill down on a project or depar
 
 Most AWS services support tags which are key-value-pairs that you define per resource (e.g. a REST API). An API for a management dashboard could have the following tags:
 
-{% gist e192493443eaaeb40fb626facd004dbe %}
+```
+team: market-insights
+project: profit-tracking
+```
 
 You can use tags for many more use cases than cost tracking. Check out the [AWS tagging strategies](https://aws.amazon.com/de/answers/account-management/aws-tagging-strategies/) for more examples.
 
@@ -53,7 +57,31 @@ We can now pick one or two of those services and tag all the resources. We’ll 
 
 Using the API we can list all functions, list tags for each function and add our tags if they are missing. Here is a simple script:
 
-{% gist 95f68843dcc8cf70e7c5e666c446b0f8 %}
+```python
+import sys
+import boto3
+
+region = 'us-east-1'
+target_tag = 'project'
+
+client = boto3.client('lambda', region)
+
+functions = client.list_functions().get('Functions', [])
+
+for function in functions:
+    tags = client.list_tags(Resource=function['FunctionArn']).get('Tags', [])
+    if target_tag not in tags:
+        print(f"Lambda {function['FunctionArn']} is missing tag {target_tag}")
+
+        tag_value = None
+        if 'aws-scheduler' in function['FunctionArn']:
+            tag_value = 'serverless-scheduler'
+        elif 'testing-mail' in function['FunctionArn']:
+            tag_value = 'research'
+
+        if tag_value is not None:
+            client.tag_resource(Resource=function['FunctionArn'], Tags={target_tag: tag_value})
+```
 
 To figure out which names you have, just comment out the code starting at line 16. Then adjust the tag_value logic for your needs. Once you’ve run it for all your functions there should be no more uncategorised lambda costs anymore. It might take a day for Cost Explorer to show those changes, but then we can move on to the next service. Rinse and repeat until you tagged all your relevant cost drivers.
 

@@ -5,8 +5,6 @@ description: This project allows developers to quickly schedule events with prec
 backgroundUrl: "https://miro.medium.com/max/2000/1*IGURB6wjlNvasWOKQ_tUAw.png"
 ---
 
-![](https://cdn-images-1.medium.com/max/5120/1*IGURB6wjlNvasWOKQ_tUAw.png)
-
 AWS offers many great services, but when it comes to ad hoc scheduling there is still potential. We use the term ad hoc scheduling for irregular point in time invocations, e.g. one in 32 hours and another one in 4 days.
 
 ![Comparison of regular and irregular invocations](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)

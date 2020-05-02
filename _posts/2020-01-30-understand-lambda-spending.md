@@ -1,6 +1,7 @@
 ---
 layout: post
 title: AWS Cost Optimisation - Understanding Lambda Spending
+backgroundUrl: "https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=2500&q=80"
 ---
 
 Serverless is an amazing approach to building highly scalable and usually low cost systems. But the pay-per-use model combined with increased traffic and code that is not cost optimised may lead to higher bills than anticipated. In this series I will show and discuss my attempts to understand and fix my AWS spendings.

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Analysis of DynamoDB’s TTL delay
+backgroundUrl: "https://images.unsplash.com/photo-1563371386-187140095137?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
 ---
 
 In the article “[Serverless scheduling of irregular invocations](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)” we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the delays between the specified TTL and the actual deletion.
@@ -9,7 +10,22 @@ In the article “[Serverless scheduling of irregular invocations](https://mediu
 
 To measure the delay we specified an evenly distributed TTL on each database entry. Upon deletion that entry is pushed into a stream which is then consumed by a lambda function. That lambda function prints the delay between the old record’s specified TTL and the current time.
 
-{% gist c5c9eaf4733bc90344de84616407017f %}
+```python
+def handle(event, context):
+    print('Received %d records' % len(event['Records']))
+    for record in event['Records']:
+
+        # as we're using ttl to schedule executions, we do not care about inserts or updates,
+        # only about removes which happen after the ttl is hit
+        event_name = record['eventName']
+        if event_name != 'REMOVE':
+            print('Skipping %s' % event_name)
+            continue
+
+        # note that this image is in DynamoDB style, not a regular python object and needs to be converted accordingly
+        old_image = record['dynamodb']['OldImage']
+        print(old_image['payload'])
+```
 
 ## Tests
 

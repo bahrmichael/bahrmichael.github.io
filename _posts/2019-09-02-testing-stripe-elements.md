@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Testing Stripe Elements with Cypress
+backgroundUrl: "https://images.unsplash.com/photo-1582224369048-e4d2d7a6ba30?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
 ---
 
 In this article we will look into how we can test a website that uses iframes like Stripe Elements.
@@ -17,11 +18,48 @@ We’re assuming that you set up a Cypress project and ran the example test suit
 
 We will start with extending the commands.js file.
 
-{% gist 401b6c37ed3191879a6292977ba09470 %}
+```js
+Cypress.Commands.add(
+    'iframeLoaded',
+    {prevSubject: 'element'},
+    ($iframe) => {
+        const contentWindow = $iframe.prop('contentWindow');
+        return new Promise(resolve => {
+            if (
+                contentWindow &&
+                contentWindow.document.readyState === 'complete'
+            ) {
+                resolve(contentWindow)
+            } else {
+                $iframe.on('load', () => {
+                    resolve(contentWindow)
+                })
+            }
+        })
+    });
+
+
+Cypress.Commands.add(
+    'getInDocument',
+    {prevSubject: 'document'},
+    (document, selector) => Cypress.$(selector, document)
+);
+
+Cypress.Commands.add(
+    'getWithinIframe',
+    (targetElement) => cy.get('iframe').iframeLoaded().its('document').getInDocument(targetElement)
+);
+```
 
 Append this code to your commands.js file. Now you can use `cy.getWithinIframe('a selector')` to target any element within the iframe.
 
-{% gist 6f4d7e6a51013548508e513d47fde557 %}
+```js
+cy.get('iframe')
+  .iframeLoaded()
+  .its('document')
+  .getInDocument('button')
+  .trigger('click')
+```
 
 If you need greater flexibility you can use `iframeLoaded` and `getInDocument` as shown above. You can chain many Cypress commands after `getInDocument`.
 
@@ -33,7 +71,23 @@ Now we’re able to fill out credit card details. In your browser’s [dev tools
 
 As you can see in the highlighted area, there’s an input that we can select with `[name="cardnumber"]`. With this information we can tell Cypress to fill out the test credit card number `4242 4242 4242 4242` as well as the other required information. The other input parts are exp-date, cvc and postal.
 
-{% gist 6ad17009aae4709802e8211de3dd6264 %}
+
+```js
+/// <reference types="Cypress" />
+
+context('Actions', () => {
+
+    it('should fill out creditcard', () => {
+        cy.getWithinIframe('[name="cardnumber"]').type('4242424242424242');
+        cy.getWithinIframe('[name="exp-date"]').type('1232');
+        cy.getWithinIframe('[name="cvc"]').type('987');
+        cy.getWithinIframe('[name="postal"]').type('12345');
+
+        // adjust this to use your own pay now button
+        cy.get('[data-cy="pay-now"]').click();
+    });
+});
+```
 
 Integrate the code into your test suite and run it. You should see Cypress filling out the credit details.
 

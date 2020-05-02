@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Scheduling irregular AWS Lambda executions through DynamoDB TTL attributes
+backgroundUrl: "https://images.unsplash.com/photo-1421789497144-f50500b5fcf0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
 ---
 
 ## Introduction
@@ -53,7 +54,22 @@ Once DynamoDB has created the TTL and stream, you will see the stream details on
 
 Next we write an executor function in Python which consumes the stream events.
 
-{% gist c5c9eaf4733bc90344de84616407017f %}
+```python
+def handle(event, context):
+    print('Received %d records' % len(event['Records']))
+    for record in event['Records']:
+
+        # as we're using ttl to schedule executions, we do not care about inserts or updates,
+        # only about removes which happen after the ttl is hit
+        event_name = record['eventName']
+        if event_name != 'REMOVE':
+            print('Skipping %s' % event_name)
+            continue
+
+        # note that this image is in DynamoDB style, not a regular python object and needs to be converted accordingly
+        old_image = record['dynamodb']['OldImage']
+        print(old_image['payload'])
+```
 
 A few things to keep in mind here:
 
@@ -69,7 +85,29 @@ A few things to keep in mind here:
 
 You may create new entries manually through the DynamoDB management console or through scripts. In this example we will write an AWS Lambda function in Python which creates a new entry.
 
-{% gist 57a60c91e637c55364ea132c47e8cca3 %}
+```python
+import boto3
+import time
+from uuid import uuid4
+
+# keep the db initialization outside of the functions to maintain them as long as the container lives
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+scheduling_table = dynamodb.Table('lambda-scheduling')
+
+def delay():
+    return 10
+
+def handle(payload, context):
+    print(payload)
+    id = str(uuid4())
+    ttl = int(time.time()) + delay()
+    item = {
+        'id': id,
+        'ttl': ttl,
+        'payload': payload
+    }
+    scheduling_table.put_item(Item=item)
+```
 
 Please check that line 8 of the *scheduler* has the table name you specified during the table setup.
 
@@ -81,7 +119,29 @@ The *put_item* from line 24 will cause an *INSERT* event to be pushed to the str
 
 To deploy the functions, we use the [serverless framework](https://serverless.com). Here is the *serverless.yml*, which specifies the desired resources:
 
-{% gist 304442d63324fe5865a07b54238c1160 %}
+```yaml
+service: lambda-scheduler
+
+provider:
+  name: aws
+  runtime: python3.7
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      # Please limit the Actions to read and write if you use this in production
+        - dynamodb:*
+      # Limit this to your lambda-scheduling table
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  schedule:
+    handler: scheduler.handle
+  execute:
+    handler: executor.handle
+    events:
+      # Use your lambda-scheduling stream
+      - stream: arn:aws:dynamodb:us-east-1:256608350746:table/lambda-scheduling/stream/2019-05-27T15:48:18.587
+```
 
 From line 3 to 12 we specify the provider (AWS), the runtime (python3.7) and grant permissions to our lambda functions. Here we only need write and read access for the scheduling table. You may [extend the roles](https://serverless.com/framework/docs/providers/aws/guide/iam/) depending on what your *scheduler* and *executor* do.
 
