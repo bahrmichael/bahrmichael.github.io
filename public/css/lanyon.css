@@ -27,6 +27,25 @@
  * Themes
  */
 
+
+.post-title > a {
+  background: rgba(250,250,250,0.7);
+  bottom: 0;
+  position: absolute;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+
+@media (min-width: 56rem) {
+  .post > p, h2, h3, h4, blockquote, div, twitter-widget, ul {
+      max-width: 38rem;
+      margin-left: auto;
+      margin-right: auto;
+  }
+} 
+
 img[src*='#left'] {
   float: left;
 }
