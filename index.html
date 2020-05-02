@@ -37,15 +37,17 @@ title: Home
 </div>
 
 <script>
-  document.querySelectorAll('.post > p').forEach((p) => {
-    let c = p.children;
-    if (c && c[0] && c[0].tagName && c[0].tagName == 'IMG' && c[0].width > c[0].height * 3) {
-      p.style.maxWidth = '56rem';
-      p.style['margin-left'] = 'auto';
-      p.style['margin-right'] = 'auto';
-      c[0].style.maxWidth = '56rem';
-      c[0].style['margin-left'] = 'auto';
-      c[0].style['margin-right'] = 'auto';
-    }
-  });
+  window.onload = function() {
+    document.querySelectorAll('.post > p').forEach((p) => {
+      let c = p.children;
+      if (c && c[0] && c[0].tagName && c[0].tagName == 'IMG' && c[0].width > c[0].height * 3) {
+        p.style.maxWidth = '56rem';
+        p.style['margin-left'] = 'auto';
+        p.style['margin-right'] = 'auto';
+        c[0].style.maxWidth = '56rem';
+        c[0].style['margin-left'] = 'auto';
+        c[0].style['margin-right'] = 'auto';
+      }
+    });
+  }
 </script>
