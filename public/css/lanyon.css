@@ -39,7 +39,7 @@
 
 
 @media (min-width: 56rem) {
-  .post > p, h2, h3, h4, blockquote, twitter-widget, ul, .highlight {
+  .post > p, h2, h3, h4, blockquote, twitter-widget, ul, .highlight, hr {
       max-width: 38rem;
       margin-left: auto;
       margin-right: auto;
