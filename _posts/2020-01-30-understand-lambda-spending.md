@@ -5,7 +5,7 @@ title: AWS Cost Optimisation - Understanding Lambda Spending
 
 Serverless is an amazing approach to building highly scalable and usually low cost systems. But the pay-per-use model combined with increased traffic and code that is not cost optimised may lead to higher bills than anticipated. In this series I will show and discuss my attempts to understand and fix my AWS spendings.
 
-# Understanding Lambda Spending
+## Understanding Lambda Spending
 
 Assumptions about the reader:
 - You know how to use the [AWS Cost Explorer](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html) and have [activated its cost allocation tags](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/custom-tags.html)
@@ -14,13 +14,13 @@ Assumptions about the reader:
 
 As my lambda spending has decently increased over the last weeks, this post will dive into this service's cost sources.
 
-## Lambda Pricing
+### Lambda Pricing
 
 Lambda is priced on a pay-per-use model. The [official pricing page](https://aws.amazon.com/lambda/pricing) is very detailed, but you can start by assuming that 100.000 seconds of Lambda runtime will cost ~1.7$ when using the default 1024MB of RAM. Depending on the type and size of your workloads you can lower your cost by decreasing the RAM. Increasing it [can also help](https://hackernoon.com/lower-your-aws-lambda-bill-by-increasing-memory-size-yep-e591ae499692), as with more RAM comes more CPU.
 
 Lambda comes with a free tier of "1M free requests per month and 400,000 GB-seconds of compute time per month". The first two weeks in the above graph were probably due to the free tier.
 
-## Cost Tagging
+### Cost Tagging
 
 The first step to understanding AWS costs should always be to add tags. When you add tags to your AWS resources, you can then tell the Cost Explorer to [scan those tags](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html) and include them in your reports.
 
