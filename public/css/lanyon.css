@@ -91,18 +91,6 @@ img[src*='#center'] {
   display: block;
 }
 
-#recent_articles_sidebar {
-  position: absolute; 
-  right: 50px;
-  top: 100px;
-}
-
-@media (max-width: 90rem) {
-  #recent_articles_sidebar {
-    display: none;
-  }
-}
-
 /*
  * Global resets
  *
