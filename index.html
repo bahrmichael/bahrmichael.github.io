@@ -3,51 +3,43 @@ layout: default
 title: Home
 ---
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    <h1 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 20rem; position:relative;">
-      <a href="{{ post.url }}">
+<h2>Featured Projects</h2>
+<div>
+    <img src="https://miro.medium.com/max/2000/1*IGURB6wjlNvasWOKQ_tUAw.png" style="object-fit: cover; max-height: 300px; width: 100%;">
+    <p>The Serverless Scheduler solves the lack of a serverless ad hoc scheduling solution. Read more about in the <a href="/2019/10/11/serverless-scheduler">launch article</a> and find the source code on <a href="https://github.com/bahrmichael/aws-scheduler">GitHub</a>.</p>
+    <p>
+        <b>Related Articles</b>
+        <ul>
+            <li><a href="/2019/10/11/serverless-scheduler/">Serverless Scheduler</a></li>
+            <li><a href="/2019/05/29/ddb-ttl-analysis/">Analysis of DynamoDB’s TTL delay</a></li>
+            <li><a href="/2020/01/30/understand-lambda-spending/">Understanding Lambda Spending</a></li>
+        </ul>
+    </p>
+</div>
+
+<div>
+    <div style="position:relative">
+        <img src="https://webimg.ccpgamescdn.com/kvd74o0q2fjg/5pj3y2XZKMoEIsQu2mKiWY/84fb1a6ee07978143d5424a3cdae63c2/Bowhead_1080.jpg" style="object-fit: cover; max-height: 300px; width: 100%;">
+        <h2 style="position:absolute;top:0;color: white; left: 30px;">EVE Market Watch</h2>
+    </div>
+    <p><a href="https://evemarketwatch.com">EVE Market Watch</a> is a fully serverless application that helps players of the MMORPG EVE Online keep their markets stocked. It aggregates data and sends notifications to more than 500 users, free of charge.</p>
+    <p>
+        <b>Related Articles</b>
+        <ul>
+            <li><a href="https://bahr.dev/2020/04/13/custom-metrics/">Monitoring Custom Application Health</a></li>
+            <li><a href="https://bahr.dev/2020/02/02/aggregate-ddb/">DynamoDB: Analyse and Aggregate</a></li>
+        </ul>
+    </p>
+</div>
+
+<h2>Recent Articles</h2>
+
+{% for post in site.posts limit:10 %}
+<h3 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
+    <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
         {{ post.title }}
-      </a>
-    </h1>
-
-    <span class="post-date">{{ post.date | date_to_string }}</span>
-
-    {{ post.content }}
-  </div>
-  {% endfor %}
+    </a>
+</h3>
+{% endfor %}
+<p>Find more posts in the <a href="/archive">Archive</a>.</p>
 </div>
-
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="/page{{paginator.next_page}}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="/">Newer</a>
-    {% else %}
-      <a class="pagination-item newer" href="/page{{paginator.previous_page}}">Newer</a>
-    {% endif %}
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
-</div>
-
-<script>
-  window.onload = function() {
-    document.querySelectorAll('.post > p').forEach((p) => {
-      let c = p.children;
-      if (c && c[0] && c[0].tagName && c[0].tagName == 'IMG' && c[0].width > c[0].height * 3) {
-        p.style.maxWidth = '56rem';
-        p.style['margin-left'] = 'auto';
-        p.style['margin-right'] = 'auto';
-        c[0].style.maxWidth = '56rem';
-        c[0].style['margin-left'] = 'auto';
-        c[0].style['margin-right'] = 'auto';
-      }
-    });
-  }
-</script>

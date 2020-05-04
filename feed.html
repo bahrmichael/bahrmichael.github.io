@@ -1,0 +1,53 @@
+---
+layout: default
+title: Feed
+---
+
+<div class="posts">
+  {% for post in paginator.posts %}
+  <div class="post">
+    <h1 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 20rem; position:relative;">
+      <a href="{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
+
+    <span class="post-date">{{ post.date | date_to_string }}</span>
+
+    {{ post.content }}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item older" href="/page{{paginator.next_page}}">Older</a>
+  {% else %}
+    <span class="pagination-item older">Older</span>
+  {% endif %}
+  {% if paginator.previous_page %}
+    {% if paginator.page == 2 %}
+      <a class="pagination-item newer" href="/">Newer</a>
+    {% else %}
+      <a class="pagination-item newer" href="/page{{paginator.previous_page}}">Newer</a>
+    {% endif %}
+  {% else %}
+    <span class="pagination-item newer">Newer</span>
+  {% endif %}
+</div>
+
+<script>
+  window.onload = function() {
+    document.querySelectorAll('.post > p').forEach((p) => {
+      let c = p.children;
+      if (c && c[0] && c[0].tagName && c[0].tagName == 'IMG' && c[0].width > c[0].height * 3) {
+        p.style.maxWidth = '56rem';
+        p.style['margin-left'] = 'auto';
+        p.style['margin-right'] = 'auto';
+        c[0].style.maxWidth = '56rem';
+        c[0].style['margin-left'] = 'auto';
+        c[0].style['margin-right'] = 'auto';
+      }
+    });
+  }
+</script>
