@@ -1,0 +1,46 @@
+---
+layout: page_without_title
+title: Start
+---
+
+<h2>Featured Projects</h2>
+<div style="display: flex;">
+<div>
+<h3>Serverless Scheduler</h3>
+<p>The Serverless Scheduler solves the lack of a serverless ad hoc scheduling solution. Read more about in the <a href="/2019/10/11/serverless-scheduler">launch article</a> and find the source code on <a href="https://github.com/bahrmichael/aws-scheduler">GitHub</a>.</p>
+<p>
+<b>Related Articles</b>
+<ul>
+<li><a href="/2019/10/11/serverless-scheduler/">Serverless Scheduler</a></li>
+<li><a href="/2019/05/29/ddb-ttl-analysis/">Analysis of DynamoDB’s TTL delay</a></li>
+<li><a href="/2020/01/30/understand-lambda-spending/">Understanding Lambda Spending</a></li>
+</ul>
+</p>
+
+</div>
+<div>
+<h3>EVE Market Watch</h3>
+<p>EVE Market Watch helps players of the MMORPG EVE Online keep their markets stocked. It aggregates data and sends notifications for more than 500 users, free to use.</p>
+<p>
+<b>Related Articles</b>
+<ul>
+<li><a href="https://bahr.dev/2020/04/13/custom-metrics/">Monitoring Custom Application Health</a></li>
+<li><a href="https://bahr.dev/2020/02/02/aggregate-ddb/">DynamoDB: Analyse and Aggregate</a></li>
+</ul>
+</p>
+</div>
+</div>
+
+<h2>Recent Articles</h2>
+<div>
+{% for post in site.posts limit:10 %}
+<p>
+    <a href="{{ post.url }}">
+    <small>
+        {{ post.title }}
+    </small>
+    </a>
+</p>
+{% endfor %}
+<p><small>Find more in the <a href="/archive">Archive</a>.</small></p>
+</div>
