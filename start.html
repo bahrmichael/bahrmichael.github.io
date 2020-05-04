@@ -35,11 +35,11 @@ title: Start
 <h2>Recent Articles</h2>
 
 {% for post in site.posts limit:10 %}
-<h4 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 20rem; position:relative; margin-bottom:50px">
+<h3 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 20rem; position:relative; margin-bottom:50px">
     <a href="{{ post.url }}">
         {{ post.title }}
     </a>
-</h4>
+</h3>
 {% endfor %}
 <p><small>Find more in the <a href="/archive">Archive</a>.</small></p>
 </div>
