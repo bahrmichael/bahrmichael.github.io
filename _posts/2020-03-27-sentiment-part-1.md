@@ -30,7 +30,7 @@ functions:
 
 The function needs to authenticate with Twitter, load new tweets and then store these in our table for later processing.
 
-The first step is pretty simple with [Tweepy](https://tweepy.org). In the following snippet we load the oauth1 keys from environment variables and then authenticate. Our script will abort if the authentication fails. You can find the full source code on [Github](https://github.com/bahrmichael/twitter-sentiment-analyzer).
+The first step is pretty simple with [Tweepy](https://tweepy.org). In the following snippet we load the oauth1 keys from environment variables and then authenticate. Our script will abort if the authentication fails. You can find the full source code on [GitHub](https://github.com/bahrmichael/twitter-sentiment-analyzer).
 
 ```python
 import tweepy

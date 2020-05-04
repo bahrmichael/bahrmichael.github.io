@@ -10,9 +10,9 @@ Over the last past days I've published and used a couple docker images without s
 
 To get started you need a docker hub account and a github account. You don't need git or docker installed on your machine.
 
-## The Github Repo
+## The GitHub Repo
 
-Head over to Github and create a repository. The name and description don't need to follow any conventions. I name my repos which are used for docker hub something like "docker-my-image-name".
+Head over to GitHub and create a repository. The name and description don't need to follow any conventions. I name my repos which are used for docker hub something like "docker-my-image-name".
 
 Once the repository is set up, create a new file. You can do this through your browser. Name it Dockerfile and add the content you want. As an example we'll create one to deploy applications with the serverless framework.
 
@@ -22,7 +22,7 @@ FROM node:lts-slim
 RUN npm install -g serverless
 ```
 
-![Github Repo](https://dev-to-uploads.s3.amazonaws.com/i/oocbzm77l1ivjcq76kzv.png)
+![GitHub Repo](https://dev-to-uploads.s3.amazonaws.com/i/oocbzm77l1ivjcq76kzv.png)
 
 The Dockerfile is all you need. Feel free to add a readme or license.
 
@@ -33,7 +33,7 @@ Now log in to Docker Hub and create a new repository there. Give it a nice name 
 
 ![Docker Description](https://dev-to-uploads.s3.amazonaws.com/i/qdbhyanazz6is2312oa8.png)
 
-Scroll down a bit and connect to the Github repository you created earlier. You might have to grant Docker Hub read access to your account.
+Scroll down a bit and connect to the GitHub repository you created earlier. You might have to grant Docker Hub read access to your account.
 
 ![Docker Build](https://dev-to-uploads.s3.amazonaws.com/i/y6wfrch9b2e77vrck2lz.png)
 

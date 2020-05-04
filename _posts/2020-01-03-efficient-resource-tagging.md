@@ -85,7 +85,7 @@ for function in functions:
 
 To figure out which names you have, just comment out the code starting at line 16. Then adjust the tag_value logic for your needs. Once you’ve run it for all your functions there should be no more uncategorised lambda costs anymore. It might take a day for Cost Explorer to show those changes, but then we can move on to the next service. Rinse and repeat until you tagged all your relevant cost drivers.
 
-You can find an improved version of the script on [Github](https://github.com/bahrmichael/aws-service-tagger).
+You can find an improved version of the script on [GitHub](https://github.com/bahrmichael/aws-service-tagger).
 
 Here’s how my Cost Explorer view changed after running the script for Lambda. The last two days show that we have less than 1$/day untagged.
 
@@ -95,7 +95,7 @@ Here’s how my Cost Explorer view changed after running the script for Lambda. 
 
 Repeat the process: The next cost driver would be CloudWatch.
 
-There’s an improved version ready for you on [Github](https://github.com/bahrmichael/aws-service-tagger). I will extend this tooling for more services over time. Do you find it useful? Do you need help or would like to contribute for other services? Let me know!
+There’s an improved version ready for you on [GitHub](https://github.com/bahrmichael/aws-service-tagger). I will extend this tooling for more services over time. Do you find it useful? Do you need help or would like to contribute for other services? Let me know!
 
 Also follow AWS hero [Yan Cui](undefined) as he might release something related soon ;)
 
@@ -105,7 +105,7 @@ Also follow AWS hero [Yan Cui](undefined) as he might release something related 
 
 ## Further Reads
 
-* [Github repository](https://github.com/bahrmichael/aws-service-tagger) with improved tooling
+* [GitHub repository](https://github.com/bahrmichael/aws-service-tagger) with improved tooling
 
 * [Script for tagging CloudWatch resources](http://ricktbaker.com/2018/12/04/tag-your-aws-log-groups/)
 
