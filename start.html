@@ -4,31 +4,32 @@ title: Start
 ---
 
 <h2>Featured Projects</h2>
-<div style="display: flex;">
 <div>
-<h3>Serverless Scheduler</h3>
-<p>The Serverless Scheduler solves the lack of a serverless ad hoc scheduling solution. Read more about in the <a href="/2019/10/11/serverless-scheduler">launch article</a> and find the source code on <a href="https://github.com/bahrmichael/aws-scheduler">GitHub</a>.</p>
-<p>
-<b>Related Articles</b>
-<ul>
-<li><a href="/2019/10/11/serverless-scheduler/">Serverless Scheduler</a></li>
-<li><a href="/2019/05/29/ddb-ttl-analysis/">Analysis of DynamoDB’s TTL delay</a></li>
-<li><a href="/2020/01/30/understand-lambda-spending/">Understanding Lambda Spending</a></li>
-</ul>
-</p>
+    <img src="https://miro.medium.com/max/2000/1*IGURB6wjlNvasWOKQ_tUAw.png" style="object-fit: cover; max-height: 300px; width: 100%;">
+    <p>The Serverless Scheduler solves the lack of a serverless ad hoc scheduling solution. Read more about in the <a href="/2019/10/11/serverless-scheduler">launch article</a> and find the source code on <a href="https://github.com/bahrmichael/aws-scheduler">GitHub</a>.</p>
+    <p>
+        <b>Related Articles</b>
+        <ul>
+            <li><a href="/2019/10/11/serverless-scheduler/">Serverless Scheduler</a></li>
+            <li><a href="/2019/05/29/ddb-ttl-analysis/">Analysis of DynamoDB’s TTL delay</a></li>
+            <li><a href="/2020/01/30/understand-lambda-spending/">Understanding Lambda Spending</a></li>
+        </ul>
+    </p>
+</div>
 
-</div>
 <div>
-<h3>EVE Market Watch</h3>
-<p>EVE Market Watch helps players of the MMORPG EVE Online keep their markets stocked. It aggregates data and sends notifications for more than 500 users, free to use.</p>
-<p>
-<b>Related Articles</b>
-<ul>
-<li><a href="https://bahr.dev/2020/04/13/custom-metrics/">Monitoring Custom Application Health</a></li>
-<li><a href="https://bahr.dev/2020/02/02/aggregate-ddb/">DynamoDB: Analyse and Aggregate</a></li>
-</ul>
-</p>
-</div>
+    <div style="position:relative">
+        <img src="https://webimg.ccpgamescdn.com/kvd74o0q2fjg/5pj3y2XZKMoEIsQu2mKiWY/84fb1a6ee07978143d5424a3cdae63c2/Bowhead_1080.jpg" style="object-fit: cover; max-height: 300px; width: 100%;">
+        <h2 style="position:absolute;top:0;color: white; left: 30px;">EVE Market Watch</h2>
+    </div>
+    <p>EVE Market Watch helps players of the MMORPG EVE Online keep their markets stocked. It aggregates data and sends notifications for more than 500 users, free to use.</p>
+    <p>
+        <b>Related Articles</b>
+        <ul>
+            <li><a href="https://bahr.dev/2020/04/13/custom-metrics/">Monitoring Custom Application Health</a></li>
+            <li><a href="https://bahr.dev/2020/02/02/aggregate-ddb/">DynamoDB: Analyse and Aggregate</a></li>
+        </ul>
+    </p>
 </div>
 
 <h2>Recent Articles</h2>
@@ -36,9 +37,7 @@ title: Start
 {% for post in site.posts limit:10 %}
 <p>
     <a href="{{ post.url }}">
-    <small>
         {{ post.title }}
-    </small>
     </a>
 </p>
 {% endfor %}
