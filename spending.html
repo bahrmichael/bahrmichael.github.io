@@ -9,27 +9,27 @@ title: Spending
             <div class="form-group">
                 <label for="lambdaSaving">Lambda savings</label>
                 <div class="input-group mb-3" id="lambdaWrapper">
-                    <input type="number" class="form-control" id="lambdaSaving" aria-describedby="lambdaInputDescription" placeholder="17" onchange="redraw()">
+                    <input style="max-width: 100px;" type="number" class="form-control" id="lambdaSaving" aria-describedby="lambdaInputDescription" placeholder="12" onchange="redraw()">
                     <div class="input-group-append">
                       <span class="input-group-text" id="lambdaInputDescription">% over on-demand</span>
                     </div>
                 </div>
-                <small id="lambdaWrapper" class="form-text text-muted">Please get the savings rate from the <a href="https://aws.amazon.com/savingsplans/pricing/" target="_blank">Savings Plan page</a>.</small>
+                <small id="lambdaWrapper" class="form-text text-muted">Please get your savings rate from the <a href="https://aws.amazon.com/savingsplans/pricing/" target="_blank">Savings Plan page</a>. 12% is 1 year with no upfront payment in us-east-1.</small>
             </div>
             <div class="form-group">
                 <label for="ec2Saving">EC2 savings</label>
                 <div class="input-group mb-3" id="ec2Wrapper">
-                    <input type="number" class="form-control" id="ec2Saving" aria-describedby="ec2InputDescription" placeholder="33" onchange="redraw()">
+                    <input type="number" class="form-control" id="ec2Saving" aria-describedby="ec2InputDescription" placeholder="28" onchange="redraw()">
                     <div class="input-group-append">
                       <span class="input-group-text" id="ec2InputDescription">% over on-demand</span>
                     </div>
                 </div>
-                <small id="ec2Wrapper" class="form-text text-muted">Please get the savings rate from the <a href="https://aws.amazon.com/savingsplans/pricing/" target="_blank">Savings Plan page</a>.</small>
+                <small id="ec2Wrapper" class="form-text text-muted">Please get the savings rate from the <a href="https://aws.amazon.com/savingsplans/pricing/" target="_blank">Savings Plan page</a>. 28% is a Linux t2.micro, 1 year with no upfront in us-east-1.</small>
             </div>
             <div class="form-group">
                 <label for="hourlyCommitment">Hourly Commitment</label>
                 <div class="input-group mb-3" id="hourlyCommitmentWrapper">
-                    <input type="number" class="form-control" id="hourlyCommitment" aria-describedby="hourlyCommitmentDescription" placeholder="0.03" onchange="redraw()">
+                    <input style="max-width: 100px;" type="number" class="form-control" id="hourlyCommitment" aria-describedby="hourlyCommitmentDescription" placeholder="0.03" onchange="redraw()">
                     <div class="input-group-append">
                       <span class="input-group-text" id="hourlyCommitmentDescription">$ per hour</span>
                     </div>
@@ -43,7 +43,7 @@ title: Spending
                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                 </div>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="csvFileUpload" name="CSV Upload" aria-describedby="inputGroupFileAddon01" accept=".csv" onchange="uploadFile(this.files[0]);">
+                    <input style="max-width: 400px;" type="file" class="custom-file-input" id="csvFileUpload" name="CSV Upload" aria-describedby="inputGroupFileAddon01" accept=".csv" onchange="uploadFile(this.files[0]);">
                     <label class="custom-file-label" for="inputGroupFile01">Choose a .csv file</label>
                 </div>
             </div>
@@ -106,8 +106,8 @@ title: Spending
                 const services = rows[0].split(',');
 
                 const hourlyCommitment=document.getElementById("hourlyCommitment").value || 0.03;
-                const ec2SavingsRate=(document.getElementById("ec2Saving").value || 33)/100;
-                const lambdaSavingsRate=(document.getElementById("lambdaSaving").value || 17)/100;
+                const ec2SavingsRate=(document.getElementById("ec2Saving").value || 28)/100;
+                const lambdaSavingsRate=(document.getElementById("lambdaSaving").value || 12)/100;
 
                 const ec2_index = services.indexOf("EC2-Instances($)");
                 const lambda_index = services.indexOf("Lambda($)");
