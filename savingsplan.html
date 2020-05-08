@@ -1,7 +1,31 @@
 ---
 layout: default
-title: Spending
+title: Savings Plan
 ---
+
+<div>
+    <p>This tool helps you pick the right hourly commitment based on your previous spending.</p>
+    <p>Open Issues:</p>
+    <ul>
+        <li>Fargate is not ignored.</li>
+        <li>Only one EC2 savings rate is possible. They might differ if you run different types of EC2s.</li>
+        <li>Only one Lambda savings rate is possible. They might differ if you run Lambdas in multiple regions.</li>
+    </ul>
+    <p>Here's how to use it:</p>
+    <ol>
+        <li>Got to the <a href="https://console.aws.amazon.com/cost-management/home#/custom">AWS Cost Explorer</a></li>
+        <li>Pick a time period where you paid for Lambda and/or EC2</li>
+        <li>Switch to daily granularity</li>
+        <li>Group by service</li>
+        <li>Optional, but recommended: Filter to only EC2 and Lambda</li>
+        <li>Download the CSV</li>
+        <li>Come back to this page</li>
+        <li>Update the savings rates</li>
+        <li>Upload the cost report</li>
+        <li>Play with the savings rate to find your best fit</li>
+    </ol>
+
+</div>
 
         <form> 
             <style scoped>@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');</style>
@@ -19,7 +43,7 @@ title: Spending
             <div class="form-group">
                 <label for="ec2Saving">EC2 savings</label>
                 <div class="input-group mb-3" id="ec2Wrapper">
-                    <input type="number" class="form-control" id="ec2Saving" aria-describedby="ec2InputDescription" placeholder="28" onchange="redraw()">
+                    <input style="max-width: 100px;" type="number" class="form-control" id="ec2Saving" aria-describedby="ec2InputDescription" placeholder="28" onchange="redraw()">
                     <div class="input-group-append">
                       <span class="input-group-text" id="ec2InputDescription">% over on-demand</span>
                     </div>
