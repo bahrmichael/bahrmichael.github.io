@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to use S3 to share media with your friends
-backgroundUrl: "https://images.unsplash.com/photo-1487861212986-608f621b0370?ixlib=rb-1.2.1&auto=format&fit=crop&w=2500&q=80"
+backgroundUrl: "https://images.unsplash.com/photo-1487861212986-608f621b0370?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"
 ---
 
 In our recent winter holiday we had a GoPro, a drone and some more cameras. In total we gathered ~600GB of footage which was way too much for the home servers some of us had. So we decided to use AWS’ file storage service S3 to collect and share all that media. This guide shows you how to set up a bucket and user so that your friends (also the non-technicals) can use an infinitely scalable storage solution.

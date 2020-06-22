@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Testing Stripe Elements with Cypress
-backgroundUrl: "https://images.unsplash.com/photo-1582224369048-e4d2d7a6ba30?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
+backgroundUrl: "https://images.unsplash.com/photo-1582224369048-e4d2d7a6ba30?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
 In this article we will look into how we can test a website that uses iframes like Stripe Elements.

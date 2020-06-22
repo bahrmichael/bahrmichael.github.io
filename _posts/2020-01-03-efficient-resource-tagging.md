@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Efficiently tagging existing AWS resources
-backgroundUrl: "https://images.unsplash.com/photo-1562408590-e32931084e23?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
+backgroundUrl: "https://images.unsplash.com/photo-1562408590-e32931084e23?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
 This guide is for you if you have a bunch of untagged AWS resources and want to understand your bills better.

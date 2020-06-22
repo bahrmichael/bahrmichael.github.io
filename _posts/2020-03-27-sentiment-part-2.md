@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Stock Sentiment Analysis - Part 2: Analysing the sentiment"
-backgroundUrl: "https://images.unsplash.com/photo-1535320903710-d993d3d77d29?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2500&q=80"
+backgroundUrl: "https://images.unsplash.com/photo-1535320903710-d993d3d77d29?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
 In this two part article I will show you how to build an app, that collects people's opinions about companies and how to turn that into sentiments. Disclaimer: Trade at your own risk!

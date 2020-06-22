@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to analyse and aggregate data from DynamoDB
-backgroundUrl: "https://images.unsplash.com/photo-1570327611715-7a1afe27eccc?ixlib=rb-1.2.1&auto=format&fit=crop&w=2500&q=80"
+backgroundUrl: "https://images.unsplash.com/photo-1570327611715-7a1afe27eccc?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"
 ---
 
 DynamoDB is not a database designed to let you run analysis queries. We can however use DynamoDB streams and lambda functions to run these analyses each time data changes.
