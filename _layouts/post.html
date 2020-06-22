@@ -3,7 +3,11 @@ layout: default
 ---
 
 <div class="post">
-  <h1 class="post-title" style="background: url({{page.backgroundUrl}}&w=2000) 0; background-size: cover; min-height: 30rem; position:relative;">
+  {% if post.backgroundUrl contains 'https://images.unsplash.com' %}
+<h1 class="post-title" style="background: url({{page.backgroundUrl}}&w=2000) 0; background-size: cover; min-height: 30rem; position:relative;">
+    {% else %}
+      <h1 class="post-title" style="background: url({{page.backgroundUrl}}) 0; background-size: cover; min-height: 30rem; position:relative;">
+{% endif %}
     <a href="{{ page.url }}">
       {{ page.title }}
     </a>
