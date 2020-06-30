@@ -7,7 +7,7 @@ title: About
 
 Hi! I'm Michael and I build more and less interesting things on AWS. Since 2020 I'm also working as a Software Developer at AWS in Berlin, Germany. Opinions are my own.
 
-This blog will challenge you with new ideas, mostly reolving around serverless tech. Some are pretty neat, others make you ask "but why?" Take that input and twist in your own ways :) You can also follow me on [Twitter](https://twitter.com/michabahr) and [GitHub](https://github.com/bahrmichael).
+This blog will challenge you with new ideas, mostly reolving around serverless tech. Some are pretty neat, others make you ask "but why?" Take that input and twist in your own ways :) You can also follow me on [Twitter](https://twitter.com/bahrdev) and [GitHub](https://github.com/bahrmichael).
 
 If you would like to keep up to date with AWS releases, I highly suggest [Last Week in AWS](http://lastweekinaws.com/).
 

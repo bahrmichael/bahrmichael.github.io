@@ -76,7 +76,3 @@ provider:
 Check back soon when we use the newly gained information to optimise the expensive lambda functions.
 
 Please note that the cost of a lambda execution consists of both the runtime as well as the memory. For simplicity we excluded the latter in this chapter. Do you know how to combine the duration and memory usage in CloudWatch? Please share it!
-
-## Feedback
-
-Did you find this interesting, wrong or did you miss something? Please let me know here or on [twitter](https://twitter.com/michabahr).

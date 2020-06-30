@@ -9,7 +9,7 @@ backgroundUrl: "https://images.unsplash.com/photo-1421789497144-f50500b5fcf0?ixl
 This article describes a serverless approach to schedule AWS Lambda invocations through the usage of AWS DynamoDB TTL attributes and streams. At the time of writing there was no way to schedule an irregular point of time execution of a lambda execution (e.g. “run this function once in 2 days and 10 hours and then again in 4 days”) without [abusing CloudWatch crons](https://forums.aws.amazon.com/thread.jspa?messageID=902484) (see Alternatives for more info).
 
 {% raw %}
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">hey <a href="https://twitter.com/awscloud?ref_src=twsrc%5Etfw">@awscloud</a>! is there a way to trigger a <a href="https://twitter.com/hashtag/lambda?src=hash&amp;ref_src=twsrc%5Etfw">#lambda</a> execution at a future point in time without abusing rate/cron from <a href="https://twitter.com/hashtag/CloudWatch?src=hash&amp;ref_src=twsrc%5Etfw">#CloudWatch</a> or ttl from <a href="https://twitter.com/hashtag/DynamoDB?src=hash&amp;ref_src=twsrc%5Etfw">#DynamoDB</a>? e.g. call this function in 2 hours and this function in 3 days, 7 hours and 15 minutes</p>&mdash; Michael Bahr (@michabahr) <a href="https://twitter.com/michabahr/status/1133048146270052353?ref_src=twsrc%5Etfw">May 27, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">hey <a href="https://twitter.com/awscloud?ref_src=twsrc%5Etfw">@awscloud</a>! is there a way to trigger a <a href="https://twitter.com/hashtag/lambda?src=hash&amp;ref_src=twsrc%5Etfw">#lambda</a> execution at a future point in time without abusing rate/cron from <a href="https://twitter.com/hashtag/CloudWatch?src=hash&amp;ref_src=twsrc%5Etfw">#CloudWatch</a> or ttl from <a href="https://twitter.com/hashtag/DynamoDB?src=hash&amp;ref_src=twsrc%5Etfw">#DynamoDB</a>? e.g. call this function in 2 hours and this function in 3 days, 7 hours and 15 minutes</p>&mdash; Michael Bahr (@bahrdev) <a href="https://twitter.com/bahrdev/status/1133048146270052353?ref_src=twsrc%5Etfw">May 27, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
 
 This approach scores with its clean architecture and maintainability. It only requires a function to insert events into a scheduling-table and a function that processes events that hit reach the scheduled point of time. As we build everything on serverless technology, we don’t have to run software upgrades, maintain firewalls and pay for idle time. At low usage it’s practically free and even with higher usage we only really start paying once we schedule **hundreds of thousands of events per day**. Read more in this [follow up article](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588).
@@ -230,8 +230,6 @@ You can spin up an EC2 that runs a scheduler software, but this requires additio
 In this article we looked at an approach to schedule irregular lambda invocations and learned about its implementation and limitations. If you use this approach, then beware of the delays and monitor them.
 
 What are your thoughts? Do you have a better approach or know how to achieve this on a different cloud provider? Share it!
-
-Follow me on [Twitter](https://twitter.com/michabahr) for more experiments in and around cloud computing!
 
 ## Further Reading
 

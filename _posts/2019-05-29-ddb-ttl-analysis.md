@@ -48,5 +48,3 @@ Entries in a table with 1.000 entries were usually deleted within 13 minutes whe
 Officially DynamoDB deletes the entries [within a 48h](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/howitworks-ttl.html) after the TTL expires. The delay appears to correlate with the tables size as shown above.
 
 As the results show you should monitor the delays to see if they remain acceptable as your workload grows.
-
-Follow me on [Twitter](https://twitter.com/michabahr) for more experiments in and around cloud computing!

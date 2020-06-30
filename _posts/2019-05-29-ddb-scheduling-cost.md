@@ -82,8 +82,6 @@ At moderate usage it is possible to stay within the “basically free” area. S
 
 As always make sure to monitor your costs and set up budgets so that you get notifications if costs rise unexpectedly.
 
-Follow me on [Twitter](https://twitter.com/michabahr) for more experiments in and around cloud computing!
-
 ## Further Reading
 
 * [Replacing AWS Gateway with AWS ALB](https://serverless-training.com/articles/save-money-by-replacing-api-gateway-with-application-load-balancer/)
