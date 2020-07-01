@@ -25,7 +25,7 @@ Numbers in this article might be wrong, as they are based on my understanding of
 
 ## How do Savings Plans save money?
 
-With a Savings Plan you pay for compute before you use it, and in exchange your [rates for tht purchse are lowered](https://aws.amazon.com/savingsplans/pricing/) by up to **17% for Lambda** and up to **52% for Fargate**. In this chapter we will refer to hourly commitment as prepaid compute.
+With a Savings Plan you pay for compute before you use it, and in exchange your [rates for that purchase are lowered](https://aws.amazon.com/savingsplans/pricing/) by up to **17% for Lambda** and up to **52% for Fargate**. In this chapter we will refer to hourly commitment as prepaid compute.
 
 Once purchased, a Savings Plan gives you hourly packages of prepaid compute that compute services such as Lambda and Fargate can use. Any additional compute above the prepaid amount is priced at regular On-Demand rates.
 
