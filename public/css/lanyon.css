@@ -28,6 +28,11 @@
  */
 
 
+ .spaced-list {
+   margin-top: 10px;
+   margin-bottom: 10px;
+ }
+
 .post-title > a {
   background: rgba(250,250,250,0.7);
   bottom: 0;
