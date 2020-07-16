@@ -10,18 +10,16 @@
 
   <link rel="canonical" href="https://bahr.dev"/>
   <meta property="og:site_name" content="bahr.dev"/>
-  <meta property="og:title" content="bahr.dev"/>
   <meta property="og:url" content="https://bahr.dev"/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/bahrdev.png"/>
   <meta property="og:image:width" content="760"/>
   <meta property="og:image:height" content="248"/>
-  <meta itemprop="name" content="bahr.dev;"/>
+  <meta itemprop="name" content="bahr.dev"/>
   <meta itemprop="url" content="https://bahr.dev"/>
   <meta itemprop="thumbnailUrl" content="https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/bahrdev.png"/>
   <link rel="image_src" href="https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/bahrdev.png" />
   <meta itemprop="image" content="https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/bahrdev.png"/>
-  <meta name="twitter:title" content="bahr.dev"/>
   <meta name="twitter:image" content="https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/bahrdev.png"/>
   <meta name="twitter:url" content="https://bahr.dev"/>
   <meta name="twitter:card" content="summary"/>
@@ -29,8 +27,12 @@
   <title>
     {% if page.title == "Home" %}
       {{ site.title }} &middot; {{ site.tagline }}
-    {% else %}
+      <meta property="og:title" content={{ site.title }}/>
+      <meta name="twitter:title" content={{ site.title }}/>
+      {% else %}
       {{ page.title }} &middot; {{ site.title }}
+      <meta property="og:title" content={{ page.title }}/>
+      <meta name="twitter:title" content={{ page.title }}/>
     {% endif %}
   </title>
 
@@ -48,4 +50,6 @@
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <script src="https://donkey.bahr.dev/script.js" site="GVLDDGWJ" defer></script>
 </head>
