@@ -19,11 +19,11 @@
     <meta name="twitter:card" content="summary">
   {% else %}
     <title>{{ page.title }} &middot; {{ site.title }}</title>
-    <meta property="og:title" content="%{ page.title }"/>
-    <meta name="description" content="%{page.description}" >
-    <meta property="og:description" content="%{page.description}" >
-    <meta property="og:image" content="%{page.backgroundUrl}&w=1000">
-    <meta property="og:url" content="%{page.url}">
+    <meta property="og:title" content="{{ page.title }}"/>
+    <meta name="description" content="{{page.description}}" >
+    <meta property="og:description" content="{{page.description}}" >
+    <meta property="og:image" content="{{page.backgroundUrl}}&w=1000">
+    <meta property="og:url" content="{{page.url}}">
     <meta name="twitter:card" content="summary_large_image">
   {% endif %}
 
