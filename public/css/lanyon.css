@@ -63,7 +63,7 @@ img[src*='#center'] {
 }
 
 
-#header_signup .button {
+.mail_signup .button {
   clear:both; 
   background-color: #aaa; 
   border: 0 none; 
@@ -81,7 +81,7 @@ img[src*='#center'] {
   width: auto;
 }
 
-#header_signup input {
+.mail_signup input {
   border: 1px solid #ABB0B2;
   border-radius:4px 0 0 4px; 
   display: block;
@@ -90,7 +90,7 @@ img[src*='#center'] {
   text-indent: 2%;
 }
 
-#header_signup {
+.mail_signup {
   height: 31px;
   background-color: #268bd2;
   display: block;
@@ -189,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
   .masthead-title small {
     display: none;
   }
-  .masthead #header_signup {
+  .masthead .mail_signup {
     display: none;
   }
 }
