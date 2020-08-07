@@ -65,12 +65,15 @@ def handler(event, context):
             return
     
         payload = record['dynamodb']['NewImage']
-        # this assumes that there is a partition key called Id which is a number, and that there is no sort key
+        # this assumes that there is a partition key called Id 
+        # which is a number, and that there is no sort key
         key = record['dynamodb']['Keys']['Id']['N']
 
         date = datetime.now().isoformat()
 
-        s3.Object('my_bucket', f"data-from-dynamodb/{date}/{key}").put(Body=json.dumps(payload).encode())
+        object_key = f"data-from-dynamodb/{date}/{key}"
+        body = json.dumps(payload).encode()
+        s3.Object('my_bucket', object_key).put(Body=body)
 ```
 
 This will store deleted records in the S3 bucket `my_bucket`. No data is lost, the DynamoDB table stays small and you get an instant 90% cost reduction on storage.
@@ -104,12 +107,13 @@ s3 = boto.client('s3')
 
 one_mb = 1024 * 1024
 bucket = 'my_bucket'
-date = '2020-07'
+date_prefix = 'data-from-dynamodb/2020-07'
 
 print("Downloading data")
 
 objects = []
-for obj_info in s3.list_objects(Bucket=bucket, Prefix=f'data-from-dynamodb/{date}').get('Contents', []):
+files_response = s3.list_objects(Bucket=bucket, Prefix=date_prefix)
+for obj_info in files_response.get('Contents', []):
     key = obj_info['Key']
     obj = s3.Object(bucket, key).get()
     data = json.loads(obj['Body'].read().decode('utf-8'))
@@ -125,15 +129,17 @@ for obj in objects:
     size += len(obj['data'])
 
     if size > one_mb:
-        s3.put_object(Body=json.dumps(obj['data']).encode(), Bucket=bucket, Key=f"aggregated/{date}")
+        body = json.dumps(obj['data']).encode()
+        s3.put_object(Body=body, Bucket=bucket, Key=f"aggregated/{date}")
         size = 0
         aggregator = {}
 
-s3.put_object(Body=json.dumps(obj['data']).encode(), Bucket=bucket, Key=f"aggregated/{date}")
+body = json.dumps(obj['data']).encode()
+s3.put_object(Body=body, Bucket=bucket, Key=f"aggregated/{date}")
 
 print("Deleting data")
 
-for obj_info in s3.list_objects(Bucket=bucket, Prefix=f'data-from-dynamodb/{date}').get('Contents', []):
+for obj_info in s3.list_objects(Bucket=bucket, Prefix=date_prefix).get('Contents', []):
     s3.delete_object(Bucket=bucket, Key=obj_info['Key'])
 
 print("Done")
@@ -172,6 +178,8 @@ S3 Glacier and S3 Glacier Deep Archive become interesting options, when you need
 **How to move data to Glacier**
 
 As we've previously aggregated our data, we can add additional lifecycle transitions to move the data from S3 Infrequent Access to S3 Glacier. Instead of the Infrequent Access tier, now pick a Glacier option and adjust the time before transition accordingly.
+
+![Lifecycle Rule Glacier](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_glacier.png)
 
 That's it. Your data is now on ice and we get an additional 68% cost reduction on storage.
 
