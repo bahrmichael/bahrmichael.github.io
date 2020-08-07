@@ -11,7 +11,7 @@ This article describes the available options for archiving data, how to prepare 
 
 ![Storage Price vs Latency](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_storage_vs_latency.png)
 
-Below you find a table comparing the prices and latencies as of August 2020.
+Below you find a table comparing the prices and access latencies as of August 2020.
 
 {% gist 485a3646301377aee26cc0d95dfdac53 %}
 
@@ -19,9 +19,11 @@ All prices are for us-east-1. This article focuses on storage cost only.
 
 ## Prerequisites
 
-You should have an **AWS account** and gained **first experience with DynamoDB or S3**. The code snippets are written in Python.
+You should have an **AWS account** and gained **first experience with DynamoDB or S3**. The code snippets are written in Python and are intended to run on **AWS Lambda**.
 
 ## Moving Data
+
+As you've seen in the previous table, you can achieve significant storage cost reduction, by moving your data to a cheaper storage solution.
 
 There are 3 major paths when archiving data:
 
