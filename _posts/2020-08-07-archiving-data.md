@@ -153,7 +153,7 @@ Now that we've packaged our objects, let's continue with **lifecycle transitions
 
 In this article we will configure the lifecycle transitions through the AWS console. You can also use the CDK's [LifecycleRules](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-s3.LifecycleRule.html) and [Transition](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-s3.Transition.html)s to build an Infrastructure as Code solution.
 
-To get started, open your S3 bucket in the AWS console and open the Management tab. Click on "Add lifecycle rule" to configure a lifecycle. By applying the lifecycle rule to the folder `aggregated`, we only transition data which has ben packaged for archival.
+To get started, open your S3 bucket in the AWS console and open the Management tab. Click on "Add lifecycle rule" to configure a lifecycle. By applying the lifecycle rule to the folder `aggregated`, we only transition data which has been packaged for archival.
 
 ![Lifecycle Rules Step 1](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_step_1.png)
 
