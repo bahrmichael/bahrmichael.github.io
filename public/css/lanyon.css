@@ -44,7 +44,7 @@
 
 
 @media (min-width: 56rem) {
-  .post > p, h2, h3, h4, blockquote, ul, .highlight, hr, ol, table, .gist, .twitter-tweet {
+  .post > p, h2, h3, h4, blockquote, ul, .highlight, hr, ol, table, .gist, .twitter-tweet, .mail_signup {
       max-width: 38rem;
       margin-left: auto;
       margin-right: auto;
