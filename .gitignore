@@ -44,3 +44,5 @@ bower_components
 .jekyll-cache
 md2pdf.css
 *.pdf
+
+drafts

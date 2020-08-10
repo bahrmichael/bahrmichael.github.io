@@ -183,7 +183,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 48rem) {
   .masthead-title {
-    text-align: center;
+    margin: auto;
   }
   .masthead-title small {
     display: none;
