@@ -25,6 +25,18 @@
     <meta property="og:image" content="{{page.backgroundUrl}}&w=1000">
     <meta property="og:url" content="{{page.url}}">
     <meta name="twitter:card" content="summary_large_image">
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ page.title }}",
+        "image": [
+          "{{page.backgroundUrl}}&w=600"
+        ],
+        "datePublished": "{{ page.date }}"
+      }
+    </script>
   {% endif %}
 
   <!-- CSS -->
