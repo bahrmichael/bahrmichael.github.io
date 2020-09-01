@@ -50,7 +50,7 @@ Depending on who manages your domain (e.g. Route 53 or GoDaddy) and if you alrea
 
 **Warning**: Before deleting hosted zones, please make sure you delete all related records in the root hosted zone or third party provider. Dangling CNAME and NS records might [allow an attacker to serve content in your name](https://searchsecurity.techtarget.com/answer/What-is-subdomain-takeover-and-why-does-it-matter).
 
-### 1.1 Fresh Domain That Is Managed By Route 53
+### 1.1. Fresh Domain That Is Managed By Route 53
 
 This is the easiest path. All we need is a Hosted Zone for our domain.
 
@@ -67,7 +67,7 @@ const hostedZone = new HostedZone(this, "HostedZone", {
 
 Route 53 can now serve DNS records for that domain.
 
-### 1.2 Used Domain That Is Managed By Route 53
+### 1.2. Used Domain That Is Managed By Route 53
 
 This assumes that you already have a Hosted Zone for your apex domain, use your apex domain for something different and want to use a subdomain instead. An apex domain is your top level domain, e.g. `bahr.dev` or `google.com`.
 
@@ -105,7 +105,7 @@ A low time to live (TTL) allows for faster trial and error as DNS caches expire 
 
 We will later add ARecords, so that requests to `picture.bahr.dev` and `*.picture.bahr.dev` go to the same CloudFront distribution. `bahr.dev` will not be affected.
 
-### 1.3 Domain Is Managed By A Provider Other Than AWS
+### 1.3. Domain Is Managed By A Provider Other Than AWS
 
 Again we will create a Hosted Zone in Route 53, but this time we need manual work to register the nameservers of our Hosted Zone with our DNS provider. To get started, first create a Hosted Zone through the AWS console.
 
@@ -141,7 +141,7 @@ const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
 });
 ```
 
-## 2 Certificate
+## 2. Certificate
 
 Now that we have DNS routing set up, we can request and validate a certificate. We need this certificate to serve our website with https.
 
@@ -175,7 +175,7 @@ The parameter `hostedZone` specifies which Hosted Zone the certificate shall con
 
 `domainName` and `subjectAlternativeNames` specify which domains the certificate should be valid for. The remaining parameters configure the validation process.
 
-## 3 Frontend Deployment
+## 3. Frontend Deployment
 
 With the certificate in place, we can create a Single Page Application (SPA) deployment via S3 and CloudFront. We're using the npm package [cdk-spa-deploy](https://www.npmjs.com/package/cdk-spa-deploy) to shorten the amount of code required for configuring the S3 bucket and attaching a CloudFront distribution.
 
@@ -203,7 +203,7 @@ const subdomain = window.location.host.split('.')[0];
 
 With that information, the website can then contact the CMS to get the right assets for your customer.
 
-## 4 Wilcard Routing
+## 4. Wilcard Routing
 
 And finally it's time for the wildcard routing. With the CDK code below, all requests to `*.picture.bahr.dev` and `picture.bahr.dev` will be routed to the frontend deployment we set up above.
 
