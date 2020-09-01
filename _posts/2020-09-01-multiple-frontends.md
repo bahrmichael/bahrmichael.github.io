@@ -7,9 +7,10 @@ description: "This article explains how you can point multiple subdomains to the
 
 Back in 2019 I built an online ticketshop for sports clubs. In its core, the shop was a webapp that processes payments and sends PDF via email. When it came to customization, things got tricky: Each club had a different name, different pictures, and sometimes even different questions they wanted to ask their customers. To give each of the clubs a customized experience, we provided each of them with their own subdomain. Eventually there were six different frontend deployments, multiple branches and the code bases started to diverge. Recently I learned that you can use DNS ARecords to route all requests under a cetain domain to the same frontend. Thanks to [DongGyun](https://twitter.com/handk85)!
 
-<iframe src="https://giphy.com/embed/Xbfx1QFcCKxkhUeVwa" width="720" height="372" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
 This article explains how you can point multiple subdomains to the same frontend deployment by creating DNS records and a static website with the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). That will enable you to give each of your customers a customized experience, while having just one frontend deployment.
+
+![Wildcard Domains Demo](https://media3.giphy.com/media/kdLSRH6v4dSc5eNNQ4/giphy.gif)
 
 **Shortcut**: If you don't need Infrastructure as Code (IaC), then an ARecord in Route 53 with `*.yourdomain.com` that points to your existing CloudFront distribution gets you the same result.
 
