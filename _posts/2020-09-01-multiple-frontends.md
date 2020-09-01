@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Point Multipe Subdomains To The Same Frontend"
+title: "Point Multiple Subdomains To The Same Frontend"
 backgroundUrl: "https://images.unsplash.com/photo-1508904933353-8a1d461016f2?auto=format&fit=crop&q=80"
 description: "This article explains how you can point multiple subdomains to the same frontend deployment. This will enable you to give each of your customers a customized experience, while having just one frontend deployment."
 ---
@@ -293,7 +293,7 @@ export class WildcardSubdomainsStack extends cdk.Stack {
 }
 ```
 
-Now run `AWS_PROFILE=myProfile npm run deploy` to deploy the solution. Replaec `myProfile` with whatever profile you're using for AWS. [Here's more about AWS profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
+Now run `AWS_PROFILE=myProfile npm run deploy` to deploy the solution. Replace `myProfile` with whatever profile you're using for AWS. [Here's more about AWS profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
 
 The deployment may take somewhere between 10 and 15 minutes. Grab a coffee and let CDK do its thing. If you run into problems, check the troubleshooting section below.
 
@@ -323,7 +323,7 @@ Make sure you are using the right approach so that the required CNAME record wil
 
 ## Next Steps
 
-[Chceck out the full source code](https://github.com/bahrmichael/wildcard-subdomains) and try it yourself! If you'd like to contribute, a PR to [cdk patterns](https://github.com/cdk-patterns) is probably a good idea.
+[Check out the full source code](https://github.com/bahrmichael/wildcard-subdomains) and try it yourself! If you'd like to contribute, a PR to [cdk patterns](https://github.com/cdk-patterns) is probably a good idea.
 
 ## Further Reading
 
