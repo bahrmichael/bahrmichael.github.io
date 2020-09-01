@@ -14,7 +14,7 @@ This article explains how you can point multiple subdomains to the same frontend
 
 **Shortcut**: If you don't need Infrastructure as Code (IaC), then an ARecord in Route 53 with `*.yourdomain.com` that points to your existing CloudFront distribution gets you the same result.
 
-The magic is in the chapter "Wilcard Routing". [Check out the full source code on GitHub](https://github.com/bahrmichael/wildcard-subdomains).
+The magic is in the chapter "Wildcard Routing". [Check out the full source code on GitHub](https://github.com/bahrmichael/wildcard-subdomains).
 
 ## Prerequisites
 
@@ -203,7 +203,7 @@ const subdomain = window.location.host.split('.')[0];
 
 With that information, the website can then contact the CMS to get the right assets for your customer.
 
-## 4. Wilcard Routing
+## 4. Wildcard Routing
 
 And finally it's time for the wildcard routing. With the CDK code below, all requests to `*.picture.bahr.dev` and `picture.bahr.dev` will be routed to the frontend deployment we set up above.
 
