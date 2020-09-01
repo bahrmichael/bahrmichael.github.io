@@ -7,9 +7,7 @@ description: "This article explains how you can point multiple subdomains to the
 
 Back in 2019 I built an online ticketshop for sports clubs. In its core, the shop was a webapp that processes payments and sends PDF via email. When it came to customization, things got tricky: Each club had a different name, different pictures, and sometimes even different questions they wanted to ask their customers. To give each of the clubs a customized experience, we provided each of them with their own subdomain. Eventually there were six different frontend deployments, multiple branches and the code bases started to diverge. Recently I learned that you can use DNS ARecords to route all requests under a cetain domain to the same frontend. Thanks to [DongGyun](https://twitter.com/handk85)!
 
-{% raw %}
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">📽️ Demo: Each subdomain gets different content, with ONE frontend.<a href="https://twitter.com/hashtag/AWS?src=hash&amp;ref_src=twsrc%5Etfw">#AWS</a> <a href="https://twitter.com/hashtag/serverless?src=hash&amp;ref_src=twsrc%5Etfw">#serverless</a> <a href="https://twitter.com/hashtag/CDK?src=hash&amp;ref_src=twsrc%5Etfw">#CDK</a> <a href="https://t.co/9gZlM4spjU">pic.twitter.com/9gZlM4spjU</a></p>&mdash; Michael Bahr (@bahrdev) <a href="https://twitter.com/bahrdev/status/1299714817608081408?ref_src=twsrc%5Etfw">August 29, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endraw %}
+<iframe src="https://giphy.com/embed/Xbfx1QFcCKxkhUeVwa" width="720" height="372" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 
 This article explains how you can point multiple subdomains to the same frontend deployment by creating DNS records and a static website with the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/). That will enable you to give each of your customers a customized experience, while having just one frontend deployment.
 
@@ -39,7 +37,7 @@ You can see above that only the domain changes, but nothing else. At **the core 
 
 ![Route 53 ARecords](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/route53-preview.png)
 
-## Create A Hosted Zone
+## 1. Create A Hosted Zone
 
 To register DNS records in AWS, we need to [create a Hosted Zone in Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html). [Each Hosted Zone costs $0.50 per month](https://aws.amazon.com/route53/pricing/).
 
@@ -51,7 +49,7 @@ Depending on who manages your domain (e.g. Route 53 or GoDaddy) and if you alrea
 
 **Warning**: Before deleting hosted zones, please make sure you delete all related records in the root hosted zone or third party provider. Dangling CNAME and NS records might [allow an attacker to serve content in your name](https://searchsecurity.techtarget.com/answer/What-is-subdomain-takeover-and-why-does-it-matter).
 
-### Fresh Domain That Is Managed By Route 53
+### 1.1 Fresh Domain That Is Managed By Route 53
 
 This is the easiest path. All we need is a Hosted Zone for our domain.
 
@@ -68,7 +66,7 @@ const hostedZone = new HostedZone(this, "HostedZone", {
 
 Route 53 can now serve DNS records for that domain.
 
-### Used Domain That Is Managed By Route 53
+### 1.2 Used Domain That Is Managed By Route 53
 
 This assumes that you already have a Hosted Zone for your apex domain, use your apex domain for something different and want to use a subdomain instead. An apex domain is your top level domain, e.g. `bahr.dev` or `google.com`.
 
@@ -79,7 +77,8 @@ import { HostedZone } from '@aws-cdk/aws-route53';
 
 ...
 
-// bahr.dev is already in use, so will start at the subdomain picture.bahr.dev
+// bahr.dev is already in use, so we'll start 
+// at the subdomain picture.bahr.dev
 const apexDomain = 'bahr.dev';
 const domain = `picture.${apexDomain}`;
 
@@ -90,7 +89,9 @@ const hostedZone = new HostedZone(this, "HostedZone", {
 // add a ZoneDelegationRecord so that requests for *.picture.bahr.dev 
 // and picture.bahr.dev are handled by our newly created HostedZone
 const nameServers: string[] = hostedZone.hostedZoneNameServers!;    
-const rootZone = HostedZone.fromLookup(this, 'Zone', { domainName: apexDomain });
+const rootZone = HostedZone.fromLookup(this, 'Zone', { 
+  domainName: apexDomain 
+});
 new ZoneDelegationRecord(this, "Delegation", {
     recordName: domain,
     nameServers,
@@ -103,7 +104,7 @@ A low time to live (TTL) allows for faster trial and error as DNS caches expire 
 
 We will later add ARecords, so that requests to `picture.bahr.dev` and `*.picture.bahr.dev` go to the same CloudFront distribution. `bahr.dev` will not be affected.
 
-### Domain Is Managed By A Provider Other Than AWS
+### 1.3 Domain Is Managed By A Provider Other Than AWS
 
 Again we will create a Hosted Zone in Route 53, but this time we need manual work to register the nameservers of our Hosted Zone with our DNS provider. To get started, first create a Hosted Zone through the AWS console.
 
@@ -134,10 +135,12 @@ import { HostedZone } from '@aws-cdk/aws-route53';
 
 const domain = `picture.bahr.dev`;
 
-const hostedZone = HostedZone.fromLookup(this, 'HostedZone', { domainName: domain });
+const hostedZone = HostedZone.fromLookup(this, 'HostedZone', { 
+  domainName: domain 
+});
 ```
 
-## Certificate
+## 2 Certificate
 
 Now that we have DNS routing set up, we can request and validate a certificate. We need this certificate to serve our website with https.
 
@@ -171,7 +174,7 @@ The parameter `hostedZone` specifies which Hosted Zone the certificate shall con
 
 `domainName` and `subjectAlternativeNames` specify which domains the certificate should be valid for. The remaining parameters configure the validation process.
 
-## Frontend Deployment
+## 3 Frontend Deployment
 
 With the certificate in place, we can create a Single Page Application (SPA) deployment via S3 and CloudFront. We're using the npm package [cdk-spa-deploy](https://www.npmjs.com/package/cdk-spa-deploy) to shorten the amount of code required for configuring the S3 bucket and attaching a CloudFront distribution.
 
@@ -199,7 +202,7 @@ const subdomain = window.location.host.split('.')[0];
 
 With that information, the website can then contact the CMS to get the right assets for your customer.
 
-## Wilcard Routing
+## 4 Wilcard Routing
 
 And finally it's time for the wildcard routing. With the CDK code below, all requests to `*.picture.bahr.dev` and `picture.bahr.dev` will be routed to the frontend deployment we set up above.
 
