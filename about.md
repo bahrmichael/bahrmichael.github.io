@@ -9,7 +9,7 @@ Hi! I'm Michael and I burn for all things serverless. I've been working with ser
 
 ## Achievements
 
-In 2019 I built a serverless scheduler which tested the limits of various services. The companion article got a retweet by [Jeff Barr](https://twitter.com/jeffbarr) himself and eventually lead to me joining AWS in Berlin, Germany.
+In 2019 I built a [serverless scheduler](https://bahr.dev/2019/10/11/serverless-scheduler/) which tested the limits of various AWS services. The companion article got a retweet by [Jeff Barr](https://twitter.com/jeffbarr) himself and eventually lead to me joining AWS in Berlin, Germany.
 
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Cool - <a href="https://twitter.com/hashtag/Serverless?src=hash&amp;ref_src=twsrc%5Etfw">#Serverless</a> Scheduler - <a href="https://t.co/dI2V6LvzSv">https://t.co/dI2V6LvzSv</a> <a href="https://twitter.com/hashtag/AWS?src=hash&amp;ref_src=twsrc%5Etfw">#AWS</a> <a href="https://twitter.com/hashtag/Lambda?src=hash&amp;ref_src=twsrc%5Etfw">#Lambda</a> <a href="https://t.co/Zb9SYDL09E">pic.twitter.com/Zb9SYDL09E</a></p>&mdash; Jeff Barr ☁️ (@ 🏠 ) (@jeffbarr) <a href="https://twitter.com/jeffbarr/status/1182706563716222979?ref_src=twsrc%5Etfw">October 11, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -39,8 +39,10 @@ This blog uses Fathom Analytics which is a privacy focused analytics tool with n
 
 ### Newsletter Analytics
 
+ [I strongly share Corey's stance on newsletter analytics. Check out what he has to say!](https://www.lastweekinaws.com/podcast/aws-morning-brief/whiteboard-confessional-hacking-email-newsletter-analytics-breaking-links/).
+
 To see what newsletter formats work, I use little pixels which tell me if mails were opened as well as link counters. I don't care if you opened a mail or not, but if the my general audience does. That way I can test various formats and get real data on my experiments. I can also stop sending mail to those who don't read the newsletter anyway.
 
-In terms of privacy, tracking pixels are a pretty difficult topic. I thought long and hard about these and realized that eventually the aggregated data is a incredibly useful. If you do not wish to receive individualised tracking pixels, please tell me and I'll move you to a dedicated group.
+In terms of privacy, tracking pixels are a pretty difficult topic. I thought long and hard about these and realized that eventually the aggregated data is a incredibly useful. 
 
-[Check out what Corey Quinn from Last Week in AWS says about newsletter analytics]()https://www.lastweekinaws.com/podcast/aws-morning-brief/whiteboard-confessional-hacking-email-newsletter-analytics-breaking-links/.
+If you do not wish to receive individualised tracking pixels, please tell me and I'll move you to a dedicated group.
