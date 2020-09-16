@@ -40,7 +40,8 @@ title: Home
 
 
 <h2>Cost Optimization</h2>
-{% for post in site.posts | where:"frontPageCategory","costOptimization" %}
+{% assign cost-posts = site.posts | where:"frontPageCategory","costOptimization" %}
+{% for post in cost-posts %}
 <h3 class="post-title" style="background: url({{post.backgroundUrl}}&w=700) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
     <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
         {{ post.title }}
@@ -49,7 +50,8 @@ title: Home
 {% endfor %}
 
 <h2>Monitoring & Performance</h2>
-{% for post in site.posts | where:"frontPageCategory","monitoringAndPerformance" %}
+{% assign monitoring-posts = site.posts | where:"frontPageCategory","monitoringAndPerformance" %}
+{% for post in monitoring-posts %}
 <h3 class="post-title" style="background: url({{post.backgroundUrl}}&w=700) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
     <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
         {{ post.title }}
@@ -58,7 +60,8 @@ title: Home
 {% endfor %}
 
 <h2>Storage</h2>
-{% for post in site.posts | where:"frontPageCategory","storage" %}
+{% assign storage-posts = site.posts | where:"frontPageCategory","storage" %}
+{% for post in storage-posts %}
 <h3 class="post-title" style="background: url({{post.backgroundUrl}}&w=700) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
     <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
         {{ post.title }}
@@ -67,7 +70,8 @@ title: Home
 {% endfor %}
 
 <h2>Scheduling</h2>
-{% for post in site.posts | where:"frontPageCategory","scheduling" %}
+{% assign scheduling-posts = site.posts | where:"frontPageCategory","scheduling" %}
+{% for post in scheduling-posts %}
 <h3 class="post-title" style="background: url({{post.backgroundUrl}}&w=700) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
     <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
         {{ post.title }}
