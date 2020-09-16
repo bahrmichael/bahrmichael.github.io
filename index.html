@@ -82,20 +82,6 @@ title: Home
     </a>
 </h3>
 {% endfor %}
-{% endfor %}
 
-<h2>Recent Articles</h2>
-
-{% for post in site.posts offset:1 limit:3 %}
-{% if post.backgroundUrl contains 'https://images.unsplash.com' %}
-<h3 class="post-title" style="background: url({{post.backgroundUrl}}&w=700) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
-    {% else %}
-    <h3 class="post-title" style="background: url({{post.backgroundUrl}}) 0; background-size: cover; min-height: 10rem; position:relative; margin-bottom:50px">
-{% endif %}
-    <a href="{{ post.url }}" style="background-color: rgba(250, 250, 250, 0.8);">
-        {{ post.title }}
-    </a>
-</h3>
-{% endfor %}
 <p>Find more posts in the <a href="/archive">Archive</a>.</p>
 </div>
