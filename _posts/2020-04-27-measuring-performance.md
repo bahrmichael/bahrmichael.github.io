@@ -3,6 +3,7 @@ layout: post
 title: "Measuring Performance with CloudWatch Custom Metrics and Insights"
 description: "In this article we learn 4 approaches to generating performance metrics in serverless AWS, each with their own little trade offs."
 backgroundUrl: "https://images.unsplash.com/photo-1578002171601-902a5a7645a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+frontPageCategory: monitoringAndPerformance
 ---
 
 This article focuses on serveless technologies such as AWS Lambda and CloudWatch.

@@ -3,6 +3,7 @@ layout: post
 title: "Archive your AWS data to reduce storage cost"
 description: "This article describes the available options for archiving data, how to prepare that data for long term archival and how to let S3 transition data between storage tiers."
 backgroundUrl: "https://images.unsplash.com/photo-1526923268711-fa1c7e80f0e3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+frontPageCategory: costOptimization
 ---
 
 AWS offers a variety of general purpose storage solutions. While DynamoDB is the best option when latency and a variety of access patterns matter most, S3 allows for cost reduction when access patterns are less complex and latency is less critical.

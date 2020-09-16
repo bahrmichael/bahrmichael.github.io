@@ -2,6 +2,7 @@
 layout: post
 title: Scheduling irregular AWS Lambda executions through DynamoDB TTL attributes
 backgroundUrl: "https://images.unsplash.com/photo-1421789497144-f50500b5fcf0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+frontPageCategory: scheduling
 ---
 
 ## Introduction

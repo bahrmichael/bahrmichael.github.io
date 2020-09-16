@@ -3,6 +3,7 @@ layout: post
 title: "How to pick the right Compute Savings Plan for Serverless Workloads on AWS"
 description: "This article describes the available options for serverless workloads, how to pick the right plan and how to improve on existing plans."
 backgroundUrl: "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+frontPageCategory: costOptimization
 ---
 
 [Compute Savings Plans](https://aws.amazon.com/savingsplans/faq/) are a flexible approach to lowering your AWS bill by committing to an hourly spending. Finding the right commitment can however be tricky when we consider free tiers, varying workloads, available budgets and your plans for the next years. This article describes the available options for serverless workloads, how to pick the right plan and how to improve on existing plans.

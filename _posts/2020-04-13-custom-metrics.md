@@ -3,6 +3,7 @@ layout: post
 title: "Monitoring an application's health with CloudWatch Custom Metrics"
 description: "In this article we learn how to use custom metrics to monitor the health of an application by looking at a real world example."
 backgroundUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+frontPageCategory: monitoringAndPerformance
 ---
 
 For most applications it makes sense to trigger CloudWatch alarms when lambda functions throw errors. Throwing errors on unwanted behavior is a best practice which also allows you to make use of standard metrics and redrive mechanisms. However some applications may have trade offs between concurrency and blast radius, which don't allow them to rely solely on errors for the health of their application.
