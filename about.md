@@ -5,7 +5,9 @@ title: About
 
 <img style="float: right; padding-left: 40px;" src="https://avatars3.githubusercontent.com/u/1830132?s=460&u=88b1451736a997773aa729e08a83a1fe3ada8f07#right">
 
-Hi! I'm Michael and I burn for all things serverless. I've been working with serverless technolgies since 2018, where I made my first attempts at building an online ticketshop for sports clubs. It is still running and costs about 10$ to operate per year.
+Hi! I'm Michael and I burn for all things serverless. 
+
+I've been working with serverless technolgies since 2018, where I made my first attempts at building an online ticketshop for sports clubs. It is still running and costs about 10$ to operate per year.
 
 ## Achievements
 
