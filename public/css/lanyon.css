@@ -33,6 +33,15 @@
    margin-bottom: 10px;
  }
 
+ .latest-article-headline {
+  background: rgba(250,250,250,0.7);
+  bottom: 0;
+  position: absolute;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+ }
+
  .front-page-category {
    margin-top: 50px;
   background-size: cover; 
