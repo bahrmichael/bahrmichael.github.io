@@ -34,6 +34,7 @@
  }
 
  .front-page-category {
+   margin-top: 50px;
   background-size: cover; 
   min-height: 10rem; 
   position:relative; 
@@ -47,6 +48,10 @@
   padding: 10px;
   text-align: center;
   width: 100%;
+}
+
+.front-page-topic {
+  margin-left: 5%;
 }
 
 

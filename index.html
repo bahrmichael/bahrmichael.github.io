@@ -45,7 +45,7 @@ title: Home
 </div>
 {% assign cost-posts = site.posts | where:"frontPageCategory","costOptimization" %}
 {% for post in cost-posts %}
-<h3>
+<h3 class="front-page-topic">
     <a href="{{ post.url }}">{{ post.title }}</a>
 </h3>
 {% endfor %}
@@ -55,7 +55,7 @@ title: Home
 </div>
 {% assign monitoring-posts = site.posts | where:"frontPageCategory","monitoringAndPerformance" %}
 {% for post in monitoring-posts %}
-<h3>
+<h3 class="front-page-topic">
     <a href="{{ post.url }}">{{ post.title }}</a>
 </h3>
 {% endfor %}
@@ -65,7 +65,7 @@ title: Home
 </div>
 {% assign storage-posts = site.posts | where:"frontPageCategory","storage" %}
 {% for post in storage-posts %}
-<h3>
+<h3 class="front-page-topic">
     <a href="{{ post.url }}">{{ post.title }}</a>
 </h3>
 {% endfor %}
@@ -75,7 +75,7 @@ title: Home
 </div>
 {% assign storage-posts = site.posts | where:"frontPageCategory","scheduling" %}
 {% for post in storage-posts %}
-<h3>
+<h3 class="front-page-topic">
     <a href="{{ post.url }}">{{ post.title }}</a>
 </h3>
 {% endfor %}
