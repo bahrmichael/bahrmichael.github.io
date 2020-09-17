@@ -33,7 +33,14 @@
    margin-bottom: 10px;
  }
 
-.post-title > a {
+ .front-page-category {
+  background-size: cover; 
+  min-height: 10rem; 
+  position:relative; 
+  margin-bottom:50px;
+ }
+
+.front-page-category > .front-page-category-headline {
   background: rgba(250,250,250,0.7);
   bottom: 0;
   position: absolute;
