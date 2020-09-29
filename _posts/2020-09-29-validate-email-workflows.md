@@ -43,7 +43,7 @@ We'll use DynamoDB's partition and sort keys to enable two major features: Recei
 
 ```
 partition_key: recipient@address.com
-sort_key: timestamp with millisecond precision#uuid
+sort_key: timestamp#uuid
 ttl: timestamp
 ```
 
@@ -53,6 +53,7 @@ I'm using [Jeremy Daly's dynamodb-toolbox](https://github.com/jeremydaly/dynamod
 
 ```typescript
 import { Table, Entity } from 'dynamodb-toolbox';
+import { v4 as uuid } from 'uuid';
 
 // Require AWS SDK and instantiate DocumentClient
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
@@ -258,7 +259,7 @@ For example if you are sending an order confirmation to `random-uuid@inbox-api.d
 
 ## Limitations and Potential Improvements
 
-While the [SES sandbox restricts how many emails you can **send**](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html), there seems to be no limiation about receiving mail.
+While the [SES sandbox restricts how many emails you can send](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html), there seems to be no limiation about receiving mail.
 
 Our solution is not yet capable of providing attachments or the mail body. The [SES S3 action](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ses-actions.S3.html) already stores those in a bucket which can be used for an improved read API function.
 
