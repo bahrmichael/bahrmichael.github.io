@@ -21,7 +21,7 @@ To receive mail with SES you need a domain or subdomain. You can [register a dom
 
 The solution consists of two parts. The email receiver and the api that lets you access the received mail. The first writes to the database, the latter reads from it.
 
-![Architecture Overview](./pictures/2020/tempmail/inbox-api.png)
+![Architecture Overview](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/tempmail/inbox-api.png)
 
 For the email receiver we use [SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html) with [Receipt Rules](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-ses-readme.html#email-receiving). We use those rules to store the raw payload and attachments in an S3 bucket, and send a nicely formed payload to a Lambda function which creates an entry in the DynamoDB table.
 
