@@ -130,7 +130,7 @@ Last but not least, Timestream does not have provisioned throughput yet. Especia
 
 ## Summary
 
-I moved my timeseries data to Timestream, but added another DynamoDB table for precomputing user facing data. While my cost stayed roughly the same, I now have **cheap long term storage**.
+I moved my timeseries data to Timestream, but added another DynamoDB table for precomputing user facing data. While my cost stayed roughly the same, I now have **cheap long term storage at 12% of the previous price**.
 
 DynamoDB is faster for targeted queries, whereas **Timestream is better for analytics** that include large amounts of data. You can **combine both and precompute** data that needs fast access.
 
