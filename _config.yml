@@ -19,3 +19,4 @@ paginate:         5
 
 plugins:
   - jekyll-gist
+  - jekyll-sitemap
