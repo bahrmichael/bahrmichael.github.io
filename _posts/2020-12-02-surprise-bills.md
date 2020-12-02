@@ -5,9 +5,9 @@ backgroundUrl: "https://images.unsplash.com/photo-1603777953913-d4bace4bf01c?aut
 description: "In this article we'll take a look at how billing works, and what you can do to prevent surprise bills."
 ---
 
-**Short on time?** [Set up Budget Alerts in less than 2 minutes]('/#1-budget-alerts).
+**Short on time?** [Set up Budget Alerts in less than 2 minutes]('#2-budget-alerts).
 
-**Got a surprise bill?** [Here's how you can contact AWS Support]('/#contact-support').
+**Got a surprise bill?** [Here's how you can contact AWS Support]('#contact-support').
 
 Imagine you've been running a hobby project in the cloud for the last 6 months. Every month you
 paid 20 cents. Not enough to really care about. However one morning you notice a surprisingly
@@ -72,7 +72,7 @@ will get a notification e.g. via e-mail which tells you that the threshold has b
 customize notifications through [Amazon SNS](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-sns-policy.html)
 or [AWS Chatbot](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/sns-alert-chime.html).
 
-Here's a [short video](https://youtu.be/_YXSDIPFhTI) (52 seconds) that you can follow to create your first Budget Alert. [Ryan H Lewis made a longer video](https://www.youtube.com/watch?v=MKNtSOQXFrY) with some more context around Budget Alerts and the many ways you can configure them.
+Here's a [short video](https://youtu.be/_YXSDIPFhTI) (52 seconds) that you can follow to create your first Budget Alert. [Ryan H Lewis made a longer video](https://www.youtube.com/watch?v=MKNtSOQXFrY) with some more context around Budget Alerts, and the many ways you can configure them.
 
 If you're already using the CDK then the package [aws-budget-notifier](https://awscdk.io/packages/@stefanfreitag/aws-budget-notifier@0.1.5/#/) gets you started quickly.
 
@@ -85,7 +85,7 @@ I also recommend to set up **multiple billing alerts at various thresholds**:
 
 1. The comfortable alert: This is an amount that you're comfortable spending, but you want to look into the bill over the next days.
 2. The dangerous alert: At this amount, you're not comfortable anymore, and want to shut down a service as soon as possible. If your comfortable amount is $10, this one might be $100.
-3. The critical alert: At this amount, you want to nuke your account from orbit. With a comfortable amount of $10, this one might be $500. You can attach [Budget Actions]('/#2-budget-actions) or pager alerts to this alarm to automatically stop EC2 instances or wake you up at night.
+3. The critical alert: At this amount, you want to nuke your account from orbit. With a comfortable amount of $10, this one might be $500. You can attach [Budget Actions](#3-budget-actions) or pager alerts to this alarm to automatically stop EC2 instances or wake you up at night.
 
 As an addition to predefined thresholds, you can also try out [AWS Cost Anomaly Detection](https://aws.amazon.com/aws-cost-management/aws-cost-anomaly-detection/).
 
@@ -206,12 +206,12 @@ The steps to file a support ticket are:
 While there are folks who got their surprise bill reimbursed, please don't rely on this.
 
 ## Conclusion
-
-The first thing you should do is set up [MFA]('/#1-secure-your-account-with-multifactor-authentication) and [Budget Alerts]('/#1-budget-alerts). After that you can look into more advanced
+1. Secure Your Account With Multi Factor Authentication
+The first thing you should do is set up [MFA](#1-secure-your-account-with-multi-factor-authentication) and [Budget Alerts](#2-budget-alerts). After that you can look into more advanced
 operations like Budget Actions to lock down your account if spending spikes.
 
 If your applications use secrets or access keys, you can prevent them from accidentally ending up in your repositories
-by [storing the secrets in the AWS Secrets Manager instead]('/#5-secrets-manager).
+by [storing the secrets in the AWS Secrets Manager instead](#5-secrets-manager).
 
 ## Resources
 
