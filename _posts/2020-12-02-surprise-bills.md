@@ -206,7 +206,7 @@ The steps to file a support ticket are:
 While there are folks who got their surprise bill reimbursed, please don't rely on this.
 
 ## Conclusion
-1. Secure Your Account With Multi Factor Authentication
+
 The first thing you should do is set up [MFA](#1-secure-your-account-with-multi-factor-authentication) and [Budget Alerts](#2-budget-alerts). After that you can look into more advanced
 operations like Budget Actions to lock down your account if spending spikes.
 
