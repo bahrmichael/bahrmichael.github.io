@@ -5,9 +5,9 @@ backgroundUrl: "https://images.unsplash.com/photo-1603777953913-d4bace4bf01c?aut
 description: "In this article we'll take a look at how billing works, and what you can do to prevent surprise bills."
 ---
 
-**Short on time?** [Set up Budget Alerts in less than 2 minutes]('#2-budget-alerts).
+**Short on time?** [Set up Budget Alerts in less than 2 minutes](#2-budget-alerts).
 
-**Got a surprise bill?** [Here's how you can contact AWS Support]('#contact-support').
+**Got a surprise bill?** [Here's how you can contact AWS Support](#contact-support).
 
 Imagine you've been running a hobby project in the cloud for the last 6 months. Every month you
 paid 20 cents. Not enough to really care about. However one morning you notice a surprisingly
