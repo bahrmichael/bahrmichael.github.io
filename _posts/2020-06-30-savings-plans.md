@@ -30,27 +30,27 @@ With a Savings Plan you pay for compute before you use it, and in exchange your 
 
 Once purchased, a Savings Plan gives you hourly packages of prepaid compute that compute services such as Lambda and Fargate can use. Any additional compute above the prepaid amount is priced at regular On-Demand rates.
 
-![Savings Plans generate prepaid compute](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplans_sp_flow.png)
+![Savings Plans generate prepaid compute](https://bahr.dev/pictures/savingsplans_sp_flow.png)
 
 When the compute usage matches the prepaid amount, you don't generate any additional spending beyond what you already paid for. Achieving this perfect fit is difficult as compute usage tends to vary in serverless environments.
 
-![100% usage of prepaid compute](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_usage_full.png)
+![100% usage of prepaid compute](https://bahr.dev/pictures/savingsplan_usage_full.png)
 
 When your services use more compute than what you already prepaid for, additional compute will be charged at On-Demand rates. This happens automatically and there's nothing more you need to do.
 
-![More usage than what's prepaid](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_usage_ondemand.png)
+![More usage than what's prepaid](https://bahr.dev/pictures/savingsplan_usage_ondemand.png)
 
-When your services use less compute than what you prepaid for, the remaining amount is not transferred into the next hour, but discarded. You pay the commitment no matter if you use it or not. This may be the case if you have irregular workloads (e.g. nightly jobs) or the free tier covers a lot of your spending. 
+When your services use less compute than what you prepaid for, the remaining amount is not transferred into the next hour, but discarded. You pay the commitment no matter if you use it or not. This may be the case if you have irregular workloads (e.g. nightly jobs) or the free tier covers a lot of your spending.
 
-![Less usage than what's prepaid](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_usage_overpay.png)
+![Less usage than what's prepaid](https://bahr.dev/pictures/savingsplan_usage_overpay.png)
 
 The Savings Plan will show up as a reduction of compute spending on your AWS bill.
 
-![AWS bill with prepaid Lambda](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_lambda_bill.png)
+![AWS bill with prepaid Lambda](https://bahr.dev/pictures/savingsplan_lambda_bill.png)
 
 Below you see a picture of my recent compute spending (filtered to Lambda). While the first few days don't incur any spending due to the free tier, the following days show spending and also savings (red bar in the negatives). My Savings Plan covers roughly $0.6 each day.
 
-![Applied savings in cost explorer](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_applied_savings.png)
+![Applied savings in cost explorer](https://bahr.dev/pictures/savingsplan_applied_savings.png)
 
 Note that this does not mean that I save $0.6 each day. Instead I've bought the compute in advance and back then got a 17% discount compared to On-Demand. Now that prepaid compute lowers my daily spending.
 
@@ -99,7 +99,7 @@ Start by [opening the AWS Cost Explorer](https://console.aws.amazon.com/cost-man
 
 In the top of the graph select Daily as the granularity, and filter the services to only show "Lambda" and "EC2 Container Service" (= Fargate). If you can select Hourly that's even better, but be aware that [Hourly granularity incurs additional charges](https://aws.amazon.com/about-aws/whats-new/2019/11/aws-cost-explorer-supports-hourly-resource-level-granularity/).
 
-![Cost Explorer for two months of compute](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_cost_explorer.png)
+![Cost Explorer for two months of compute](https://bahr.dev/pictures/savingsplan_cost_explorer.png)
 
 "The Hourly commitment is the Savings Plans rate, and not the On-demand spend. [(AWS Docs)](https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-purchase.html#purchase-sp-direct)". This means that when you see an hourly spending of $1, the according hourly commitment with a savings rate of 17% is `$1 * (1-17%) = $0.83`.
 
@@ -135,13 +135,13 @@ While we pick an hourly commitment based on our previous spending, we will **com
 
 Assume you have the following spending for every month:
 
-![Savings Iteration 1](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_iteration_1.png)
+![Savings Iteration 1](https://bahr.dev/pictures/savingsplan_iteration_1.png)
 
 Based on the overly simplistic formula `hourly_commitment * 24 * days_with_spending_above_commitment * savings_rate - hourly_commitment * 24 * days_with_spending_below_commitment` we could save $5 by committing to $0.04 per hour ($0.96 per day) with an All Upfront payment.
 
 Once we apply that savings plan, our remaining spending looks like this:
 
-![Savings Iteration 2](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_iteration_2.png)
+![Savings Iteration 2](https://bahr.dev/pictures/savingsplan_iteration_2.png)
 
 Adding another $0.04 savings plan would now put us at an additional -$0.72 of savings. Tha's not savings but overcommitment! Therefore we should either not buy a second savings plan or consider a lower hourly commitment.
 
@@ -160,7 +160,7 @@ Add the savings plan to your cart and carefully review the order:
 
 Once you're ready to purchase, click on Submit order.
 
-That's it. You will now get reduced rates for your compute usage. Make sure to check the utilization report over the next days. 
+That's it. You will now get reduced rates for your compute usage. Make sure to check the utilization report over the next days.
 
 If you selected All or Partial Upfront, you will soon see a big spike in the Cost Explorer. Don't worry, that's just the upfront payment for the savings plan.
 
@@ -168,7 +168,7 @@ If you selected All or Partial Upfront, you will soon see a big spike in the Cos
 
 After a couple days you can [visit the Utilization report](https://console.aws.amazon.com/cost-management/home#/savings-plans/utilization). This page will show you how much you save with your savings plan and if there is any overcommitment.
 
-![Utilization Report](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/savingsplan_utliization.png)
+![Utilization Report](https://bahr.dev/pictures/savingsplan_utliization.png)
 
 In the example above, we're at always at 100% utilization, except for a few days in the beginning of each month where the free tier applies. At the end we're still saving about 15% on our compute bill.
 

@@ -17,11 +17,11 @@ I will also mention Lambda and API Gateway. If you're not familiar with those tw
 
 ## Use Case
 
-My application monitors markets to notify customers of trading opportunities and registers about 500,000 market changes each day. DynamoDB requires ~20 [RCU/WCU](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html)s for this. While most of the system is event-driven and can complete eventually, there are also userfacing dashboards that need fast responses. 
+My application monitors markets to notify customers of trading opportunities and registers about 500,000 market changes each day. DynamoDB requires ~20 [RCU/WCU](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html)s for this. While most of the system is event-driven and can complete eventually, there are also userfacing dashboards that need fast responses.
 
 Below you can see a picture of the current architecture, where a Lambda function pulls data into DynamoDB, another one creates notifications when a trading opportunity appears and an API Gateway that serves data for the user dashboards.
 
-![Architecture for Use Case](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/timestream-use-case.png)
+![Architecture for Use Case](https://bahr.dev/pictures/2020/timestream/timestream-use-case.png)
 
 Each record in the database consists of two measurements (price and volume), has two dimensions (article number and location) and has a timestamp.
 
@@ -33,11 +33,11 @@ Let's start by comparing the data format of DynamoDB and Timestream.
 
 **DynamoDB** holds a flexible amount of attributes, which are identified by a unique key. This means that you need to query for a key, and will get the according record with multiple attributes. That's for example useful when you store meta information for movies or songs.
 
-![Data Format DynamoDB](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/data-format-dynamo.png)
+![Data Format DynamoDB](https://bahr.dev/pictures/2020/timestream/data-format-dynamo.png)
 
 **Timestream** instead is designed to store continuous measurements, for example from a temperature sensor. There are only inserts, no updates. Each measurement has a name, value, timestamp and dimensions. A dimension can be for example the city where the temperature sensor is, so that we can group results by city.
 
-![Data Format Timestream](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/data-format-timestream.png)
+![Data Format Timestream](https://bahr.dev/pictures/2020/timestream/data-format-timestream.png)
 
 ## Write to Timestream
 
@@ -45,7 +45,7 @@ Timestream shines when it comes to ingestion. The [`WriteRecords` API](https://d
 
 Below you can see a snapshot from AWS Cost Explorer when I started ingesting data with a [memory store](https://aws.amazon.com/timestream/pricing) retention of 7 days. Memory store is Timestream's fastest, but most expensive storage. It is required for ingestion but its retention can be reduced to one hour.
 
-![Timestream Write and Storage Cost](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/timestream-write-storage-cost.png)
+![Timestream Write and Storage Cost](https://bahr.dev/pictures/2020/timestream/timestream-write-storage-cost.png)
 
 The **write operations are cheap** and can be neglected in comparison to cost for storage and reading. Inserting 515,000 records has cost me $0.20, while the in-memory storage cost for all of those records totalled $0.37 after 7 days. My spending matches [Timestream's official pricing](https://aws.amazon.com/timestream/pricing/) of $0.50 per 1 million writes of 1KB size.
 
@@ -55,13 +55,13 @@ As **each Timestream record can only contain one measurement**, we need to split
 
 ## Read from Timestream
 
-You can read data from Timestream with SQL queries and get charged per GB of scanned data. `WHERE` clauses are key to limiting the amount of data that you scan because "data is pruned by Amazon Timestream’s query engine when evaluating query predicates" ([Timestream Pricing](https://aws.amazon.com/timestream/pricing/)). 
+You can read data from Timestream with SQL queries and get charged per GB of scanned data. `WHERE` clauses are key to limiting the amount of data that you scan because "data is pruned by Amazon Timestream’s query engine when evaluating query predicates" ([Timestream Pricing](https://aws.amazon.com/timestream/pricing/)).
 
 **The less data makes it through your `WHERE` clauses, the cheaper and faster your query.**
 
 I tested the read speed by running the same queries against two APIs that were backed by DynamoDB (blue) and Timestream (orange) respectively. Below you can see a chart where I mimicked user behavior over the span of an hour. The spikes where DynamoDB got slower than Timestream were requests where computing the result required more than 500 queries to DynamoDB.
 
-![Access Speed Comparison](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/access-speed-comparison.png)
+![Access Speed Comparison](https://bahr.dev/pictures/2020/timestream/access-speed-comparison.png)
 
 DynamoDB is designed for blazing fast queries, but [doesn't support adhoc analytics](https://bahr.dev/2020/02/02/aggregate-ddb/). SQL queries won't compete at getting individual records, but can get interesting once you have to access many different records and can't precompute data. My queries to Timestream usually took more than a second, and I decided to **precompute user facing data into DynamoDB**.
 
@@ -71,7 +71,7 @@ Timestream seems to have **no limit on query length**. An SQL query with 1,000 i
 
 ## Timestream Pricing
 
-Timestream pricing mostly comes down to two questions: 
+Timestream pricing mostly comes down to two questions:
 - Do you need **memory store with long retention**?
 - Do you **read frequently**?
 
@@ -85,7 +85,7 @@ When I tried to read and precompute data into DynamoDB every few seconds, I noti
 
 Below you can see a chart of my spending on Timestream and KMS with frequent reads on October 14th and 15th.
 
-![Timestream in Cost Explorer](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/timestream/timestream-cost.png)
+![Timestream in Cost Explorer](https://bahr.dev/pictures/2020/timestream/timestream-cost.png)
 
 ## Problems and Limitations
 
@@ -106,7 +106,7 @@ timestream = boto3.client('timestream-write')
 
 try:
     timestream.write_records(
-        DatabaseName='MarketWatch', 
+        DatabaseName='MarketWatch',
         TableName='Snapshots',
         CommonAttributes={
             'Time': str(int(time())),
@@ -119,7 +119,7 @@ except client.exceptions.RejectedRecordsException as err:
     print({'exception': err})
     for rejected in err.response['RejectedRecords']:
         print({
-            'reason': rejected['Reason'], 
+            'reason': rejected['Reason'],
             'rejected_record': chunk[rejected['RecordIndex']]
         })
 ```

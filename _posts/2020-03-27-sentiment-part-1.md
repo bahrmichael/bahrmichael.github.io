@@ -107,4 +107,4 @@ Note that CloudWatch will charge you too, should you exceed the free tier.
 
 Collecting data is fairly simple and very cheap. But will it be the same if we monitor 100 companies? Feel free to test that by using the source code on [GitHub](https://github.com/bahrmichael/twitter-sentiment-analyzer).
 
-In the [part 2](https://dev.to/michabahr/stock-sentiment-analysis-part-2-analysing-the-sentiment-28ig) of this article we will use sentiment analysis to understand if a tweet is positive, neutral or negative.
+In the [part 2](https://bahr.dev/2020/03/27/sentiment-part-2/) of this article we will use sentiment analysis to understand if a tweet is positive, neutral or negative.

@@ -2,17 +2,17 @@
 layout: post
 title: Serverless Scheduler
 description: This project allows developers to quickly schedule events with precision, allows a large number of open tasks, and scales
-backgroundUrl: "https://miro.medium.com/max/2000/1*IGURB6wjlNvasWOKQ_tUAw.png"
+backgroundUrl: "https://bahr.dev/pictures/serverless-scheduler-headline.png"
 frontPageCategory: scheduling
 ---
 
 AWS offers many great services, but when it comes to ad hoc scheduling there is still potential. We use the term ad hoc scheduling for irregular point in time invocations, e.g. one in 32 hours and another one in 4 days.
 
-![Comparison of regular and irregular invocations](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)
+![Comparison of regular and irregular invocations](https://bahr.dev/pictures/serverless-scheduler-1.png)
 
 [Zac Charles](https://twitter.com/zaccharles) has shown [a couple ways to do serverless scheduling](https://medium.com/@zaccharles/there-is-more-than-one-way-to-schedule-a-task-398b4cdc2a75), each with their own drawbacks in terms of cost, accuracy or time in the future.
 
-In [Yan Cui](https://twitter.com/theburningmonk)’s [analysis](https://theburningmonk.com/2019/06/step-functions-as-an-ad-hoc-scheduling-mechanism/) of step functions as an ad hoc scheduling mechanism he lists three major criteria:
+In [Yan Cui's analysis](https://theburningmonk.com/2019/06/step-functions-as-an-ad-hoc-scheduling-mechanism/) of step functions as an ad hoc scheduling mechanism he lists three major criteria:
 
 1. **Precision**: how close to my scheduled time is the task executed? The closer, the better.
 
@@ -28,7 +28,7 @@ The service’s two interfaces are an SNS input topic which receives events to b
 
 Each input event must contain an ARN to the SNS output topic where the payload will be published to once the scheduled time arrives.
 
-![Architecture of the scheduling service](https://cdn-images-1.medium.com/max/2000/1*Oo2ZdWCZAcmZb4-50mUjyg.png)
+![Architecture of the scheduling service](https://bahr.dev/pictures/serverless-scheduler-2.png)
 
 Internally the service uses a DynamoDB table to store long term events. Events whose scheduled time is less than ten minutes away are directly put into the short term queue.
 
@@ -38,21 +38,21 @@ This queue uses the DelaySeconds attribute to let the message become visible at 
 
 The scheduling service takes an event with a string payload along with a target topic, the scheduled time of execution and a user agent. The latter is mainly to identify callers.
 
-![](https://cdn-images-1.medium.com/max/3028/1*Rcv-J23vEqsosO6KJoI1GQ.png)
+![](https://bahr.dev/pictures/serverless-scheduler-3.png)
 
 The above python code publishes an event with a custom string payload. Please make sure that you fill out all four fields or the event may be dropped. See more in the *Troubleshooting* section at the end of the article.
 
 Note that we have to create our own SNS topic which must grant publish rights to the serverless scheduler. The [quickstart project contains a script](https://github.com/bahrmichael/aws-scheduler-testing#prerequisites) that helps you with creating the SNS topic. The AWS role of the public serverless scheduler is *arn:aws:sts::256608350746:assumed-role/aws-scheduler-prod-us-east-1-lambdaRole/aws-scheduler-prod-emitter*
 
-![](https://cdn-images-1.medium.com/max/4096/1*M6PasIttSQOiruyRF-t_5g.png)
+![](https://bahr.dev/pictures/serverless-scheduler-4.png)
 
 You may also manually assign an additional access policy to your SNS topic.
 
-![](https://cdn-images-1.medium.com/max/2040/1*Wczc_h0mkjaK-gpucLhPHw.png)
+![](https://bahr.dev/pictures/serverless-scheduler-5.png)
 
 After that you need a [lambda function that consumes](https://docs.aws.amazon.com/en_pv/lambda/latest/dg/with-sns-example.html) events from your output topic.
 
-![](https://cdn-images-1.medium.com/max/2084/1*POHfBIMaQz19HGnJrGifww.png)
+![](https://bahr.dev/pictures/serverless-scheduler-6.png)
 
 That’s it. You can use the [quickstart project](https://github.com/bahrmichael/aws-scheduler-testing#prerequisites) to quickly schedule and receive your first events. Go try it out!
 
@@ -66,11 +66,11 @@ Precision is probably the most important of all. Not many use cases are tolerant
 
 Over the last five days I create a base load of roughly 1000 events per hour. The emitter function logs the target timestamp and the current timestamp which are then compared to calculate the delay. Plotting this data gives us the graph below.
 
-![](https://cdn-images-1.medium.com/max/2000/1*4LGtbE8CRYRwuqTNkjHiHQ.png)
+![](https://bahr.dev/pictures/serverless-scheduler-7.png)
 
 As you can see, the vast majority is well below 100 ms with the maximum getting close to 1000 ms. This gets clearer when you take a look at the histogram.
 
-![](https://cdn-images-1.medium.com/max/2000/1*LNkXRQ4Oaskb_DoDGpKJSg.png)
+![](https://bahr.dev/pictures/serverless-scheduler-8.png)
 
 **Scale**
 
@@ -105,7 +105,7 @@ While cold starts of lambda functions can result in a slight increase of delays,
 
 To test this I scheduled 30.000 events to be published within a couple seconds. While the median went well up (probably due to cold starts), this was still not enough to hit any limits.
 
-![](https://cdn-images-1.medium.com/max/2000/1*wjp2kYu-XTQrVVuNJ-ZIeA.png)
+![](https://bahr.dev/pictures/serverless-scheduler-9.png)
 
 To sum up the Hotspots section: Very sharp spikes with very high loads can become an issue, but those are so big I couldn’t test them yet.
 

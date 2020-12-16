@@ -13,9 +13,9 @@ This article describes a serverless approach to schedule AWS Lambda invocations 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">hey <a href="https://twitter.com/awscloud?ref_src=twsrc%5Etfw">@awscloud</a>! is there a way to trigger a <a href="https://twitter.com/hashtag/lambda?src=hash&amp;ref_src=twsrc%5Etfw">#lambda</a> execution at a future point in time without abusing rate/cron from <a href="https://twitter.com/hashtag/CloudWatch?src=hash&amp;ref_src=twsrc%5Etfw">#CloudWatch</a> or ttl from <a href="https://twitter.com/hashtag/DynamoDB?src=hash&amp;ref_src=twsrc%5Etfw">#DynamoDB</a>? e.g. call this function in 2 hours and this function in 3 days, 7 hours and 15 minutes</p>&mdash; Michael Bahr (@bahrdev) <a href="https://twitter.com/bahrdev/status/1133048146270052353?ref_src=twsrc%5Etfw">May 27, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
 
-This approach scores with its clean architecture and maintainability. It only requires a function to insert events into a scheduling-table and a function that processes events that hit reach the scheduled point of time. As we build everything on serverless technology, we don’t have to run software upgrades, maintain firewalls and pay for idle time. At low usage it’s practically free and even with higher usage we only really start paying once we schedule **hundreds of thousands of events per day**. Read more in this [follow up article](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588).
+This approach scores with its clean architecture and maintainability. It only requires a function to insert events into a scheduling-table and a function that processes events that hit reach the scheduled point of time. As we build everything on serverless technology, we don’t have to run software upgrades, maintain firewalls and pay for idle time. At low usage it’s practically free and even with higher usage we only really start paying once we schedule **hundreds of thousands of events per day**. Read more in this [follow up article](https://bahr.dev/2019/05/29/scheduling-ddb/).
 
-While this approach allows one to schedule an execution for a certain time, it falls short on accuracy. [In our tests](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588) with a scheduling table holding 100.000 entries, the events appeared in the DynamoDB stream with a delay of up to 28 minutes. According to the [docs](https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/howitworks-ttl.html) it may take up to 48 hours for especially large workloads. Therefore this approach does not fit, if you require the function to be executed at a certain hour, minute or second. Potential use cases are status updates which run every couple hours or days or non time critical reminders.
+While this approach allows one to schedule an execution for a certain time, it falls short on accuracy. [In our tests](https://bahr.dev/2019/05/29/ddb-scheduling-cost/) with a scheduling table holding 100.000 entries, the events appeared in the DynamoDB stream with a delay of up to 28 minutes. According to the [docs](https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/howitworks-ttl.html) it may take up to 48 hours for especially large workloads. Therefore this approach does not fit, if you require the function to be executed at a certain hour, minute or second. Potential use cases are status updates which run every couple hours or days or non time critical reminders.
 
 The source code for the lambda functions is available at [GitHub](https://github.com/bahrmichael/lambda-scheduling-with-dynamodb).
 
@@ -25,10 +25,10 @@ Our approach is to use a lambda function to create scheduling entries. These ent
 
 The executor function may reschedule events by performing the same logic as the scheduler function.
 
-In this guide we will 
-1. setup the table and stream, 
-2. the executor which consumes the stream, 
-3. a little function to schedule events and 
+In this guide we will
+1. setup the table and stream,
+2. the executor which consumes the stream,
+3. a little function to schedule events and
 4. deploy it to AWS with the [serverless framework](https://serverless.com) (version 1.32.0).
 
 You can change the order of the steps, but should keep in mind that the executor requires the stream’s [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html).
@@ -37,19 +37,19 @@ You can change the order of the steps, but should keep in mind that the executor
 
 Start by creating a new DynamoDB table.
 
-![](https://cdn-images-1.medium.com/max/2000/0*Ao5j_LbjG57uLVhD)
+![](https://bahr.dev/pictures/scheduling-ddb-1.png)
 
 If you expect to exceed the [free tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=categories%23alwaysfree&awsf.Free%20Tier%20Categories=productcategories%23database), we recommend switching to on-demand. Please not that exceeding a provisioned capacity may lead to DB operations being rejected, while on-demand is not limited.
 
-![](https://cdn-images-1.medium.com/max/2000/0*CJA4gL70nX8KVwbl)
+![](https://bahr.dev/pictures/scheduling-ddb-2.png)
 
 This will open a dialog where you specify the TTL attribute and activate DynamoDB Streams. We will use the attribute name “ttl”, but you may choose whatever name you like that is not [reserved by DynamoDB](https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/ReservedWords.html). Click on Continue to create enable the TTL.
 
-![](https://cdn-images-1.medium.com/max/2000/0*rBCGrPkSwz_Yezpj)
+![](https://bahr.dev/pictures/scheduling-ddb-3.png)
 
 Once DynamoDB has created the TTL and stream, you will see the stream details on the table overview. We will later need the “Latest stream ARN” to hook it up to our executor function.
 
-![](https://cdn-images-1.medium.com/max/3200/0*0sEMe2PTOWYC_jUf)
+![](https://bahr.dev/pictures/scheduling-ddb-4.png)
 
 ## Executor
 
@@ -80,7 +80,7 @@ A few things to keep in mind here:
 
 1. Line 13: The [record’s structure](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_streams_Record.html) differs from the entry we wrote to the DynamoDB table. You need to access *Records*, then *dynamodb* and finally *OldImage* to get the database entry as it was before deletion. Note that the payload follows DynamoDB’s [AttributeValue](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_streams_AttributeValue.html) schema shown below:
 
-![](https://cdn-images-1.medium.com/max/2504/1*qxR6M44jtLY3rW37XdVW0A.png)
+![](https://bahr.dev/pictures/scheduling-ddb-5.png)
 
 ## Scheduler
 
@@ -152,33 +152,33 @@ Lines 17 to 21 set up the *executor*. Through events we specify that the *execut
 
 Once you adjusted the *serverless.yml* to your needs, deploy it by running *serverless deploy* from the folder where the *serverless.yml* and functions are located. This may take a few minutes to complete.
 
-![](https://cdn-images-1.medium.com/max/2164/1*-CBNPJi0Zob528dMvnqz-g.png)
+![](https://bahr.dev/pictures/scheduling-ddb-6.png)
 
 ## Test
 
 Once serverless completes the deployment, head over to the [lambda management console](https://console.aws.amazon.com/lambda/home?region=us-east-1#/applications/lambda-scheduler-dev) and click on *ScheduleLambdaFunction*.
 
-![](https://cdn-images-1.medium.com/max/4444/1*d0CpAQ_MDDwjjb2-_HkFFw.png)
+![](https://bahr.dev/pictures/scheduling-ddb-7.png)
 
 In the top right corner you can then configure a test event.
 
-![](https://cdn-images-1.medium.com/max/2996/1*WAZXz6fKvch1n_1mQeDwHQ.png)
+![](https://bahr.dev/pictures/scheduling-ddb-8.png)
 
 As we don’t evaluate the input of the scheduler function the default *Hello World* event is sufficient.
 
-![](https://cdn-images-1.medium.com/max/3200/1*LCRPw4-EK3EOrd9EODiOyA.png)
+![](https://bahr.dev/pictures/scheduling-ddb-9.png)
 
 Create the test event and then execute it by clicking on Test.
 
-![](https://cdn-images-1.medium.com/max/5156/1*F_M-jZjclb5X9vUlxlKEHQ.png)
+![](https://bahr.dev/pictures/scheduling-ddb-10.png)
 
 Now head over to the [DynamoDB management console](https://console.aws.amazon.com/dynamodb/home#tables:) and open the items of your table. When you hover over the TTL attribute you will see an overlay which tells you when the entry is supposed to be deleted (remember that the deletion may be delayed).
 
-![](https://cdn-images-1.medium.com/max/3680/1*_JEWnU8xCte7MiLVIrimBw.png)
+![](https://bahr.dev/pictures/scheduling-ddb-11.png)
 
 Now we have to wait until DynamoDB deletes the entry. As DynamoDB will probably take a few minutes we are in no rush here. Switch back to the console where you deployed the serverless application and run the command *serverless logs -f executor -t* to listen for new logs of the *executor* function. Get yourself a drink and a snack as this will probably take 10 to 15 minutes for a small table. If you created 10.000.000.000 entries, then you might have to wait longer.
 
-![](https://cdn-images-1.medium.com/max/2504/1*qxR6M44jtLY3rW37XdVW0A.png)
+![](https://bahr.dev/pictures/scheduling-ddb-12.png)
 
 That’s it! We invoked a single lambda execution without the use of rate or cron.
 
@@ -186,7 +186,7 @@ That’s it! We invoked a single lambda execution without the use of rate or cro
 
 From here you can play around with the [example](https://github.com/bahrmichael/lambda-scheduling-with-dynamodb) and try a couple things:
 
-1. Modify the delay e.g. by using Python’s *random.randint()
+1. Modify the delay e.g. by using Python’s `random.randint()`
 
 1. If you are using this approach to schedule a lot of executions (read: more than 100 per day), you should look into optimising the resources of your functions away from the default of 1GB RAM. You can do this by glancing over the logs and looking for the RAM usage, then estimating a number that will fit for all those executions or by using the [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) tool to estimate the perfect fit.
 
@@ -234,9 +234,9 @@ What are your thoughts? Do you have a better approach or know how to achieve thi
 
 ## Further Reading
 
-* [Analysis of DynamoDB’s TTL delay](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588)
+* [Analysis of DynamoDB’s TTL delay](https://bahr.dev/2019/05/29/ddb-ttl-analysis/)
 
-* [Cost Analysis: Serverless scheduling of irregular invocations](https://medium.com/@michabahr/cost-analysis-serverless-scheduling-of-irregular-invocations-a1c044957588)
+* [Cost Analysis: Serverless scheduling of irregular invocations](https://bahr.dev/2019/05/29/ddb-scheduling-cost/)
 
 * Yan Cui’s take on [DynamoDB TTL as an ad-hoc scheduling mechanism](https://medium.com/theburningmonk-com/dynamodb-ttl-as-an-ad-hoc-scheduling-mechanism-bda119116887)
 

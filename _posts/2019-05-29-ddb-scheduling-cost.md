@@ -4,13 +4,13 @@ title: "Cost Analysis: Serverless scheduling of irregular invocations"
 backgroundUrl: "https://images.unsplash.com/photo-1513596846216-48ae70153834?ixlib=rb-1.2.1&auto=format&q=80&fit=crop"
 ---
 
-In the article “[Serverless scheduling of irregular invocations](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)” we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the operational cost of that approach.
+In the article [Serverless scheduling of irregular invocations](https://bahr.dev/2019/05/29/scheduling-ddb/) we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the operational cost of that approach.
 
 ## Service Prices
 
 In the mentioned article we used only DynamoDB and Lambda. All costs here are taken from us-east-1 (North Virginia). Below you can see how active the scheduling was over a 24h period.
 
-![Activity of the scheduler in 5 minute intervals](https://cdn-images-1.medium.com/max/2150/1*WM0vXLZvpueACibt8kZHfQ.png)
+![Activity of the scheduler in 5 minute intervals](https://bahr.dev/pictures/ddb-scheduling-cost-graph-1.png)
 
 ### DynamoDB
 
@@ -22,7 +22,7 @@ The relevant pricing aspects of DynamoDB for our example are
 
 In our example we used on-demand pricing which charges $1.25 per million write requests and $0.25 per million read requests. Let’s take a look at read requests first.
 
-![Consumed Read Capacity Units](https://cdn-images-1.medium.com/max/2000/1*mJ_ot1aZ17XrHilJNb_vzw.png)
+![Consumed Read Capacity Units](https://bahr.dev/pictures/ddb-scheduling-cost-graph-2.png)
 
 The spikes in the picture above were from table size scans. During regular operation there are no read requests, therefore we don’t have to calculate read capacity, only write capacity. We do however pay for the DynamoDB stream which we will look into later.
 
@@ -31,7 +31,7 @@ The cost for write capacity depends on how many entries you write and how big th
 
 Measure the size of your scheduling entries and adjust your calculations accordingly.
 
-![Consumer Write Capacity Units](https://cdn-images-1.medium.com/max/2000/1*qK6ZjxRARXz8tn082JMLEw.png)
+![Consumer Write Capacity Units](https://bahr.dev/pictures/ddb-scheduling-cost-graph-3.png)
 
 In our 24 hour example we scheduled ~280.000 entries each consisting of a uuid, the TTL attribute and a target id (number). This results in the 278.000 write capacity units shown above.
 > $1,25 / 1.000.000 * 278.000 = $0,3475

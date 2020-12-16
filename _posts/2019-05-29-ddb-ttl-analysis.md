@@ -4,7 +4,7 @@ title: Analysis of DynamoDB’s TTL delay
 backgroundUrl: "https://images.unsplash.com/photo-1563371386-187140095137?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
-In the article “[Serverless scheduling of irregular invocations](https://medium.com/@michabahr/scheduling-irregular-aws-lambda-executions-through-dynamodb-ttl-attributes-acd397dfbad9)” we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the delays between the specified TTL and the actual deletion.
+In the article [Serverless scheduling of irregular invocations](https://bahr.dev/2019/05/29/scheduling-ddb/) we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the delays between the specified TTL and the actual deletion.
 
 ## Setup
 

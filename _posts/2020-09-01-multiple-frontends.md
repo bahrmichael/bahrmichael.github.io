@@ -20,9 +20,9 @@ The magic is in the chapter "Wildcard Routing". [Check out the full source code 
 
 To deploy the solution of this article, you should have an AWS account and some experience with the [AWS CDK](https://aws.amazon.com/cdk/). It's also good to have an unused domain registered in Amazon Route 53, but we will learn how to use other providers and used domains as well.
 
-This article uses CDK version 1.60.0. Let me know if anything breaks in newer versions! 
+This article uses CDK version 1.60.0. Let me know if anything breaks in newer versions!
 
-Please bootstrap your account for CDK by running `cdk bootstrap`. We will need this for the `DnsValidatedCertificate`. 
+Please bootstrap your account for CDK by running `cdk bootstrap`. We will need this for the `DnsValidatedCertificate`.
 
 Optional: [Understanding how DNS and especially nameservers work](https://www.cloudflare.com/learning/dns/what-is-dns/) will help you a lot with troubleshooting potential routing issues.
 
@@ -32,17 +32,17 @@ Let's find a solution by putting us in the customers shoes. As a customer I want
 
 The request flow would look like this:
 
-![Overview](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/user-flow.png)
+![Overview](https://bahr.dev/pictures/2020/wildcarddomains/user-flow.png)
 
 You can see above that only the domain changes, but nothing else. At **the core of the solution** are **wildcard ARecords** which let us route traffic for any subdomain to a particular target. The website can then take the URL, extract the subdomain and ask for the right picture. In the next chapter we will take a look at each part in detail.
 
-![Route 53 ARecords](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/route53-preview.png)
+![Route 53 ARecords](https://bahr.dev/pictures/2020/wildcarddomains/route53-preview.png)
 
 ## 1. Create A Hosted Zone
 
 To register DNS records in AWS, we need to [create a Hosted Zone in Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html). [Each Hosted Zone costs $0.50 per month](https://aws.amazon.com/route53/pricing/).
 
-The Hosted Zone is easiest to set up if you have a domain that is managed by Route 53 and that you don't use for anything else yet. 
+The Hosted Zone is easiest to set up if you have a domain that is managed by Route 53 and that you don't use for anything else yet.
 
 We will also look at how you can set up your Hosted Zone if you are already using your Route 53 domain for another purpose (e.g. your blog) or if that domain is managed by a different provider than Route 53.
 
@@ -78,7 +78,7 @@ import { HostedZone } from '@aws-cdk/aws-route53';
 
 ...
 
-// bahr.dev is already in use, so we'll start 
+// bahr.dev is already in use, so we'll start
 // at the subdomain picture.bahr.dev
 const apexDomain = 'bahr.dev';
 const domain = `picture.${apexDomain}`;
@@ -87,11 +87,11 @@ const domain = `picture.${apexDomain}`;
 const hostedZone = new HostedZone(this, "HostedZone", {
     zoneName: domain
 });
-// add a ZoneDelegationRecord so that requests for *.picture.bahr.dev 
+// add a ZoneDelegationRecord so that requests for *.picture.bahr.dev
 // and picture.bahr.dev are handled by our newly created HostedZone
-const nameServers: string[] = hostedZone.hostedZoneNameServers!;    
-const rootZone = HostedZone.fromLookup(this, 'Zone', { 
-  domainName: apexDomain 
+const nameServers: string[] = hostedZone.hostedZoneNameServers!;
+const rootZone = HostedZone.fromLookup(this, 'Zone', {
+  domainName: apexDomain
 });
 new ZoneDelegationRecord(this, "Delegation", {
     recordName: domain,
@@ -109,11 +109,11 @@ We will later add ARecords, so that requests to `picture.bahr.dev` and `*.pictur
 
 Again we will create a Hosted Zone in Route 53, but this time we need manual work to register the nameservers of our Hosted Zone with our DNS provider. To get started, first create a Hosted Zone through the AWS console.
 
-![Create Hosted Zone](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/create-hosted-zone.png)
+![Create Hosted Zone](https://bahr.dev/pictures/2020/wildcarddomains/create-hosted-zone.png)
 
 This will give us a Hosted Zone with two entries for Nameservers (NS) and Start Of Authority (SOA). We will copy the authoritative nameserver, and tell our DNS provider to delegate requests to our Hosted Zone in AWS.
 
-![Hosted Zone Records](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/hosted-zone-records.png)
+![Hosted Zone Records](https://bahr.dev/pictures/2020/wildcarddomains/hosted-zone-records.png)
 
 Copy the authoritative nameserver from the SOA record, go to your DNS provider and create a nameserver record, where you replace the values for `Name` and `Value`:
 
@@ -125,7 +125,7 @@ Value: ns-1332.awsdns-38.org
 
 Use a specific value like `picture` if you want to start at a subdomain like `*.picture.bahr.dev` or use `@` if you want to use your apex domain like `*.bahr.dev`.
 
-![Nameserver Record GoDaddy](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/wildcarddomains/godaddy.png)
+![Nameserver Record GoDaddy](https://bahr.dev/pictures/2020/wildcarddomains/godaddy.png)
 
 Then use the following CDK snippet to import the Hosted Zone that you created manually.
 
@@ -136,8 +136,8 @@ import { HostedZone } from '@aws-cdk/aws-route53';
 
 const domain = `picture.bahr.dev`;
 
-const hostedZone = HostedZone.fromLookup(this, 'HostedZone', { 
-  domainName: domain 
+const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+  domainName: domain
 });
 ```
 
@@ -165,11 +165,11 @@ const certificate = new DnsValidatedCertificate(this, "Certificate", {
 });
 ```
 
-There's a lot going on here, so let's break it down. 
+There's a lot going on here, so let's break it down.
 
 First we set the region to `us-east-1`, because [CloudFront requires certificates to be in `us-east-1`](https://aws.amazon.com/premiumsupport/knowledge-center/migrate-ssl-cert-us-east/).
 
-We then use the CDK construct `DnsValidatedCertificate` which spawns a certificate request and a lambda function to register the CNAME record in Route 53. That record is used for validating that we actually own the domain. 
+We then use the CDK construct `DnsValidatedCertificate` which spawns a certificate request and a lambda function to register the CNAME record in Route 53. That record is used for validating that we actually own the domain.
 
 The parameter `hostedZone` specifies which Hosted Zone the certificate shall connect with. This is the Hosted Zone we created before.
 
@@ -186,9 +186,9 @@ import { SPADeploy } from 'cdk-spa-deploy';
 
 const deployment = new SPADeploy(this, 'spaDeployment')
     .createSiteWithCloudfront({
-        indexDoc: 'index.html', 
-        websiteFolder: './website', 
-        certificateARN: certificate.certificateArn, 
+        indexDoc: 'index.html',
+        websiteFolder: './website',
+        certificateARN: certificate.certificateArn,
         cfAliases: [this.domain, `*.${this.domain}`]
     });
 ```
@@ -232,7 +232,7 @@ Once all the DNS records have propagated, we can test our setup. Please note tha
 
 ## Try It Yourself
 
-Here's the full CDK code that you can copy into your existing CDK codebase. 
+Here's the full CDK code that you can copy into your existing CDK codebase.
 
 I suggest that you [start with checking out the source code](https://github.com/bahrmichael/wildcard-subdomains) and adjust the domain and Hosted Zone to your needs. Add a `ZoneDelegationRecord` if you need it. Make sure to run `cdk bootstrap` if you haven't done that yet.
 
@@ -249,7 +249,7 @@ export class WildcardSubdomainsStack extends cdk.Stack {
 
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    
+
     const domain = `picture.bahr.dev`;
 
     const hostedZone = new HostedZone(this, "HostedZone", {
@@ -269,15 +269,15 @@ export class WildcardSubdomainsStack extends cdk.Stack {
 
     const deployment = new SPADeploy(this, 'spaDeployment')
         .createSiteWithCloudfront({
-            indexDoc: 'index.html', 
-            websiteFolder: './website', 
-            certificateARN: certificate.certificateArn, 
+            indexDoc: 'index.html',
+            websiteFolder: './website',
+            certificateARN: certificate.certificateArn,
             cfAliases: [this.domain, `*.${this.domain}`]
         });
 
     const cloudfrontTarget = RecordTarget
         .fromAlias(new CloudFrontTarget(deployment.distribution));
-  
+
     new ARecord(this, "ARecord", {
       zone: hostedZone,
       recordName: `${this.domain}`,

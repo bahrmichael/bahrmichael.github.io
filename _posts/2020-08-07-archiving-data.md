@@ -10,7 +10,7 @@ AWS offers a variety of general purpose storage solutions. While DynamoDB is the
 
 This article describes the available options for archiving data, how to prepare that data for long term archival and how to let S3 transition data between storage tiers.
 
-![Storage Price vs Latency](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_storage_vs_latency.png)
+![Storage Price vs Latency](https://bahr.dev/pictures/data_archival_storage_vs_latency.png)
 
 Below you find a table comparing the prices and access latencies as of August 2020.
 
@@ -36,11 +36,11 @@ The first path requires a lambda function, and the others can be achieved withou
 
 ### DynamoDB to S3
 
-![Badge for DynamoDB to S3](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_badge_1.png)
+![Badge for DynamoDB to S3](https://bahr.dev/pictures/data_archival_badge_1.png)
 
 **When to move data from DynamoDB to S3**
 
-Moving data out of DynamoDB makes sense when that data is becoming stale, but remains interesting for future use cases. 
+Moving data out of DynamoDB makes sense when that data is becoming stale, but remains interesting for future use cases.
 
 An example for this are performance metrics. We're most interested in the recent weeks, but don't look at data from months ago too much. We still want to keep those around for later analysis or troubleshooting.
 
@@ -66,9 +66,9 @@ def handler(event, context):
     for record in event.get('Records', []):
         if record['eventName'] != 'DELETE':
             return
-    
+
         payload = record['dynamodb']['NewImage']
-        # this assumes that there is a partition key called Id 
+        # this assumes that there is a partition key called Id
         # which is a number, and that there is no sort key
         key = record['dynamodb']['Keys']['Id']['N']
 
@@ -83,7 +83,7 @@ This will store deleted records in the S3 bucket `my_bucket`. No data is lost, t
 
 ### S3 Storage Tiers
 
-![Badge for S3 Storage Tiers](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_badge_2.png)
+![Badge for S3 Storage Tiers](https://bahr.dev/pictures/data_archival_badge_2.png)
 
 **If your data is accessed infrequently** you can achieve further cost savings by picking the right storage tier.
 
@@ -156,15 +156,15 @@ In this article we will configure the lifecycle transitions through the AWS cons
 
 To get started, open your S3 bucket in the AWS console and open the Management tab. Click on "Add lifecycle rule" to configure a lifecycle. By applying the lifecycle rule to the folder `aggregated`, we only transition data which has been packaged for archival.
 
-![Lifecycle Rules Step 1](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_step_1.png)
+![Lifecycle Rules Step 1](https://bahr.dev/pictures/data_archival_step_1.png)
 
 Specify a Transition to Standard-IA (Infrequent Access) after 30 days. We're assuming here that data will be archived and therefore infrequently accessed, but you can increase this number however you like or pick another storage tier.
 
-![Lifecycle Rules Step 2](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_step_2.png)
+![Lifecycle Rules Step 2](https://bahr.dev/pictures/data_archival_step_2.png)
 
 Review and complete the lifecycle rule.
 
-![Lifecycle Rules Step 3](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_step_3.png)
+![Lifecycle Rules Step 3](https://bahr.dev/pictures/data_archival_step_3.png)
 
 After 30 days you should start see in your bill that some objects are now priced at a less expensive storage tier. If you picked S3 Infrequent Access, that's another 45% you save for storage.
 
@@ -172,7 +172,7 @@ After 30 days you should start see in your bill that some objects are now priced
 
 While we're only looking at Glacier here, you can apply the same principles for moving data to Intellingent-Tiering, One Zone-IA and Glacier Deep Archive.
 
-![Badge for S3 Glacier](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_badge_3.png)
+![Badge for S3 Glacier](https://bahr.dev/pictures/data_archival_badge_3.png)
 
 **When to move data to Glacier**
 
@@ -182,7 +182,7 @@ S3 Glacier and S3 Glacier Deep Archive become interesting options, when you need
 
 As we've previously aggregated our data, we can add additional lifecycle transitions to move the data from S3 Infrequent Access to S3 Glacier. Instead of the Infrequent Access tier, now pick a Glacier option and adjust the time before transition accordingly.
 
-![Lifecycle Rule Glacier](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/data_archival_glacier.png)
+![Lifecycle Rule Glacier](https://bahr.dev/pictures/data_archival_glacier.png)
 
 That's it. Your data is now on ice and we get an additional 68% cost reduction on storage.
 

@@ -21,11 +21,11 @@ To receive mail with SES you need a domain or subdomain. You can [register a dom
 
 The solution consists of two parts. The email receiver and the api that lets you access the received mail. The first writes to the database, the latter reads from it.
 
-![Architecture Overview](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/2020/tempmail/inbox-api.png)
+![Architecture Overview](https://bahr.dev/pictures/2020/tempmail/inbox-api.png)
 
 For the email receiver we use [SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html) with [Receipt Rules](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-ses-readme.html#email-receiving). We use those rules to store the raw payload and attachments in an S3 bucket, and send a nicely formed payload to a Lambda function which creates an entry in the DynamoDB table.
 
-On the API side there's a single read operation which requires the recipient's email address. It can be parameterized to reduce the number of emails that will be returned. 
+On the API side there's a single read operation which requires the recipient's email address. It can be parameterized to reduce the number of emails that will be returned.
 
 Old emails are automatically discarded with [DynamoDB's time to live (TTL) feature](https://bahr.dev/2019/05/29/scheduling-ddb/), keeping the database small without any maintenance work.
 
@@ -74,13 +74,13 @@ export const MailTable = new Table({
 
 export const Mail = new Entity({
     name: 'Mail',
-  
+
     attributes: {
       id: { partitionKey: true }, // recipient address
-      sk: { 
-        hidden: true, 
-        sortKey: true, 
-        default: (data: any) => `${data.timestamp}#${uuid()}` 
+      sk: {
+        hidden: true,
+        sortKey: true,
+        default: (data: any) => `${data.timestamp}#${uuid()}`
       },
       timestamp: { type: 'string' },
       from: { type: 'string' },
@@ -88,7 +88,7 @@ export const Mail = new Entity({
       subject: { type: 'string' },
       ttl: { type: 'number' },
     },
-  
+
     table: MailTable
   });
 ```
@@ -112,7 +112,7 @@ export class InboxApiStack extends cdk.Stack {
     super(scope, id, props);
 
     // your-domain.com
-    const domain = process.env.INBOX_DOMAIN; 
+    const domain = process.env.INBOX_DOMAIN;
 
     const rawMailBucket = new Bucket(this, 'RawMail');
 
@@ -159,13 +159,13 @@ export const handler: SESHandler = async(event) => {
 
     for (const record of event.Records) {
         const mail = record.ses.mail;
-    
+
         const from = mail.source;
         const subject = mail.commonHeaders.subject;
         const timestamp = mail.timestamp;
 
         const now = new Date();
-        // set the ttl as 7 days into the future and 
+        // set the ttl as 7 days into the future and
         // strip milliseconds (ddb expects seconds for the ttl)
         const ttl = now.setDate(now.getDate() + 7) / 1000;
 
@@ -188,7 +188,7 @@ Now that we receive mail directly into our database, let's build an API to acces
 
 The Read API consists of an API Gateway and a Lambda function with read access to the DynamoDB table. If you haven't built such an API before, [I recommend that you check out Marcia's video on how to build serverless APIs](https://www.youtube.com/watch?v=XVHGq2uJu9s).
 
-Below you can see the abbreviated CDK code to set up the API Gateway and Lambda function. [You can find the full source code on GitHub](https://github.com/bahrmichael/inbox-api). 
+Below you can see the abbreviated CDK code to set up the API Gateway and Lambda function. [You can find the full source code on GitHub](https://github.com/bahrmichael/inbox-api).
 
 ```typescript
 import * as cdk from '@aws-cdk/core';

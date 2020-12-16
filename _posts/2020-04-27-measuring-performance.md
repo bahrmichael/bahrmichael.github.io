@@ -12,9 +12,9 @@ This article focuses on serveless technologies such as AWS Lambda and CloudWatch
 
 In a previous article, I explained how you can use CloudWatch Custom Metrics to [monitor an application's health](https://bahr.dev/2020/04/13/custom-metrics/). In this article we will look at the serverless scheduler, and use custom metrics to monitor the performance of its most critical component.
 
-The [serverless scheduler](https://bahr.dev/2019/10/11/serverless-scheduler/) solves the problem of ad hoc scheduling with a serverless approach. This type of scheduling describes irregular point in time invocations, e.g. one in 32 hours and another one in 4 days. While scale is usually not a problem with serverless technologies, keeping the precision high can become a challenge. 
+The [serverless scheduler](https://bahr.dev/2019/10/11/serverless-scheduler/) solves the problem of ad hoc scheduling with a serverless approach. This type of scheduling describes irregular point in time invocations, e.g. one in 32 hours and another one in 4 days. While scale is usually not a problem with serverless technologies, keeping the precision high can become a challenge.
 
-![AdHoc Scheduling](https://cdn-images-1.medium.com/max/2000/1*9dwvWJotSP9SEPp5TE-Lzw.png)
+![AdHoc Scheduling](https://bahr.dev/pictures/serverless-scheduler-1.png)
 
 The serverless scheduler accepts payloads with a `date` about when they shall be sent back. It uses SQS to prepare events that are up to 15 minutes away from their target date and then publishes them with a [lambda](https://aws.amazon.com/lambda/) function called `emitter`. This function receives the events a second early and waits for the right moment to publish them. The reason for this is that cold starts can add a couple hundred milliseconds of delay.
 
@@ -57,9 +57,9 @@ def put_metrics(delay):
     )
 ```
 
-This approach is good if your function processes just one event at a time and you don't hit [lambda's concrrency limits](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html). In other situations you may quickly notice a significant downside of this approach: We don't make use of batching. In the worst case we establish a new connection for every event. 
+This approach is good if your function processes just one event at a time and you don't hit [lambda's concrrency limits](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html). In other situations you may quickly notice a significant downside of this approach: We don't make use of batching. In the worst case we establish a new connection for every event.
 
-Even if we don't establish a new connection for each event, the code still waits for the network call to complete. To put the speed of network calls into perspective, have a look at [Computer Latency at a Human Scale](https://www.prowesscorp.com/computer-latency-at-a-human-scale/). 
+Even if we don't establish a new connection for each event, the code still waits for the network call to complete. To put the speed of network calls into perspective, have a look at [Computer Latency at a Human Scale](https://www.prowesscorp.com/computer-latency-at-a-human-scale/).
 
 How about we report metrics just once?
 
@@ -96,7 +96,7 @@ def put_metrics(values, counts):
 
 To ensure that we publish all the events as quickly as possible, we only collect the delay values. After the important work is done, we start doing analytics.
 
-The batch parameters of the [PutMetricData API](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html) expect an array of values and a correspoing array of counts, where each item in the counts array describes how often a given value has occurred. 
+The batch parameters of the [PutMetricData API](https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html) expect an array of values and a correspoing array of counts, where each item in the counts array describes how often a given value has occurred.
 
 ```
 values[0] = 200
@@ -154,7 +154,7 @@ def handle(event, context):
     for item in event['Recods']:
         publish_event(item)
         delay = get_delay(item)
-    
+
         log_event = {
             'log_type': 'emit_delay',
             'delay': delay
@@ -200,7 +200,7 @@ But wait, there's another ad hoc approach which requires even less code.
 
 ### CloudWatch Insights
 
-In the previous section we started logging JSON. These logs can be used by [CloudWatch Logs Insights](https://aws.amazon.com/blogs/aws/new-amazon-cloudwatch-logs-insights-fast-interactive-log-analytics/) to generate metrics from logs. All without building and deploying new analyzer functions! 
+In the previous section we started logging JSON. These logs can be used by [CloudWatch Logs Insights](https://aws.amazon.com/blogs/aws/new-amazon-cloudwatch-logs-insights-fast-interactive-log-analytics/) to generate metrics from logs. All without building and deploying new analyzer functions!
 
 {%raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/AWSLambda?src=hash&amp;ref_src=twsrc%5Etfw">#AWSLambda</a> protip: Thou Shalt Log JSON! (and then you just use cloudwatch insights for searching across all the whole log group easily instead of fucking around with log streams)!</p>&mdash; Gojko Adzic (@gojkoadzic) <a href="https://twitter.com/gojkoadzic/status/1253246550672801793?ref_src=twsrc%5Etfw">April 23, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -208,18 +208,18 @@ In the previous section we started logging JSON. These logs can be used by [Clou
 
 The `emitter` now prints JSON logs like `{'log_type': 'emity_delay', 'delay': 156}`. To visualise the delays we open [CloudWatch Logs Insights](https://console.aws.amazon.com/cloudwatch/home?#logsV2:logs-insights) in the AWS console, select the right log group and use [CloudWatch Logs Query Syntax](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) to build a query which aggregates the delay data.
 
-![Insights Query](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/measuring-performance-query.png)
+![Insights Query](https://bahr.dev/pictures/measuring-performance-query.png)
 
 The query `stats max(delay) by bin(60s)` builds an aggregate (`stats`) of the maximum delay (`max(delay)`) for every minute (`bin(60s)`).
 
 After running the query, we see a logs and a visualization tab. Here's the visualization:
 
-![Insight Visualization](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/measuring-performance-visualization.png)
+![Insight Visualization](https://bahr.dev/pictures/measuring-performance-visualization.png)
 
 With a click on "Add to dashboard" we can build a widget out of this metric and add it to one of our existing dashboards. We'll look more into graphing in the next section.
 
 Note that this approach is based on CloudWatch logs, where you pay [$0.03 per GB](https://aws.amazon.com/cloudwatch/pricing) of storage. If you only need metrics for the last few weeks, then CloudWatch Insights with a 14 or 28 day log retention period is okay. Otherwise Custom Metrics are cheaper for long term storage.
-        
+
 ## Graph It
 
 In a [recent article](https://bahr.dev/2020/04/13/custom-metrics/) I explained how to turn custom metrics into graphs and how to build a dashboard. This time we take a look at how we can make the best out of the delay metrics, and spice them up with a reference line.
@@ -229,12 +229,12 @@ Looking at the maximum delay, we can quickly understand what the worst example i
 To better understand the various percentiles, you can use the following query to plot out the `max`, `p99`, `p95` and `p90`. I've increased the bin to 10 minutes so that the lines don't overlap too much.
 
 ```
-stats max(delay), percentile(delay, 99), percentile(delay, 95), percentile(delay, 90) by bin(10m) 
+stats max(delay), percentile(delay, 99), percentile(delay, 95), percentile(delay, 90) by bin(10m)
 ```
 
 The visualization gives us four lines.
 
-![Insights Percentiles](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/measuring-performance-percentiles.png)
+![Insights Percentiles](https://bahr.dev/pictures/measuring-performance-percentiles.png)
 
 ### Reference Line
 
@@ -242,7 +242,7 @@ If you're building graphs from custom metrics, you can add a reference line to i
 
 Once you selected a metric, you can add a reference line by adding the formula `IF(m1, 1000, 0)`. Replace `1000` with your reference value. This expression will print a reference line, if the other data series `m1` has a value.
 
-![Reference Line](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/measuring-performance-reference-line.jpg)
+![Reference Line](https://bahr.dev/pictures/measuring-performance-reference-line.jpg)
 
 ## Alarms
 

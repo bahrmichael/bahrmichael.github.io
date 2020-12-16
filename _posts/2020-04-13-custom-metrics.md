@@ -14,7 +14,7 @@ In this article I will show you how I use custom metrics to verify that an appli
 
 The application "Eve Market Watch" lets players of the MMORPG Eve Online define market thresholds for various items. When the available amount drops below that threshold, the user gets a notification so they can restock the market. In the picture below, a threshold of 100,000 would trigger an ingame mail while a threshold of 90,000 would not yet.
 
-![Market](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-market.png)
+![Market](https://bahr.dev/pictures/custom-metrics-market.png)
 
 The core process (market parser) takes all the user defined thresholds, pulls in market data from the game's API and figures out which items are running low. If the number of processed items drops significantly, then something has happened that I should investigate, be it a market that's not available anymore or a new bug.
 
@@ -24,7 +24,7 @@ The application has a trade off between concurrency and blast radius. The optima
 
 If the market parser breaks, I want to know about that before my users do. There have been a couple times where I repeatedly broke the core process without noticing it.
 
-![Chat complaint](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-chat.png)
+![Chat complaint](https://bahr.dev/pictures/custom-metrics-chat.png)
 
 To achieve this, the market parser shall track the number of items being processed so that an alarm can fire if that number drops significantly.
 
@@ -110,7 +110,7 @@ For more details check the api documentation for [PutMetricData](https://docs.aw
 
 Once the code is deployed and running we go to the [CloudWatch Metrics](https://console.aws.amazon.com/cloudwatch/home#metricsV2:graph=~()), look up our metric and verify that our code is collecting data. Once your code submitted the first metrics, you will see your new namespace under "Custom Namespaces".
 
-![Metrics with custom namespaces](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-metrics.png)
+![Metrics with custom namespaces](https://bahr.dev/pictures/custom-metrics-metrics.png)
 
 Open the dashboard, drill down into the right category and explore the available data.
 
@@ -120,7 +120,7 @@ Once you found your data, continue by creating a graph which visualizes your dat
 
 As the core process of my application runs every 15 minutes, it makes sense to average over a period of 15 minutes.
 
-![Graphed metrics](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-graphed-metrics.png)
+![Graphed metrics](https://bahr.dev/pictures/custom-metrics-graphed-metrics.png)
 
 For more info about graphing metrics, check out the [CloudWatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph_metrics.html).
 
@@ -132,13 +132,13 @@ Go to the CloudWatch [dashboards](https://console.aws.amazon.com/cloudwatch/home
 
 Resize the widget and add more as you need. Here's how my dashboard looks:
 
-![Dashboard](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-dashboard.png)
+![Dashboard](https://bahr.dev/pictures/custom-metrics-dashboard.png)
 
-As you can see in the top graph on the left side around "04/06", there is some lack of data. When my code stops working and doesn't collect data anymore, an alarm should be triggered. 
+As you can see in the top graph on the left side around "04/06", there is some lack of data. When my code stops working and doesn't collect data anymore, an alarm should be triggered.
 
 There is another drop after "04/08". This one recovered itself within a reasonable time. I do not need an alarm for that situation, but should still analyze the problem later on.
 
-Let's look at creating alarms next. 
+Let's look at creating alarms next.
 
 ## Alarms
 
@@ -146,17 +146,17 @@ Let's look at creating alarms next.
 
 To create an alarm, head over to the [alarms section](https://console.aws.amazon.com/cloudwatch/home#alarmsV2:) in CloudWatch and click on "Create alarm". You will then be asked to select a metric, where you pick and plot a metric as we've done in the previous sections. Note that here you can only select one data series. You can't aggregate various dimensions here.
 
-![Alarm configuration](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-anomaly-band.png)
+![Alarm configuration](https://bahr.dev/pictures/custom-metrics-anomaly-band.png)
 
 With the metric selected, you can define conditions. I decided to go with the "Anomaly detection" and picked "Lower than the band" as the threshold type. Play around with the anomaly detection threshold value to see what is best for your data. In the additional configuration I defined that 10 out of 10 datapoints need to breach the band before an alarm gets triggered. This way the app can recover itself in case an external API temporarily fails. I also decided to "Treat missing data as bad (breaching threshold)" as the alarm would otherwise not fire if my code breaks before the metrics are reported.
 
 In the picture below you see a preview of the anomaly detection against the metrics I've collected. We see a few red drops where the anomaly detection triggers, but as we've configured the alarm to only fire if 10 out of 10 data points are bad, we only get alarms when the market parser does not recover. If you look closely, you also see regular drops in the gray anomaly band which are caused by the game's daily downtime. CloudWatch correctly understands that this is a recurring behavior.
 
-![Anomaly band preview](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-preview.png)
+![Anomaly band preview](https://bahr.dev/pictures/custom-metrics-preview.png)
 
 When my alarm fires, I want to receive an email. This is the easiest way to continue, but you may set up custom integrations through SNS topics, e.g. for [Slack](https://read.acloud.guru/slack-notification-with-cloudwatch-alarms-lambda-6f2cc77b463a). To send alarms to an email, choose to "Create a new topic", enter a name for the new topic and enter an email address that will receive the alarm. Click on "Create Topic" below the email input and then click on next to continue.
 
-![Creating a notification](https://github.com/bahrmichael/bahrmichael.github.io/raw/master/pictures/custom-metrics-notification.png)
+![Creating a notification](https://bahr.dev/pictures/custom-metrics-notification.png)
 
 Finally give your alarm a name and finish the setup. To test your alarm you can update the trigger conditions or report metrics that will trigger the alarm. Make sure to check that you get an email as expected.
 

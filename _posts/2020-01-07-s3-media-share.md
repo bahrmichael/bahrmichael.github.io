@@ -31,7 +31,7 @@ Head to the [IAM policy overview](https://console.aws.amazon.com/iam/home#/polic
 
 Let’s start by selecting the S3 service.
 
-![Policy services](https://cdn-images-1.medium.com/max/2000/1*bz-5BIXyKmqPMal3byYimw.png)
+![Policy services](https://bahr.dev/pictures/s3-media-share-1.png)
 
 The next step is to grant the necessary permissions:
 
@@ -45,17 +45,17 @@ The next step is to grant the necessary permissions:
 
 Don’t click on “All S3 actions” as that will grant anyone with that permission to look into ALL your buckets and do EVERYTHING they want with them.
 
-![Adding S3 permissions](https://cdn-images-1.medium.com/max/2000/1*NVYg0hnzhraYsTcjfgIW8Q.png)
+![Adding S3 permissions](https://bahr.dev/pictures/s3-media-share-2.png)
 
 You have probably noticed the Resource warnings. That’s where we’ll go next to define what resources those permissions may be used on.
 
 Click on “Add ARN” under bucket and add your bucket. Click on “Add ARN” under object and add your bucket plus a * wildcard to allow everyone with that user to access and edit all the files within this single bucket. You may extend this with more users and limit each one to only write in their own folder. Ask in the comments if you don’t know how!
 
-![Resources for the permissions](https://cdn-images-1.medium.com/max/2000/1*Zd3-dF3hfGDN7zOc98V8sQ.png)
+![Resources for the permissions](https://bahr.dev/pictures/s3-media-share-3.png)
 
 Now we can just click next until we created the policy.
 
-![Policy creation success](https://cdn-images-1.medium.com/max/2000/1*3FOxRNjMIeaPGqRZ36lsUg.png)
+![Policy creation success](https://bahr.dev/pictures/s3-media-share-4.png)
 
 ### Create a user
 
@@ -63,15 +63,15 @@ The next step is to create a user which gets only the policy we just created. Ag
 
 We’ll name our user something convenient that we’ll remember and give it AWS Management Console access so that the user may log in to the web interface. You can let AWS generate a password for you or pick your own one. Please make it a secure one!
 
-![Creating a user](https://cdn-images-1.medium.com/max/2000/1*3dEMYq-BS7-ew3MhczYcQQ.png)
+![Creating a user](https://bahr.dev/pictures/s3-media-share-5.png)
 
 We’re nearly done. Make sure to attach the recently created policy to the user.
 
-![Attaching the policy](https://cdn-images-1.medium.com/max/2000/1*kNkUe7gmOVo2q_RAGDGxdw.png)
+![Attaching the policy](https://bahr.dev/pictures/s3-media-share-6.png)
 
 Click on next and you should be done.
 
-![User creation success](https://cdn-images-1.medium.com/max/2000/1*0w1eCLCrhlfP_l0EXKPX8Q.png)
+![User creation success](https://bahr.dev/pictures/s3-media-share-7.png)
 
 Don’t close the success window just yet, we need to copy a few things for your friends:
 
@@ -89,22 +89,22 @@ With that information they should be able to access your bucket and upload/downl
 
 You should have received a bucket URL, a user and a password. Open the bucket URL in your browser and enter the credentials.
 
-![Login to AWS](https://cdn-images-1.medium.com/max/2000/1*fI_x48880fn8vhPJ9wJ4IQ.png)
+![Login to AWS](https://bahr.dev/pictures/s3-media-share-8.png)
 
 Click on Sign In to open the bucket.
 
-![Bucket overview](https://cdn-images-1.medium.com/max/2490/1*14_gP6v0eLe55Jyzlcod6A.png)
+![Bucket overview](https://bahr.dev/pictures/s3-media-share-9.png)
 
 To upload a new file or folder just drag it into the bucket. On the dialog that pops up just click “Upload”.
 
-![](https://cdn-images-1.medium.com/max/2000/1*pqPNfl6U4NU8Or6zpLW2xg.png)
+![](https://bahr.dev/pictures/s3-media-share-10.png)
 
 Depending on the size of your files it might take a while to complete. You can start uploading/downloading other files in the meantime.
 
-![Upload is running](https://cdn-images-1.medium.com/max/2182/1*ATd8cpSeNxhwdmXyOTb0Ig.png)
+![Upload is running](https://bahr.dev/pictures/s3-media-share-11.png)
 
 Downloading a file is a bit trickier. Instead of just double clicking it or opening the Object-URL, you have to open the file’s details and click on Download. Depending on where you click you’ll see a dialog or be redirected to the file’s details. In any case a download button should be visible.
 
-![Downloading a file](https://cdn-images-1.medium.com/max/2000/1*c6f5L1qfYBWlHtp2BNNvHA.png)
+![Downloading a file](https://bahr.dev/pictures/s3-media-share-12.png)
 
 Currently there seems to be no option to download a whole folder from the AWS S3 console. If you don’t want to individually download files, please ask your friends to zip the files first.

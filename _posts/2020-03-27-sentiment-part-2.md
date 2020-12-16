@@ -6,7 +6,7 @@ backgroundUrl: "https://images.unsplash.com/photo-1535320903710-d993d3d77d29?ixl
 
 In this two part article I will show you how to build an app, that collects people's opinions about companies and how to turn that into sentiments. Disclaimer: Trade at your own risk!
 
-[Part 1](https://dev.to/michabahr/stock-sentiment-analysis-part-1-collecting-opinions-gdl)
+[Part 1](https://bahr.dev/2020/03/27/sentiment-part-1/)
 
 ---
 
@@ -110,11 +110,11 @@ Each tweet will require one sentiment analysis and one DynamoDB write operation.
 
 With [on-demand pricing](https://aws.amazon.com/dynamodb/pricing/on-demand/) DynamoDB charges $1.25 per million write request units and $0.25 per million read request units. With the worst case of 100 new tweets every 10 minutes, we're looking at a total of 100x6x24x365 = 5256000 WCUs or $6.57 per year.
 
-The [cost of AWS Comprehend](https://aws.amazon.com/comprehend/pricing/) is a bit more intense. 
+The [cost of AWS Comprehend](https://aws.amazon.com/comprehend/pricing/) is a bit more intense.
 
 Tweets vary in length, but for the worst case we assume that each tweet uses up the full 280 characters. If we collect 100 tweets every 10 minutes, we are going collect 100x6x24x365 = 5,256,000 tweets per year. Over the last year I did however only collect 1,500,000 tweets.
 
-> "Amazon Comprehend requests are measured in units of 100 characters, with a 3 unit (300 character) minimum charge per request." 
+> "Amazon Comprehend requests are measured in units of 100 characters, with a 3 unit (300 character) minimum charge per request."
 
 Sentiment analysis is priced at $0.0001 per unit. The price to analyze 5,256,000 tweets with 280 characters or 3 units each is 5,256,000 x $0.0001 x 3 = **$1,576.8**. This is expensive for a hobby project, so please make sure you tag your resources appropriately and think twice before you run this as a hobby project.
 

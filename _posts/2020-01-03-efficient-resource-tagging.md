@@ -10,7 +10,7 @@ Already familiar with Cost Explorer and tags? Skip to “Is there a more efficie
 
 If you’ve been using AWS for a while, you’ve probably noticed that pricing and understanding your bills is more complex here.
 
-![Spending of the last three months (Tax and Registrar excluded)](https://cdn-images-1.medium.com/max/3984/1*ruL7ldcHmOe6T66JMDQ2IQ.png)
+![Spending of the last three months (Tax and Registrar excluded)](https://bahr.dev/pictures/efficient-resource-tagging-1.png)
 
 We can see which services cost how much, but to drill down on a project or department basis we need to add tags. This guide looks at how we can add those cost tags.
 
@@ -27,7 +27,7 @@ You can use tags for many more use cases than cost tracking. Check out the [AWS 
 
 Tags however won’t show up in the Cost Explorer unless you tell AWS to start tracking them. Go to AWS’ Billing service and in the lefthand navigation click on [cost allocation tags](https://console.aws.amazon.com/billing/home?#/preferences/tags). If you’ve already defined tags somewhere, then those will show up in a table below. If you haven’t done so, tag some resources now and come back when you’re done. Click refresh to update the tag table.
 
-![Tags for cost explorer](https://cdn-images-1.medium.com/max/2676/1*TVPOsP1j8eGKRveg3mq7mw.png)
+![Tags for cost explorer](https://bahr.dev/pictures/efficient-resource-tagging-2.png)
 
 The next step is to tell AWS which tags are relevant for cost analysis. In our example it’s the two “team” and “project”. Select and activate them. Your selected tags will now *start* being tracked. You might not see the tags in the Cost Explorer diagram for a day or two.
 
@@ -47,11 +47,11 @@ For all other situations I suggest an iterative API based approach. Under the as
 
 To identify expensive services which are untagged, we open the Cost Explorer and start by showing only those resources that are missing the tag.
 
-![Show only resources that don’t have the tag “project”](https://cdn-images-1.medium.com/max/2000/1*n9w9VHyEjJHSRkYcG2FD9w.png)
+![Show only resources that don’t have the tag “project”](https://bahr.dev/pictures/efficient-resource-tagging-3.png)
 
 Then we set the diagram’s granularity to *Monthly*, the type to *Bar* and group by *Service*. This gives us an overview of services which have not been tagged yet. You may also go for Daily, but should then shorten the time period to e.g. seven days.
 
-![Cost overview of untagged services](https://cdn-images-1.medium.com/max/3980/1*olWIzgOLzBHWyuqkUaOnhA.png)
+![Cost overview of untagged services](https://bahr.dev/pictures/efficient-resource-tagging-4.png)
 
 We can now pick one or two of those services and tag all the resources. We’ll start by picking Lambda and scripting with Python and with the [boto3 library](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/lambda.html).
 
@@ -89,15 +89,13 @@ You can find an improved version of the script on [GitHub](https://github.com/ba
 
 Here’s how my Cost Explorer view changed after running the script for Lambda. The last two days show that we have less than 1$/day untagged.
 
-![Cost Explorer with improved tagging](https://cdn-images-1.medium.com/max/5356/1*bfeyxNrH9EiIsXmdmkF_Dg.png)
+![Cost Explorer with improved tagging](https://bahr.dev/pictures/efficient-resource-tagging-5.png)
 
 ## What’s next?
 
 Repeat the process: The next cost driver would be CloudWatch.
 
 There’s an improved version ready for you on [GitHub](https://github.com/bahrmichael/aws-service-tagger). I will extend this tooling for more services over time. Do you find it useful? Do you need help or would like to contribute for other services? Let me know!
-
-Also follow AWS hero [Yan Cui](undefined) as he might release something related soon ;)
 
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Haha yeah, it&#39;s in my backlog of things to catch up on after reinvent! Watch this space... patiently.. (lots to do after reinvent)</p>&mdash; Yan Cui (@theburningmonk) <a href="https://twitter.com/theburningmonk/status/1203005332483559431?ref_src=twsrc%5Etfw">December 6, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
