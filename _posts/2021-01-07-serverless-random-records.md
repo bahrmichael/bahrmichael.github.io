@@ -10,6 +10,11 @@ are good and diversified experience, e.g. for a quiz app.
 In this article we take a look at three serverless approaches
 to getting random records from a large and changing set of data.
 
+**Quick Links**:
+* [DynamoDB Example](#dynamodb-fully-random)
+* [S3 Example](#s3-fully-random)
+* [Redis Example](#redis-fully-random)
+
 A serverless mechanism for getting random records should be
 scalable, support a changing dataset and scale down to zero if not in use.
 
@@ -20,11 +25,11 @@ questions that are outdated.
 Keep in mind that true randomness is not always desirable, as that
 can lead to your user seeing the same record 5 times after another.
 Keep track of what your user has already seen, and try again if you
-load a record that they've already seen.
+load a known record.
 
 ## Use Cases
 
-Apart from a quiz app, you might need to get random records for
+Apart from a quiz app, you need random records for
 
 * a vocabulary app,
 * a "wisdom of the day" Twitter bot,
@@ -36,7 +41,8 @@ and many more.
 ## Prerequisites
 
 You need an AWS account and credentials in the environment that you're running
-the examples from. [You can use AWS CloudShell for this](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html).
+the examples from. [You can use AWS CloudShell for this](https://docs.aws.amazon.com/cloudshell/latest/userguide/welcome.html): Run `python3` which presents
+you the Python console and paste one of the examples.
 
 To get the most of this article, you should be familiar with one of DynamoDB, S3 or Redis.
 
@@ -46,16 +52,16 @@ Python knowledge, or the ability to translate the examples to other languages is
 
 In the chapters for DynamoDB and S3 we're using a random offset.
 The trick here is that this random offset does not need to exist as a record in the target service.
-S3 and DynamoDB will take it and scan until they find a record.
+S3 and DynamoDB will take the offset and scan until they find a record.
 
 ![Randomized Offset Visualization](https://bahr.dev/pictures/randomized-offset.png)
 
-In plain English we tell DynamoDB and S3 to start at a certain point, and then keep looking until they find one record.
+In plain English: We tell DynamoDB and S3 to start at a certain point, and then keep looking until they find a record.
 
 ## DynamoDB
 
-DynamoDB is a serverless key-value database that is optimized for transactional access
-patterns.
+[DynamoDB is a serverless key-value database that is optimized for transactional access
+patterns.](https://aws.amazon.com/dynamodb/)
 If the partition key of our table is random within a range (e.g. a UUID),
 we can combine a `Scan` operation with
 a random offset to get a random record on each request.
@@ -68,7 +74,7 @@ a random offset to get a random record on each request.
 
 In this example we're using [the Python library boto3 for DynamoDB](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html).
 
-First we insert some records that have a UUID as their partition key.
+First we insert some records that we have a UUID as the table's [partition key](https://stackoverflow.com/questions/45581744/how-does-the-dynamodb-partition-key-work).
 
 ```python
 for i in range(100):
@@ -78,7 +84,7 @@ for i in range(100):
 
 There are more exhaustive examples in the following sections.
 
-The second step is to run the `Scan` operation with a random offset. We use the parameter `Limit` so that
+Once we have data in our table we can run the `Scan` operation with a random offset. We use the parameter `Limit` so that
 the scan stops after it found one entry, and we use `ExclusiveStartKey` to pass in a random offset.
 
 ```python
@@ -94,7 +100,7 @@ In the above example we have a table that has a partition
 key called `pk`. Every record in this database has a UUID as their partition key.
 
 By running this command, we read and retrieve exactly one record. While scans are
-usually considered expensive, but this scan operation only consumes 0.5 capacity units. This
+usually considered expensive, this scan operation consumes only 0.5 capacity units. This
 is the same amount a `get_item` operation consumes. You can test this by adding the parameter
 `ReturnConsumedCapacity='TOTAL'` to the scan operation.
 
@@ -104,7 +110,7 @@ but only rarely access them, then S3 offers better pricing. [More on that in the
 Please note that DynamoDB has a size limit of 400 KB per record. If you exceed that, then
 consider using the S3 or Redis approach.
 
-### Fully Random
+### DynamoDB Fully Random
 
 Here's a complete Python example to pick a random
 record from a table called `random-table`. The example includes writing records
@@ -142,7 +148,7 @@ for i in range(3):
         print("Didn't find an item. Please try again.")
 ```
 
-### Categorized
+### DynamoDB Categorized
 
 Many use cases are not fully random, but require some kind of categorization.
 An example for this is a quiz, where we have the three difficulties `['easy', 'medium', 'difficult']`.
@@ -171,7 +177,11 @@ categories = ['easy', 'medium', 'difficult']
 for category in categories:
     # Create 50 records for each category with a random sort key
     for i in range(50):
-        item = {'pk': category, 'sk': str(uuid4()), 'text': f"question-{category}-{i}"}
+        item = {
+          'pk': category,
+          'sk': str(uuid4()),
+          'text': f"question-{category}-{i}"
+        }
         table.put_item(Item=item)
         print(f"Inserted {item}")
 
@@ -195,12 +205,12 @@ for category in categories:
 
 ## S3
 
-S3 is a serverless object storage. It allows you to store and retrieve any amount of data, and
-offers industry-leading scalability, availability and performance. It's also cheaper than
-fully fledged databases for storage heavy use cases. It does however offer less query flexibility than
+[S3 is a serverless object storage which allows you to store and retrieve any amount of data, and
+offers industry-leading scalability, availability and performance.](https://aws.amazon.com/s3/) It's also cheaper than
+a fully fledged database for storage heavy use cases. It does however offer less query flexibility than
 databases like DynamoDB.
 
-With S3 we take a similar approach to the one used with DynamoDB, which we need two API calls for: One for
+With S3 we take a similar approach to the one used with DynamoDB. With S3 we need two API calls: One for
 finding the key of a random object, and one for retrieving that object's content.
 
 Assuming that there's a bucket called `my-bucket-name` with files that each
@@ -224,7 +234,7 @@ equivalent to DynamoDB's `ExclusiveStartKey` which allows us to pass a random of
 is a list of object keys, from which we pick the first one and retrieve the object.
 [The result is sorted alphabetically](https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysUsingAPIs.html).
 
-### Fully Random
+### S3 Fully Random
 
 Here's a Python example to pick a random
 record from a bucket called `my-bucket-name`. The example includes writing files
@@ -267,12 +277,12 @@ for i in range(3):
         print("Didn't find an item. Please try again.")
 ```
 
-### Categorized
+### S3 Categorized
 
-Here's an S3 example with categories, which we add as a key prefix. What was previously `key`
+Here's an S3 example with categories, which we add as a prefix: `key`
 now becomes `category/key`. For `list_objects_v2` we need to consider the category in two places. The first one
 is the `Prefix` parameter, and the second one is the `StartAfter` parameter which needs to include the category and the
-key.
+key. `get_object` doesn't change.
 
 ```python
 import boto3
@@ -323,8 +333,8 @@ If we however include `Prefix=categoryA`, then `categoryB/object3` doesn't match
 
 ```
 categoryA/object1
-categoryA/object2
-categoryB/object3
+categoryA/object2 <-- start after
+categoryB/object3 <-- undesired hit
 ```
 
 The `list_objects_v2` call [always returns an ordered list](https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysUsingAPIs.html).
@@ -339,7 +349,7 @@ that you can use to keep your application fully serverless.
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Have you tried redis? It has both RANDOMKEY as well as SRANDMEMBER commands that might be useful here</p>&mdash; Yan Cui is making the AppSync Masterclass (@theburningmonk) <a href="https://twitter.com/theburningmonk/status/1342516700764364801?ref_src=twsrc%5Etfw">December 25, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
 
-The Redis approach suggested by [Yan Cui](https://twitter.com/theburningmonk) is a lot simpler, because there are built-in command to pick random
+The Redis approach suggested by [Yan Cui](https://twitter.com/theburningmonk) is a lot simpler, because there are built-in commands to pick random
 entries:
 
 * `RANDOMKEY` gets a random key from the currently selected database.
@@ -347,7 +357,7 @@ entries:
 
 Redis has a size limit of 512 MB per record.
 
-### Fully Random
+### Redis Fully Random
 
 In the example below, we store unstructured records in our database.
 We retrieve a random key with the command `RANDOMKEY`, and then get
@@ -366,7 +376,7 @@ GET firstKey
 
 This approach requires two calls per random record.
 
-### Categorized
+### Redis Categorized
 
 We can leverage sets to add categories into our data. This approach
 is very powerful, as the `SRANDMEMBER` command has an optional parameter
@@ -391,12 +401,12 @@ This approach only needs one call per random record, or less if you retrieve mul
 ## Cost Comparison
 
 In the cost comparison we're looking at DynamoDB (On-Demand), S3 (Standard), and Lambda Store, because all
-of them are serverless solutions. All of them have a free tier that lets you test the approaches
+of them are serverless solutions with a pay per request pricing model. All of them have a free tier that lets you test the approaches
 for free.
 
 In the cost comparison we're reading from a dataset of one million records, each with a size of 1 KB.
 This should be enough for a question and some meta information. The total size of this data set is 1 GB. We're
-excluding cost for Data Transfer.
+ignoring cost for data transfer.
 
 In the first table you see the price per single random record, as well as per million.
 
