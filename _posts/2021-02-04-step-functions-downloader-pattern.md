@@ -19,6 +19,12 @@ We'll take a look at an example with parallel requests and post-processing in a 
 
 Are you interested in CDK code to spin up a Step Functions Downloader? [Let me know on Twitter!](https://twitter.com/bahrdev)
 
+## Prerequisites
+
+**Previous experience with AWS Step Functions is helpful, but not required**.
+
+Knowledge about API Gateway, DynamoDB and Lambda helps you with debugging edge cases.
+
 ## What is the Downloader Pattern?
 
 At its core the Downloader Pattern consists of the three steps Prepare, Download and Persist which allow us to collect 3rd party
@@ -31,10 +37,11 @@ endpoint that you read from (e.g. `GET https://esi.evetech.net/v2/status`), then
 Please note that [you need a workaround for endpoints that require `Authorization` headers](#prohibited-authorization-header).
 
 During the **Download** step we run `GET` requests against the URL that we received from the previous step, and can
-optionally transform the result with JSONPath.
+optionally transform the result with ResultSelectors and JSONPath.
 
-Finally, we map the data to our DynamoDB format and **persist** it. The data storage doesn't have to be DynamoDB, but can
-also be other ones like S3.
+Finally, we map the data to our DynamoDB format and **persist** it. You can also use a different data storage
+as longs as it is listed on the [Step Functions service integrations](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-service-integrations.html) or is accessible via HTTP.
+At the time of writing S3 is not listed on the service integrations page.
 
 An experienced Step Functions user might notice that in principle we only need the Download step and can
 change/omit the other steps as needed. In our first example, we will focus on the core use case of getting 3rd party data
@@ -48,7 +55,7 @@ like approval flows with human interaction, and Express for straight-forward pro
 5 minutes. Express Workflows tend to be cheaper for state machines that run frequently. [Check the pricing page for
 more details](https://aws.amazon.com/step-functions/pricing/).
 
-Standard is very helpful when you write and debug the state machine. It gives you a lot of insight about where
+**Standard is very helpful when you write and debug the state machine.** It gives you a lot of insight about where
 and why things fail, as well as the data that is passed from one state to another. All this is shown in a nice UI.
 You get the same information with Express, but will have to read through the logs and connect the dots yourself.
 **Develop the state machine with Standard, and then recreate it with Express when you move to production.**
@@ -57,10 +64,10 @@ The Downloader Pattern only uses features that both Standard and Express Workflo
 
 ## Invocation and Post-Processing
 
-AWS Step Functions supports are variety of triggers and [service integrations](https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html)
-whose icons you can see in the picture below. There are probably more than you see in this picture. Also note that in
-this picture I split the Persist step into a "Transform Result" and "Post-Process", as we don't necessarily need to store
-the data in DynamoDB.
+AWS Step Functions supports are variety of triggers and [service integrations](https://docs.aws.amazon.com/step-functions/latest/dg/connect-supported-services.html).
+You can see some of their icons in the picture below. Also note that in
+this picture I split the Persist step into a "Transform Result" and "Post-Process", as we might want to aggregate our data
+don't necessarily need to store it in DynamoDB.
 
 ![Downloader Pattern with Surrounding Services](https://bahr.dev/pictures/downloader-pattern-wrapper.png)
 
@@ -71,12 +78,6 @@ have even more options to choose from for post-processing the data. We only talk
 but you can also send the data to many other services such as Lambda, SQS, SNS, API Gateway, SageMaker and even
 other Step Functions.
 
-## Prerequisites
-
-**Previous experience with AWS Step Functions is helpful, but not required**.
-
-Knowledge about API Gateway, DynamoDB and Lambda helps you with debugging edge cases.
-
 ## A Simple Example
 
 The 3rd party API we use for this example comes from EVE Online, a space based multiplayer game that features an
@@ -85,7 +86,7 @@ The 3rd party API we use for this example comes from EVE Online, a space based m
 The result of this example will be a DynamoDB table that we can use to build player count charts with a minute-precision.
 You can find an example of how these charts could look like at [eve-offline.net](https://eve-offline.net/?server=tranquility).
 
-Below you see an abbreviated Step Functions definition, that has two tasks. We'll dive into them over the next sections.
+Below you see an abbreviated Step Functions definition, that has two tasks. We'll dive into each of them in the next sections.
 
 ```json
 {
@@ -156,7 +157,7 @@ DynamoDB will take a few moments to create the table. In the meantime you can co
 ## 3. Step Functions
 
 Next let's go to the Step Functions console. Here we create a new state machine with the type Standard. We can later recreate this with Express for higher concurrency,
-but Standard makes creating state machines through the console easier.
+but Standard makes developing state machines through the console easier.
 
 Here you can paste the example state machine definition you see below. Replace the `xxxxxxxxxx` in the Download step
 with the ID of your API Gateway. If you deployed to a region different from `us-east-1` then also update the region.
@@ -223,7 +224,7 @@ For our example we set the `Stage` to `prod`, the `Method` to `GET`, and the `Pa
 Because we set the endpoint in our API Gateway proxy to `https://esi.evetech.net/{proxy}`, this request will be proxied
 to `GET https://esi.evetech.net/v2/status`. You can try that endpoint in your browser.
 
-[You can customize the API call with query parameters, headers, request bodies and many more](https://docs.aws.amazon.com/step-functions/latest/dg/connect-api-gateway.html).
+[You can customize the API call with query parameters, headers, request bodies and much more](https://docs.aws.amazon.com/step-functions/latest/dg/connect-api-gateway.html).
 This is relatively easy when you have static values, but becomes tricky with Dynamic Parallelism. More about that in the
 second article. Some headers such as `Authorization` are [not permitted due to security considerations](#prohibited-authorization-header),
 but that [can be worked around](#prohibited-authorization-header).
@@ -249,7 +250,7 @@ Inspecting the output of this step in the console shows us the following respons
 
 This output will be the input for the next step. Please note that [the output of each step must be less than 256 KB](#256-kb-result-size-limit).
 
-### 3.2 Put Item into DynamoDB
+### 3.2 Store It In DynamoDB
 
 In this step, we send a `putItem` request to DynamoDB and pass along the `Date` from the `Header`, as well as the `players` count from the `ResponseBody`.
 
@@ -303,10 +304,8 @@ You are redirected to the Create Rule wizard of EventBridge, where you can selec
 fixed rate of `1 Minute`. As the target select Step Functions state machine and pick the state machine you created before.
 You can keep the remaining defaults.
 
-![Details for the Cron Job](https://bahr.dev/pictures/downloader-pattern-cron-details.png)
-
 That's it. Your state machine will now be invoked every minute. Let it run a few minutes and check your DynamoDB table.
-You can see the data in my table below.
+Your result should look like the picture below.
 
 ![Player counts in the table](https://bahr.dev/pictures/downloader-pattern-table-data.png)
 
@@ -315,7 +314,7 @@ You can see the data in my table below.
 ### Prohibited Authorization Header
 
 [Due to security considerations Step Functions prohibits some headers in the API Gateway integration](https://docs.aws.amazon.com/step-functions/latest/dg/connect-api-gateway.html).
-`Authorization` is one of them. This means that we can't provide an `Authorization` header for 3rd party APIs that require one.
+`Authorization` is one of them. This means that we can't send an `Authorization` header to 3rd party APIs.
 
 **Workaround**: In API Gateway you can edit the request mapping. This allows you to map an incoming header like `MyCustomAuth` to the header `Authorization`.
 This way you can use authentication, even though Step Functions won't let a header called `Authorization` pass.
@@ -328,8 +327,8 @@ Go to the Integration Request and add an HTTP Header mapping which maps `method.
 
 ![Integration Request for Authentication header](https://bahr.dev/pictures/downloader-pattern-auth-integration.png)
 
-Save, deploy and test it against an endpoint that requires authentication. Instead of passing in an `Authorziation` header,
-use the header `MyCustomAuth`.
+Save, deploy and test it against an endpoint that requires authentication. Instead of passing in an `Authorziation` header from
+your Step Function, use the header `MyCustomAuth`.
 
 ### 256 KB Result Size Limit
 
@@ -337,7 +336,7 @@ The result of each download step must be no more than `262,144 bytes` (or 256 KB
 
 If the result of the request is larger than this and is a JSON response, you can try reducing it with a `ResultSelector`.
 
-I quickly hit this limit with EVE Online's market endpoints that can return up to 50 MB over more than 300 pages for the
+I hit this limit with EVE Online's market endpoints that can return up to 50 MB over more than 300 pages for the
 largest market.
 
 ### Debugging
@@ -346,19 +345,21 @@ I suggest that you start developing your state machine with Standard Workflows. 
 Express Workflows and help you with debugging errors. Keep in mind that Express Workflows don't support all the
 features that Standard Workflows do.
 
-Error messages are not always helpful. E.g. typing `States.format` leads to an error without further details. The solution
-here was to use `States.Format` instead.
-
 ### Limited Concurrency
 
 [Step Functions may limit concurrent executions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-map-state.html).
 There's a concurrency limit of 40, after which Step Functions may wait until previous iterations completed.
 
+In my tests the maximum was 60 concurrent executions.
+
+Someone suggested that one could nest multiple Map tasks to get 40x40 concurrent executions, but in my tests with
+nested Map tasks the there were no more than 60 concurrent executions.
+
 ## Price
 
 Standard Workflows are expensive for the Downloader Pattern, as the price for state transitions combined with the
-limitation in download size doesn't really offset the price for the alternative compute runtime. The cost for state transitions
-becomes significant if you fan out to hundreds or thousands of parallel requests.
+limitation in download size doesn't really offset the price for an alternative compute runtime like Lambda. The cost for state transitions
+becomes significant if you run hundreds or thousands of parallel state machines.
 
 Express Workflows charges per 100ms, which might be based on Lambdas pricing model. AWS Lambda recently reduced their
 billing increments to 1ms, so you might pay a bit less with Lambda if most of your requests finish within a couple milliseconds.
@@ -367,8 +368,8 @@ You can find more details on the [Step Functions Pricing page](https://aws.amazo
 
 ## Conclusion
 
-The Step Functions Downloader Pattern is a nice way to show that workflows can be built without functions, but its limitations are
-quickly reached with more complex or heavy workloads.
+The Step Functions Downloader Pattern is a nice way to show that workflows can be built without functions, but reaches
+its limits with more complex or heavy workloads.
 
 The Downloader Pattern is nice for very simple "get and store" workflows. You'll see how this can be applied to more
 complex workflows in the next article.
