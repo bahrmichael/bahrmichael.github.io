@@ -1,3 +1,10 @@
+---
+layout: post
+title: "How To Download Data With AWS Step Functions"
+backgroundUrl: "https://images.unsplash.com/photo-1515984977862-1c7201ef324d?auto=format&fit=crop&q=80"
+description: "In this article I introduce the Step Functions Downloader Pattern, which is a functionless approach to retrieving and storing data from 3rd party APIs."
+---
+
 In this article I introduce the Step Functions Downloader Pattern, which is a serverless approach to retrieving and
 storing data from 3rd party APIs with
 as little custom code (read: Lambda functions) as possible.
