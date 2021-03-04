@@ -13,11 +13,11 @@ query multiple pages of an API in parallel, uses [ResultSelectors](https://docs.
 to reduce the size of the API response down to the
 Step Functions maximum task output size, and aggregates the result before writing thousands of entries into DynamoDB.
 
-Below you see the visualization of the state machine. [The state machine definition is available on GitHub](https://gist.github.com/bahrmichael/552c0e334cdfb86f3f268a570371d32c).
+Below you see the visualization of [the state machine](https://gist.github.com/bahrmichael/552c0e334cdfb86f3f268a570371d32c).
 
 ![Downloader Pattern](https://bahr.dev/pictures/downloader-pattern-extended-fresh.png)
 
-Involved in this state machine are the three task types [API Gateway](https://docs.aws.amazon.com/step-functions/latest/dg/connect-api-gateway.html), [Lambda](https://docs.aws.amazon.com/step-functions/latest/dg/connect-lambda.html), [DynamoDB](https://docs.aws.amazon.com/step-functions/latest/dg/connect-ddb.html), and the [Map State](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-map-state.html):
+Involved in this state machine are the three task types [API Gateway](https://docs.aws.amazon.com/step-functions/latest/dg/connect-api-gateway.html), [Lambda](https://docs.aws.amazon.com/step-functions/latest/dg/connect-lambda.html), [DynamoDB](https://docs.aws.amazon.com/step-functions/latest/dg/connect-ddb.html), as well as the [Map State](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-map-state.html):
 
 | Name           | Type          |
 |----------------|---------------|
@@ -40,10 +40,9 @@ were larger than the 256 KB step output limit. Input and output processing are p
 [read the official documentation](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-input-output-filtering.html).
 
 There's an upper bound of how much data this pattern can process. If the API returns more data than we can compress
-with the ResultSelectors, the state machine will fail.
-
-In my example I'm downloading data about market orders, but I'm only interested in the total volume per item being available.
-That's why we have the aggregation step which performs a domain specific aggregation.
+with the ResultSelectors, the state machine will fail. In my example I'm downloading data about market orders, but I'm
+only interested in the total volume per item being available. That's why we have the aggregation step which performs a
+domain specific aggregation.
 
 **Tell me more about the API you're using**
 
@@ -63,14 +62,12 @@ on the market. Below is an example for the item `Tritanium` which has the id `34
 ```
 
 The market API is paginated and comes with an `X-Pages` header that we will use to run parallel requests.
-
 You can try the endpoint we use in this example at [https://esi.evetech.net/v1/markets/10000063/orders](https://esi.evetech.net/v1/markets/10000063/orders).
-
-Let's check up on prerequsites, and then dive right into the details.
+Let's check up on prerequisites, and then dive right into the details.
 
 ## Prerequisites
 
-Before jumping into this article, you should have read the [introduction to the Step Functions Downloader Pattern](https://bahr.dev/2021/02/04/step-functions-downloader-pattern/)
+You should have read the [introduction to the Step Functions Downloader Pattern](https://bahr.dev/2021/02/04/step-functions-downloader-pattern/)
 which provides detailed explanations of some mechanisms we use here. Amongst others, we compared Standard and Express
 state machines, and looked into how one uses API Gateway as a proxy for 3rd party APIs.
 
