@@ -6,8 +6,6 @@ backgroundUrl: "https://images.unsplash.com/photo-1578002171601-902a5a7645a9?ixl
 frontPageCategory: monitoringAndPerformance
 ---
 
-This article focuses on serveless technologies such as AWS Lambda and CloudWatch.
-
 > tl;dr: CloudWatch Insights is great if you can log JSON and only consider the last few weeks, otherwise I suggest asynchronous log analysis with a detached lambda function.
 
 In a previous article, I explained how you can use CloudWatch Custom Metrics to [monitor an application's health](https://bahr.dev/2020/04/13/custom-metrics/). In this article we will look at the serverless scheduler, and use custom metrics to monitor the performance of its most critical component.
@@ -55,9 +53,17 @@ def put_metrics(delay):
             },
         ]
     )
+
+def publish_event(event):
+    # sends the event to the sns topic
+    # specified in the event
+
+def get_delay(event):
+    # calculate the time until the
+    # event shall be fired
 ```
 
-This approach is good if your function processes just one event at a time and you don't hit [lambda's concrrency limits](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html). In other situations you may quickly notice a significant downside of this approach: We don't make use of batching. In the worst case we establish a new connection for every event.
+This approach is good if your function processes just one event at a time and you don't hit [lambda's concurrency limits](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html). In other situations you may quickly notice a significant downside of this approach: We don't make use of batching. In the worst case we establish a new connection for every event.
 
 Even if we don't establish a new connection for each event, the code still waits for the network call to complete. To put the speed of network calls into perspective, have a look at [Computer Latency at a Human Scale](https://www.prowesscorp.com/computer-latency-at-a-human-scale/).
 
@@ -78,7 +84,7 @@ def handle(event, context):
         delays.append(get_delay(item))
 
     values, counts = aggregate_delays(delays)
-    put_metrics(values, count)
+    put_metrics(values, counts)
 
 def put_metrics(values, counts):
     cloudwatch.put_metric_data(
@@ -212,19 +218,19 @@ The `emitter` now prints JSON logs like `{'log_type': 'emity_delay', 'delay': 15
 
 The query `stats max(delay) by bin(60s)` builds an aggregate (`stats`) of the maximum delay (`max(delay)`) for every minute (`bin(60s)`).
 
-After running the query, we see a logs and a visualization tab. Here's the visualization:
+After running the query, we see a logs, and a visualization tab. Here's the visualization:
 
 ![Insight Visualization](https://bahr.dev/pictures/measuring-performance-visualization.png)
 
-With a click on "Add to dashboard" we can build a widget out of this metric and add it to one of our existing dashboards. We'll look more into graphing in the next section.
+With a click on "Add to dashboard" we can build a widget out of this metric and add it to one of our existing dashboards. We'll look more into visualizing in the next section.
 
 Note that this approach is based on CloudWatch logs, where you pay [$0.03 per GB](https://aws.amazon.com/cloudwatch/pricing) of storage. If you only need metrics for the last few weeks, then CloudWatch Insights with a 14 or 28 day log retention period is okay. Otherwise Custom Metrics are cheaper for long term storage.
 
-## Graph It
+## Visualize It
 
 In a [recent article](https://bahr.dev/2020/04/13/custom-metrics/) I explained how to turn custom metrics into graphs and how to build a dashboard. This time we take a look at how we can make the best out of the delay metrics, and spice them up with a reference line.
 
-Looking at the maximum delay, we can quickly understand what the worst example is. But using percentiles allows us to better understand how bad the situation really is. If your maximum delay is 14 seconds, but that only occurred once, then the situation isn't too bad. If however the 90% percentile (p90) to 10 seconds, then a significant number of customers will be impacted. P90 describes the best 90%.
+Looking at the maximum delay, we can quickly understand what the worst example is. But using percentiles allows us to better understand how bad the situation really is. If your maximum delay is 14 seconds, but that only occurred once, then the situation isn't too bad. If however the 90% percentile (i.e. p90) rises to 10 seconds, then a significant number of customers will be impacted. P90 describes the best 90%.
 
 To better understand the various percentiles, you can use the following query to plot out the `max`, `p99`, `p95` and `p90`. I've increased the bin to 10 minutes so that the lines don't overlap too much.
 
