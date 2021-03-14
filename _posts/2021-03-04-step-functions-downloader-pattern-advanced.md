@@ -70,6 +70,7 @@ Let's check up on prerequisites, and then dive right into the details.
 You should have read the [introduction to the Step Functions Downloader Pattern](https://bahr.dev/2021/02/04/step-functions-downloader-pattern/)
 which provides detailed explanations of some mechanisms we use here. Amongst others, we compared Standard and Express
 state machines, and looked into how one uses API Gateway as a proxy for 3rd party APIs.
+Check out Alex Hyett's [Getting Started with AWS Step Functions](https://www.alexhyett.com/aws-step-functions/).
 
 To get the most out of this article, you should also be familiar with AWS DynamoDB and AWS Lambda.
 

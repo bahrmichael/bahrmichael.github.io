@@ -21,7 +21,7 @@ Are you interested in CDK code to spin up a Step Functions Downloader? [Let me k
 
 ## Prerequisites
 
-**Previous experience with AWS Step Functions is helpful, but not required**.
+**Previous experience with AWS Step Functions is helpful, but not required**. Check out Alex Hyett's [Getting Started with AWS Step Functions](https://www.alexhyett.com/aws-step-functions/).
 
 Knowledge about API Gateway, DynamoDB and Lambda helps you with debugging edge cases.
 
