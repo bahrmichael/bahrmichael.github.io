@@ -257,7 +257,7 @@ By default, [DynamoDB uses eventually consistent reads](https://docs.aws.amazon.
 
 > When you read data from a DynamoDB table, the response might not reflect the results of a recently completed write operation. The response might include some stale data. If you repeat your read request after a short time, the response should return the latest data.
 
-DynamoDB Local however uses strong read consistency. This means that your tests which succeeded with DynamoDB Local
+DynamoDB Local however is so fast that it looks like it had strong read consistency. This means that your tests which succeeded with DynamoDB Local
 might sometimes fail when running against DynamoDB on AWS.
 
 There are two approaches to fix this: Using strongly consistent reads, or letting tests retry the get calls.
