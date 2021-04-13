@@ -14,7 +14,12 @@ with [some](https://github.com/localstack/localstack) [for](https://medium.com/s
 [testing](https://opensource.com/article/17/8/testing-production)
 [with](https://copyconstruct.medium.com/testing-in-production-the-safe-way-18ca102d0ef1) the cloud.
 
-In this article, I'll show you how we switched from testing against a local emulation to testing with managed DynamoDB on AWS.
+While frequently mentioned in the community,
+[the service differences](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) were much
+less a problem than the onboarding for new team members, as well as issues when
+the local database's process stopped responding.
+
+In this article, I'll show you how my team switched from testing against a local emulation to testing with managed DynamoDB on AWS.
 
 ## What Is DynamoDB Local?
 
@@ -24,18 +29,12 @@ tests without the need for creating tables in your AWS account, and without requ
 while running these tests.
 
 My team used DynamoDB Local to verify our data model in unit tests. In addition to the reasons mentioned above, this also
-allowed us to test out table changes quickly and without introducing problems for others who might be using the same
-database. Some of us probably still remember the pain of traditional databases, that either had to be installed
+allowed us to test out table changes quickly without introducing problems for others who might be using the same
+database.
+
+Some of us probably still remember the pain of traditional databases, that either had to be installed
 locally with a couple of hacks trying to get the right system permissions, or using a shared instance that frequently
 lead to conflicting changes. Using a local version of DynamoDB can be very compelling.
-
-However, over time we noticed some problems with the local emulation. While frequently mentioned in the community,
-[the service differences](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) were much
-less a problem than the onboarding for new team members, as well as issues when
-the local database's process stopped responding.
-
-So we replaced the local emulation with direct access to the managed DynamoDB on AWS. Let's have a look at our test
-structure first, and then inspect the test setup in detail.
 
 ## Prerequisites
 
@@ -64,14 +63,14 @@ indices. We used DynamoDB Local for the functional tests, which could be execute
 I listed the environment above, because we need to know where multiple test runs could use the same table. With
 DynamoDB Local this wasn't an issue, as it created a new ephemeral table before each test run.
 
-## What Had To Change For Managed DynamoDB?
+## What Had To Change For Migrating To Managed DynamoDB?
 
 1. The developer must have an active AWS profile with valid credentials and the right permissions when running the tests.
 2. The test executors in the AWS accounts must also have the right permissions. This applies to CICD and Pull Request builds.
 3. Our tests must create tables on the fly.
 4. The tests need to use random values, so that test executions don't conflict with each other.
 5. When more than one developer runs tests in one account (e.g. for pull request builds), then the tests must use
-   different tables. Otherwise conflicting table changes would lead to confusing test failures.
+   different tables. Otherwise, conflicting table changes would lead to confusing test failures.
 6. Tests must use retry mechanisms to handle DynamoDB's eventual consistency.
 
 ## 1. Developer Permissions
@@ -81,14 +80,14 @@ pushing changes to the shared account where they start to affect others. To let 
 the [AWS JavaScript SDK](https://aws.amazon.com/sdk-for-javascript/) for table setup and database queries, we need to have an active AWS profile and valid
 credentials. [Check this guide on how to create named AWS profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
 
-In our `package.json` we have a test script as shown below, which passes the personal profile to our test runner.
+In our `package.json` we have a test script as shown below, which passes the `personal` profile to our test runner.
 
 ```
 "test:functional": "AWS_PROFILE=personal jest --config test_config/jest.functional.config.js"
 ```
 
 The jest config file also references further environment variables, like the table names for running tests.
-Making the table names configurable is important, so that we can select different table names when running
+Making the table names configurable is important, so that we can select unique table names when running
 multiple test executors in the same account.
 
 ## 2. Text Executor Permissions
@@ -176,6 +175,8 @@ async function doesTableExist(tableName: string): Promise<boolean> {
       }).promise();
     return true;
   } catch (e) {
+    // instead of a try-catch block you
+    // can also use the ListTables API
     console.log(e);
     return false;
   }
@@ -241,7 +242,7 @@ update a pull request at the same time, the tests could conflict with each other
 the pull requests modifies the table in a non-backwards compatible way.
 
 To solve this problem, we create tables with a commit hash suffix before the tests run, and tear them down
-afterwards. This approach adds a bit of runtime to the pull request build, but I think that it's okay for pull request
+afterwards. This approach adds a bit of runtime to the pull request build, but I think it's okay for pull request
 builds to take a minute or two longer.
 
 Because we used an environment variable for the table name, we can quickly switch what table the tests use. Please note that
@@ -262,7 +263,7 @@ might sometimes fail when running against DynamoDB on AWS.
 
 There are two approaches to fix this: Using strongly consistent reads, or letting tests retry the get calls.
 
-### 6.1 Strongly Consistent Reads
+### 6.1 Strongly Consistent Reads (not recommended)
 
 By using strongly consistent reads, DynamoDB will wait until the data has been written to all nodes.
 
@@ -288,7 +289,7 @@ This approach however [has some disadvantages](https://docs.aws.amazon.com/amazo
 
 I suggest using retries instead strong read consistency.
 
-### 6.2 Retries For Tests
+### 6.2 Retries For Tests (recommended)
 
 Most large scale systems are eventually consistent. Therefore, it's okay to reflect that in our tests. We use the
 library `async-retry` to exponentially retry a request, as shown below.
