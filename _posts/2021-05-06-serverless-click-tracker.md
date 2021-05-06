@@ -5,7 +5,7 @@ backgroundUrl: "https://images.unsplash.com/photo-1588600878108-578307a3cc9d?aut
 description: "This article shows you how to track clicks on your website with serverless technology."
 ---
 
-What if I told you that you don't need any analytics tracker, cookies (or biscuits if you're British) or JS libraries at all to understand how visitors of your website move around? And you can do this serverless, so barely pay a penny.
+What if I told you that you don't need any analytics tracker, cookies (or biscuits if you're British) or JS libraries at all to understand how visitors of your website move around? And you can do this serverless, so you only pay for what you use.
 
 With the `ping` attribute of the HTML element `<a>` you can **enable hyperlink auditing** for any link on your website. This means that you can connect any link on your website with a self-made analytics service that you fully control. This does not apply to links from other websites to yours though.
 
