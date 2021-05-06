@@ -7,7 +7,7 @@ description: "This article shows you how to track clicks on your website with se
 
 What if I told you that you don't need any analytics tracker, cookies (or biscuits if you're British) or JS libraries at all to understand how visitors of your website move around? And you can do this serverless, so barely pay a penny.
 
-With the `ping` attribute of the HTML element `<a>` you can **enable the hyperlink auditing** for any link on your website. This means that you can connect any link on your website with a self-made analytics service that you fully control. This does not apply to links from other website to yours though.
+With the `ping` attribute of the HTML element `<a>` you can **enable hyperlink auditing** for any link on your website. This means that you can connect any link on your website with a self-made analytics service that you fully control. This does not apply to links from other websites to yours though.
 
 ```
 <a href="/about" ping="/ping">About Me</a>
@@ -46,7 +46,7 @@ It can help you understand how viewers move within your website, or where they l
 The ping attribute is [supported by all major browsers](https://caniuse.com/ping). Firefox however disables it by default. On my blog 17% of the viewers use Firefox.
 
 I like the `ping` attribute because it's more transparent than JS/iframe based approaches, it can be controlled by the
-user, and does not require any cookies. If one of the browsers doesn't allow you to disable the hyperlink auditing (grr
+user, and does not require any cookies. If one of the browsers doesn't allow you to disable hyperlink auditing (grr
 Chrome), you can use extensions like [uBlock Origin](https://github.com/gorhill/uBlock) to prevent this traffic. This is
 a lot harder to prevent with JS libraries.
 
@@ -60,7 +60,7 @@ our browser will send the ping requests to. I'm going to user the [serverless fr
 
 ### Architecture
 
-Our application consists of three APIs for the hyperlink auditing, showing the user journey, and serving a website with a
+Our application consists of three APIs for hyperlink auditing, showing the user journey, and serving a website with a
 couple links. It is backed by a DynamoDB table and Lambda functions.
 
 ![Architecture](https://bahr.dev/pictures/auditing-architecture.png)
@@ -74,7 +74,7 @@ import {htmlResponse} from '@libs/apiGateway';
 
 export const main = async (event) => {
   return htmlResponse(`
-        <h1>Welcome To Hyperlink Auditing</h1>
+        <h1>Welcome To hyperlink auditingng</h1>
         <p>Current Page: <pre>${event.path}</pre></p>
         <p>Follow one of the links below to generate data.</p>
 
@@ -95,7 +95,7 @@ Check out the [source code on GitHub](https://github.com/bahrmichael/hyperlink-a
 
 This function accepts a `POST` request, ignores the body, and uses the headers to identify from where to where a user
 went. It also uses the headers to generate a hash of the user's session. This is not to identify a user, but to match
-multiple requests of a journey together. We also include the date into this hash so that we're not able to see a users
+multiple requests of a journey together. We also include the date into this hash so that we're not able to see a user's
 movement over more than one day.
 
 ```typescript
@@ -189,9 +189,9 @@ extension.
 
 ## Conclusion
 
-Hyperlink auditing is a lightweight and transparent approach to understanding your viewers' journeys on your website.
+hyperlink auditing is a lightweight and transparent approach to understanding your viewers' journeys on your website.
 With just one function, you can start recording movements without giving your viewers' data to anyone who will monetise
 them.
 
-If you only want some simple analytics, while maintaining your viewers' privacy, you should check out Fatham Analytics
+If you only want some simple analytics, while maintaining your viewers' privacy, you should check out Fathom Analytics
 by following this [referral link](https://usefathom.com/ref/I1EFJ1).
