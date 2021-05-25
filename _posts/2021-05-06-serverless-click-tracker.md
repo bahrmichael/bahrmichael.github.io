@@ -13,10 +13,6 @@ With the `ping` attribute of the HTML element `<a>` you can **enable hyperlink a
 <a href="/about" ping="/ping">About Me</a>
 ```
 
-If you don't want to build and maintain a tracker yourself while maintaining your viewers' privacy, you should check
-out Fathom Analytics by following this [referral link](https://usefathom.com/ref/I1EFJ1). I'm a happy customer
-and [the statistics of my blog are public](https://app.usefathom.com/share/gvlddgwj/bahr.dev).
-
 ## Prerequisites
 
 To get the most out of this article, you should be familiar with using AWS Lambda.
@@ -101,6 +97,7 @@ movement over more than one day.
 ```typescript
 import {DynamoDB} from 'aws-sdk';
 
+// TABLE_NAME comes from the environment variables
 const {TABLE_NAME} = process.env;
 const ddb = new DynamoDB.DocumentClient();
 
