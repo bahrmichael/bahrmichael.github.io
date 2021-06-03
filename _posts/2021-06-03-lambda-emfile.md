@@ -9,12 +9,10 @@ description: "This article shows how we debugged and fixed an 'EMFILE: too many 
 
 My team is building a new application, and I used [CloudWatch alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#CloudWatchAlarms) to
 understand what latency promises we could make without triggering the alarms too often. I set these alarms to fire when 3/3 datapoints breach the alarm's threshold, and
-noticed an interesting pattern from multiple triggered alarms: A sharp increase in latency (hundreds of ms to multiple seconds), followed by a function timeout (30 seconds), again followed by a cold start.
+noticed an **interesting pattern from multiple triggered alarms**: A sharp increase in latency (hundreds of ms to multiple seconds), followed by a function timeout (30 seconds), again followed by a cold start.
 
-Our application consists of a couple Lambda functions and other serverless infrastructure. One monolithic function backs an API Gateway endpoint.
+Our application consists of a couple AWS Lambda functions and other serverless infrastructure, with a NodeJS 12 environment. One monolithic function backs an API Gateway endpoint.
 The Lambda function uses [aws-serverless-koa](https://www.npmjs.com/package/aws-serverless-koa) for routing requests to the right handler, and the AWS SDK for JavaScript to call other AWS services like DynamoDB.
-
-Out application is built with AWS Lambda, NodeJS 12 and TypeScript.
 
 ## Prerequisites
 This article assumes that you've already built a NodeJS application on AWS Lambda, and have some experience with the AWS CloudWatch service.
@@ -35,7 +33,7 @@ fields @timestamp, @message
 ```
 
 In the resulting logs I saw an error with the message `EMFILE: too many files open`. To understand what happened leading up to this error, I filtered for
-the `@requestId` to let CloudWatch show me all logs for that particular request.
+the `@requestId` to let CloudWatch show me all logs for that particular request. You can find the value field in the `@message` field from the previous query.
 
 ```
 fields @timestamp, @message
@@ -100,7 +98,9 @@ const app = initApp(); // some custom logic
 
 export const handler = async (event, context) => {
     // this was causing the file descriptor usage to go up
-    return proxy(createServer(app.callback(), event, context, "PROMISE")).promise;
+    return proxy(
+        createServer(app.callback(), event, context, "PROMISE")
+    ).promise;
 }
 ```
 
