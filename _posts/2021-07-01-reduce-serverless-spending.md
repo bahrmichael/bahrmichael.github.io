@@ -16,11 +16,11 @@ The CloudFront Savings Bundle becomes **interesting from $10 per month**. The bu
 
 The best thing about this bundle is that you commit to a **monthly spending, which is very accessible**, even with a low usage. Whereas the Lambda and DynamoDB options require an hourly commitment, this one doesn't care about spikey workloads and inconsistent traffic.
 
-To see if the bundle makes sense for you, go to the AWS Console, open the CloudFront service, and navigate to "Savings Bundle - Overview" in the lefthand navigation. Click on the button Get Started. If you are already paying for CloudFront, it should give you an overview of your previous spending. You can use that information to estimate your spending for the upcoming months. CloudFront also gives you a recommendation on how much you should commit to, while maximizing the utilization (and therefore not paying for unused commitment).
+To see if the bundle makes sense for you, go to the AWS Console, open the CloudFront service, and navigate to *Savings Bundle - Overview* in the lefthand navigation. Click on the button *Get Started*. If you are already paying for CloudFront, it should give you an overview of your previous spending. You can use that information to estimate your spending for the upcoming months. CloudFront also gives you a recommendation on how much you should commit to, while maximizing the utilization (and therefore not paying for unused commitment).
 
 ![CloudFront Recommendation](https://bahr.dev/pictures/serverless-spending-cf-recommendation.png)
 
-Click on Next to finalize the details, where you should disable the auto-renewal. You can always buy another savings plan, but you can't cancel it after you committed to the 1-year term. When you're ready, enter an amount that you feel comfortable with, and continue to checkout.
+Click on *Next* to finalize the details, where you should disable the auto-renewal. You can always buy another savings plan, but you can't cancel it after you committed to the 1-year term. When you're ready, enter an amount that you feel comfortable with, and *continue to checkout*.
 
 ![CloudFront Purchase](https://bahr.dev/pictures/serverless-spending-cf-purchase.png)
 
@@ -32,16 +32,16 @@ Compute Savings Plans for Lambda require an hourly commitment, and can get you *
 
 I recommend this plan **if your compute spending exceeds $100 per month**, and if the compute is spread out over each day. If you commit to an hourly spending, but don't use it for 12 hours each day, you may overpay. The Lambda free tier can cut into your gains from this spending plan, [as it did for me](https://twitter.com/bahrdev/status/1393165192234602498) with about 3-4 days of each month being covered by the free tier.
 
-With a significant spending, the console will give you a recommendation. It's probably best to follow that recommendation and don't  [do the math yourself](https://bahr.dev/2020/06/30/savings-plans/). To get a recommendation, go to the Cost Explorer service, and navigate to "Savings Plans - Recommendations" on the lefthand side.
+With a significant spending, the console will give you a recommendation. It's probably best to follow that recommendation and don't  [do the math yourself](https://bahr.dev/2020/06/30/savings-plans/). To get a recommendation, go to the Cost Explorer service, and navigate to *Savings Plans - Recommendations* on the lefthand side.
 
 ![Savings Plan Recommendation](https://media.amazonwebservices.com/blog/2019/sp_full_mock_6.png)
 Source: [Savings Plans for AWS Compute Services](https://aws.amazon.com/blogs/aws/new-savings-plans-for-aws-compute-services/)
 
 If in doubt, start small with a few cents, and add more Compute Savings Plans later. You can always purchase more Compute Savings Plans, but you can't return already purchased ones as far as I know.
 
-To purchase a Compute Savings Plan, go to the Cost Explorer service, and navigate to "Savings Plans - Purchase Savings Plans" on the lefthand side. Keep the "Compute Savings Plans" type, select a commitment term, an hourly commitment and a payment option. The more upfront, the higher your savings. Review your order, and if you're comfortable with it, sumbit the order.
+To purchase a Compute Savings Plan, go to the Cost Explorer service, and navigate to *Savings Plans - Purchase Savings Plans* on the lefthand side. Keep the *Compute Savings Plans* type, select a commitment term, an hourly commitment and a payment option. The more upfront, the higher your savings. Review your order, and if you're comfortable with it, submit the order.
 
-A couple days after purchasing a Compute Savings Plan you can inspect the utilization. You find this information by going to the Cost Explorer service, and navigate to "Savings Plans - Utilization Report" on the lefthand side.
+A couple of days after purchasing a Compute Savings Plan you can inspect the utilization. You can find this information by going to the Cost Explorer service, and navigate to *Savings Plans - Utilization Report* on the lefthand side.
 
 ![Compute Savings Plan Utilization](https://bahr.dev/pictures/serverless-spending-compute-utilization.png)
 
@@ -53,9 +53,9 @@ The spending for DynamoDB provisioned capacity can be improved by purchasing res
 
 By comparing the total hourly cost of reserved capacity including upfront payment and non-reserved capacity, I calculated a **savings rate of 45%**.
 
-To see the prices for reserved capacity, check out [DynamoDB's pricing page](https://aws.amazon.com/dynamodb/pricing/provisioned/), scroll down to the detailed pricing, expand the section "Read and write requests", and scroll down to "Reserved capacity". With DynamoDB Reserved Capacity you have to partially pay upfront, and commit to an hourly spending at a reduced rate. In return for this payment, you don't get additional charges for the 100 Capacity Units that you purchased. You still pay for data storage, transfer and other AWS charges.
+To see the prices for reserved capacity, check out [DynamoDB's pricing page](https://aws.amazon.com/dynamodb/pricing/provisioned/), scroll down to the detailed pricing, expand the section *Read and write requests*, and scroll down to *Reserved capacity*. With DynamoDB Reserved Capacity you have to partially pay upfront, and commit to an hourly spending at a reduced rate. In return for this payment, you don't get additional charges for the 100 Capacity Units that you purchased. You still pay for data storage, transfer and other AWS charges.
 
-To purchase reserved capacity, go to the DynamoDB service, and open "Reserved capacity" from the lefthand navigation. This page will show you the approximate provisioned read and write capacity. Continue by clicking on "Purchase reserved capacity", pick a capacity, term and how many units you want to reserve. There seems to be no downside to picking a shorter term, so I suggest going with 1 year. You can always buy another one, but you can't return one that you already purchased. Start small and add more when you have data. Once you're comfortable with your selection, click on "Purchase reserved capacity", and you're done.
+To purchase reserved capacity, go to the DynamoDB service, and open *Reserved capacity* from the lefthand navigation. This page will show you the approximate provisioned read and write capacity. Continue by clicking on *Purchase reserved capacity*, pick a capacity, term and how many units you want to reserve. There seems to be no downside to picking a shorter term, so I suggest going with 1 year. You can always buy another one, but you can't return one that you already purchased. Start small and add more when you have data. Once you're comfortable with your selection, click on *Purchase reserved capacity*, and you're done.
 
 ## S3 Storage Tiers
 
@@ -75,7 +75,7 @@ All storage tiers offer 99.999999999% object durability for the covered availabi
 
 To figure out which bucket causes significant spending, you can use the [S3 Storage Lens](https://aws.amazon.com/blogs/aws/s3-storage-lens/) or tag your buckets to drill down on spending in the Cost Explorer.
 
-The storage class is defined per bucket. Open a bucket, go to the Management tab and create a new lifecycle rule. In the wizard of the new lifecycle rule you need to pick a "Lifecycle rule action" which transitions an object between storage classes. Pick a target storage class, and define after how many days an object should move there.
+The storage class is defined per bucket. Open a bucket, go to the Management tab and create a new lifecycle rule. In the wizard of the new lifecycle rule you need to pick a *Lifecycle rule action* which transitions an object between storage classes. Pick a target storage class, and define after how many days an object should move there.
 
 ![S3 Lifecycle rule actions](https://bahr.dev/pictures/serverless-spending-s3-lifecycle.png)
 
