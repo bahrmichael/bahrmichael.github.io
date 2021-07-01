@@ -57,7 +57,7 @@ To see the prices for reserved capacity, check out [DynamoDB's pricing page](htt
 
 To purchase reserved capacity, go to the DynamoDB service, and open "Reserved capacity" from the lefthand navigation. This page will show you the approximate provisioned read and write capacity. Continue by clicking on "Purchase reserved capacity", pick a capacity, term and how many units you want to reserve. There seems to be no downside to picking a shorter term, so I suggest going with 1 year. You can always buy another one, but you can't return one that you already purchased. Start small and add more when you have data. Once you're comfortable with your selection, click on "Purchase reserved capacity", and you're done.
 
-# S3 Storage Tiers
+## S3 Storage Tiers
 
 S3 doesn't offer savings plan similar to the previous options, but it has various [storage classes](https://aws.amazon.com/s3/storage-classes/) that differ in price. In this article we only consider S3 Standard, Intelligent Tiering, Infrequent Access, and One-Zone Infrequent Access. You can lower your storage cost by choosing a lower tier by **roughly 50%**, but the price for request and data retrievals may go up by a factor of 2.
 
