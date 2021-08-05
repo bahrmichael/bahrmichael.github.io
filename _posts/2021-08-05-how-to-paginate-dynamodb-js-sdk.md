@@ -15,6 +15,8 @@ The table setup and examples are [available on GitHub](https://github.com/bahrmi
 
 This guide is for **TypeScript** and `aws-sdk` (article written with version `2.958.0`).
 
+The examples are intended for the `DynamoDB.DocumentClient`. If you don't have to use this client, consider Jeremy Daly's [DynamoDB Toolbox](https://github.com/jeremydaly/dynamodb-toolbox).
+
 I assume that you are familiar with DynamoDB table structures, especially partition and sort keys.
 
 ## Async Generators
