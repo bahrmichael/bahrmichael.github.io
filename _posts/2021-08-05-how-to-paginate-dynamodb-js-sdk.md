@@ -1,4 +1,9 @@
-# How To Paginate DynamoDB Tables With The AWS SDK For JavaScript
+---
+layout: post
+title: "How To Paginate DynamoDB Tables With The AWS SDK For JavaScript"
+backgroundUrl: "https://images.unsplash.com/photo-1564669722947-c89159202d19?auto=format&fit=crop&q=80"
+description: "This article has DynamoDB pagination examples in TypeScript that you can copy and paste."
+---
 
 [Python library boto3 has built in paginators](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#paginators),
 but this doesn't seem to be the case for AWS SDK for JavaScript. This article has code examples that you can copy and paste
