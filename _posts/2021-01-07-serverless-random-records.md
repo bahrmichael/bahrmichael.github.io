@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How To Get Random Records From A Serverless Application"
+title: "How To Get Random Items From DynamoDB, S3, and Redis"
 backgroundUrl: "https://images.unsplash.com/photo-1518688248740-7c31f1a945c4?auto=format&fit=crop&q=80"
 description: "In this article we take a look at three serverless approaches to getting random records from a large and changing set of data."
 ---

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Point Multiple Subdomains To The Same Frontend"
+title: "How To Use AWS Route53 Wildcard Subdomains With CDK"
 backgroundUrl: "https://images.unsplash.com/photo-1508904933353-8a1d461016f2?auto=format&fit=crop&q=80"
 description: "This article explains how you can point multiple subdomains to the same frontend deployment. This will enable you to give each of your customers a customized experience, while having just one frontend deployment."
 ---
