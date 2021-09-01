@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Partial Data Recovery with AWS DynamoDB Point In Time Recovery"
-description: "This article describes how you can recover broken items in DynamoDB. We will Point In Time Recovery backups for a partial restore."
+description: "This article describes how you can recover broken items in DynamoDB. We use Point In Time Recovery backups for a partial recovery."
 backgroundUrl: "https://images.unsplash.com/photo-1473621038790-b778b4750efe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
