@@ -9,10 +9,10 @@ It’s not always a full table delete that requires you to recover data. You may
 
 * how you can partially recover data,
 * what you need to do now to prepare your application,
-* what you should do when you discover an incident,
-* and how you can recover data after you resolved the root cause.
+* what you should do when you discover an incident, and
+* how you can recover data after you resolved the root cause.
 
-We’ll use the term incident for the moment when the first records in your table are corrupted.
+We’ll use the term incident for the instant when the first records in your table are corrupted.
 
 For when you need to restore the whole table and add it back to your application stack, [check out Matthew Bonig's guide](https://matthewbonig.com/2021/08/30/importing-with-the-cdk/).
 
@@ -20,16 +20,16 @@ For when you need to restore the whole table and add it back to your application
 
 This article exclusively covers DynamoDB. You should also be familiar with IAM, as we’ll need to revoke permissions to force the application into read only mode.
 
-You should also be able to rollback your application. Bonus points if you have a runbook how do safely roll back your application when you discover an issue.
+You should also be able to rollback your application. Bonus points if you have a runbook how to safely roll back to a previous version.
 
 ## How Does Partial Recovery Work
 
 DynamoDB has a feature called Point In Time Recovery (PITR) where the service creates continuous backups , and retains them for up to 35 days.
 We can restore a PITR backup into a NEW table. You can’t restore the data into an existing table.
-Instead, you need to compare and patch records yourself. That’s what we call partial recovery in this article.
+Instead, you need to compare and patch records yourself. That’s what I'll call partial recovery.
 
 Partial recovery is especially interesting when we deal with large tables, where a full table restore would take significantly longer.
-With partial recovery we can decide to ignore GSIs during recovery and therefore improve the restoration time.
+With partial recovery we can decide to ignore GSIs during recovery and therefore lower the restoration time.
 We may also be able to keep the application running for customers that are not impacted by the bug.
 
 With the approach covered in this article we will restore the table for a point in time when the bug didn’t affect records yet, and patch the broken records in our existing table.
@@ -42,9 +42,9 @@ With a partial recovery we will modify records in a live table without tearing i
 * identify impacted records (unless you want to restore ALL records),
 * put your application into a read-only mode,
 * activate Point In Time Recovery for your tables, and
-* have a dedicated role for your application so that you can drop all write permissions while you recover records.
+* have a dedicated role for your application so that you can prevent all write operations during recovery.
 
-Below you will find some options to make your application ready for the above requirements.
+Below you will find some options to make your application ready.
 
 ### Identifying Impacted Records
 
@@ -57,7 +57,7 @@ Bonus points if you record how the item was modified (i.e. create, update or del
 The first approach is to log the item’s identifiers with the performed operation.
 Each log has a timestamp, with which you can later identify which items have been changed after a bug started impacting the application.
 
-I recommend structured logging, or the EMF format to make parsing your logs easier. Below you can find an example log entry.
+I recommend structured logging to make parsing your logs easier. Below you can find an example log entry.
 
 ```
 {
@@ -158,7 +158,7 @@ You’ll need to keep write access for the role you’ll recovery records with.
 
 **Update The Read-Only Parameter**
 
-We'll assume that you previously created a parameter called `read-only-customers` and added logic to your code to heck for this parameter.
+We'll assume that you previously created a parameter called `read-only-customers` and added logic to your code to check for this parameter.
 
 Navigate to AWS Systems Manager, then Parameter Store, and then edit the parameter `read-only-customers`.
 
@@ -168,16 +168,16 @@ In the edit screen, replace your default value with `all` to reject requests fro
 
 ![Update Parameter](https://bahr.dev/pictures/ddb-recovery-parameters-update.png)
 
-Your code should now reject requests before trying to let them write to DynamoDB.
+Your application should now reject requests before trying to let them write to DynamoDB.
 
-When you want to lift the read-only mode at the application leve, you need to change this parameter back to your default value (e.g. `none`).
+When you want to lift the read-only mode at the application level, you need to change this parameter back to your default value (e.g. `none`).
 
 **Update The IAM Roles**
 
-We'll assume that you have an existing IAM role for your application, with a policy that allows both read and write your DynamoDB table.
+We'll assume that you have an existing IAM role for your application, with a policy that allows writes to your DynamoDB table.
 
 To remove write access, we'll attach an additional `Deny` policy to your application's role. [IAM first looks at `Deny` policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html).
-If we have both an `Allow` and a `Deny` for a given operation, it will be rejected.
+If we have both an `Allow` and a `Deny` for an operation, it will be rejected.
 
 Create the `Deny` policy if you haven't done so yet. If you're in a rush, you can also go the application's role, and create an inline policy.
 
@@ -205,7 +205,7 @@ Now open your application role, where amongst others you should have a DynamoDB 
 
 ![IAM Role without Deny policy](https://bahr.dev/pictures/ddb-recovery-iam-without-deny.png)
 
-Click on "Attach policies", and find the `Deny` role. In this example it's called `DenyWrite`. Select and attach it.
+Click on "Attach policies", and find the `Deny` role. In our example it's called `DenyWrite`. Select and attach it.
 
 ![IAM search and select Deny policy](https://bahr.dev/pictures/ddb-recovery-iam-select-deny.png)
 
@@ -218,7 +218,10 @@ When you want to lift the read mode, you need to detach the `Deny` policy from y
 
 ### Start Table-Recovery
 
-The next step is starting a table recovery. This will not change your existing table, but create a new one with the data from a previous point in time. The recovery might take a while, so it’s better to start it early. You’ll need to know when the first records were corrupted, so you can restore a version where everything’s been intact.
+The next step is starting a table recovery. This will not change your existing table, but create a new one with the data from a previous point in time.
+The recovery might take a while, so it’s better to start it early.
+
+Important: You’ll need to know when the first records were corrupted, so you can restore a version where everything’s been intact.
 
 Go to the DynamoDB table, and open the Backups tab. Here you’ll see a Restore button, and the earliest restore point.
 
@@ -226,7 +229,7 @@ Go to the DynamoDB table, and open the Backups tab. Here you’ll see a Restore 
 
 After clicking on the Restore button, you can configure how the table should be restored.
 The most important part is the date. It must be before, but should be close to the time when the first records were corrupted.
-If you mess this up, you can always retry.
+Don't worry if you mess this up, you can retry and patch records again.
 
 You may choose to restore the table without secondary indexes.
 Unless you know that you won’t need them, I suggest going with the default of restoring the entire table.
@@ -252,8 +255,8 @@ Assuming you started a PITR recovery, you should soon (minutes to hours) be able
 
 While DynamoDB restores the table, you can compile a list of items that you need to recover.
 In the best case there are just a few items, or partitions that you need to recovery.
-In the worst case where you need to scan the whole table a full table recovery might be faster.
-It’s more brute force, but you’re not going to make mistakes with a patch script.
+In the worst case you need to scan the whole table. In that situation a full table recovery might be faster.
+It’s more brute force, but you’re not going to have bugs in a patch script.
 
 Restored the table, and know which items you want to recover? Great!
 You can now execute a script that replaces broken records with their correct counterpart from the recovered table. Below is an example for TypeScript.
@@ -295,10 +298,8 @@ async function runMe() {
 }
 ```
 
-Run this script with one or two items first to verify if it works correctly.
+Run this script with one or two items to verify that it works correctly.
 Remember that you can rerun it if the result is not what you expect, but be careful to first identify all broken records before you run your script.
-
-I suggest that you play around by creating a table with some items, create a backup, and then try out the script above.
 
 ## Lift The Read-Mode
 
@@ -306,7 +307,8 @@ Finally, lift the read-mode by removing the `read-only-customers` parameter and 
 
 ## Conclusion
 
-Partial recoveries can help you fix broken records in your DynamoDB table without taking the whole application down for maintenance. It does however come with prerequisites such as identifying impacted records, and read-only mode.
+Partial recoveries can help you fix broken records in your DynamoDB table without taking the whole application down for maintenance.
+It does however come with prerequisites such as identifying impacted records, and a read-only mode.
 
 For a full table recovery, you need to replace the old table with the new one. [Matthew Bonig describes how you can use CDK to import DynamoDB tables to existing CloudFormation stacks](https://matthewbonig.com/2021/08/30/importing-with-the-cdk/).
 
