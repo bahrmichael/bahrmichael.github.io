@@ -260,7 +260,7 @@ team to tell me that I can override them. Reading all 3 sentences on [the `param
 
 The entry point for any Serverless Cloud application is the `index.ts` file. Here we specify all the things we talked above.
 
-[Static assets](https://www.serverless.com/cloud/docs/apps/static-assets) from a `/.static` folder are automatically served, and API routes take precedence over static files.
+[Static assets](https://www.serverless.com/cloud/docs/apps/static-assets) from a `./static` folder are automatically served, and API routes take precedence over static files.
 This is great for single page applications (SPAs) like React and Vue. For static site generators like Next.js, we have to add API routes that resolve HTML files.
 Serverless Cloud currently doesn't automatically resolve `./dashboard` to `./dashboard.html`. Below is an example of how you can resolve paths to HTML files:
 
