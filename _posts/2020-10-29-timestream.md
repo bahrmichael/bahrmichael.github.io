@@ -5,6 +5,8 @@ backgroundUrl: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?aut
 description: "This article compares Amazon Timestream with DynamoDB for timeseries data. I'm sharing my learnings trying to migrate an existing application."
 ---
 
+> Update 30. November 2021: AWS has released [multi-measure records, scheduled queries, and magnetic storage writes for Amazon Timestream](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-timestream-scheduled-queries-multi-measure-records-magnetic-storage-writes/).
+
 AWS recently announced that their [Timestream database is now generally available](https://aws.amazon.com/about-aws/whats-new/2020/09/amazon-timestream-now-generally-available/). I tried it out with an existing application that uses timeseries data. Based on my experimentation this article compares Amazon Timestream with DynamoDB and shows what I learned.
 
 [Timeseries data is a sequence of data points stored in time order](https://blog.timescale.com/blog/what-the-heck-is-time-series-data-and-why-do-i-need-a-time-series-database-dcf3b1b18563/). Each timestream record can be extended with dimensions that give more context on the measurement. One example are fuel measurements of trucks, with truck types and number plates as dimensions.
