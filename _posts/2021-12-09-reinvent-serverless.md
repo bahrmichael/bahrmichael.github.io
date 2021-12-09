@@ -26,7 +26,7 @@ We may now specify filters that Lambda applies before calling our function.
 In applications where there are many more Lambda functions attached to the same stream, this can be a major cost savings opportunity.
 Imagine having 100 functions, and only one actually does something for each change. The cheapest code is the one that doesn't run.
 
-If you're using the Serverless Framework, there's already support for this filtering. https://dev.to/aws-builders/new-dynamodb-streams-filtering-in-serverless-framework-3lc5
+If you're using the Serverless Framework, [there's already support for this filtering](https://dev.to/aws-builders/new-dynamodb-streams-filtering-in-serverless-framework-3lc5).
 
 ## New Storage Tiers for S3 and DynamoDB
 
