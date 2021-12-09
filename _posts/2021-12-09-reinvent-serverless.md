@@ -72,7 +72,9 @@ By switching from the default class to the infrequent access class, you get the 
 * Read Capacity Units: +25% ($0.25 per million to $0.31 per million)
 * GB per month: -60% ($0.25 per GB-month to $0.1 per GB-month)
 
-There seems to be no constraint to switching table classes, so you can flip it back and forth if you're unsure if the new tier will save you money.
+When changing table storage class, you are limited to two changes per 30-day period:
+
+> Note that no more than two table class updates on your table are allowed in a 30-day trailing period.
 
 ## Kinesis On-Demand
 
