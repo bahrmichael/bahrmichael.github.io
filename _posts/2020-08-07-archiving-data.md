@@ -6,6 +6,8 @@ backgroundUrl: "https://images.unsplash.com/photo-1526923268711-fa1c7e80f0e3?ixl
 frontPageCategory: costOptimization
 ---
 
+> AWS announced new storage classes tiers at re:invent 2021. [Check out my article about the new storage tiers.](https://bahr.dev/2021/12/09/reinvent-serverless/#new-storage-tiers-for-s3-and-dynamodb)
+
 AWS offers a variety of general purpose storage solutions. While DynamoDB is the best option when latency and a variety of access patterns matter most, S3 allows for cost reduction when access patterns are less complex and latency is less critical.
 
 This article describes the available options for archiving data, how to prepare that data for long term archival and how to let S3 transition data between storage tiers.
