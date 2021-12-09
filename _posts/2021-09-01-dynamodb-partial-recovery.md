@@ -5,6 +5,8 @@ description: "This article describes how you can recover broken items in DynamoD
 backgroundUrl: "https://images.unsplash.com/photo-1473621038790-b778b4750efe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
+> Update 01. December 2021: [AWS has released CloudWatch Evidently](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-cloudwatch-evidently-feature-experimentation-safer-launches/) which you can use for the read only mode. Evidently lets you enable features through a visual switch, and doesn't require you to change parameters.
+
 It’s not always a full table delete that requires you to recover data. You may also find yourself in a situation where a bug in an application falsely changed or deleted records in your table that you would like to restore. This article explains
 
 * how you can partially recover data,
