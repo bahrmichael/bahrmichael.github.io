@@ -9,15 +9,15 @@ Once a year AWS holds their re:invent conference where they announce new feature
 
 ## AWS Lambda Event Filters for DynamoDB Streams
 
-[Link to announcement](https://aws.amazon.com/about-aws/whats-new/2021/11/aws-lambda-event-filtering-amazon-sqs-dynamodb-kinesis-sources/)
+["AWS Lambda now supports event filtering for Amazon SQS, Amazon DynamoDB, and Amazon Kinesis as event sources"](https://aws.amazon.com/about-aws/whats-new/2021/11/aws-lambda-event-filtering-amazon-sqs-dynamodb-kinesis-sources/)
 
-Gone are the days when we have 10 Lambda functions attached to a stream, with every one having filtering logic in the beginning.
+Gone are the days when we have 10 Lambda functions attached to a stream, with each one having filtering logic in the beginning.
 
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Anyone played with or put into prod the new filtered <a href="https://twitter.com/hashtag/DynamoDB?src=hash&amp;ref_src=twsrc%5Etfw">#DynamoDB</a> stream in Lambda Functions? If you have not created one, it’s really nice! <a href="https://twitter.com/hashtag/serverless?src=hash&amp;ref_src=twsrc%5Etfw">#serverless</a> <a href="https://twitter.com/hashtag/NoSQL?src=hash&amp;ref_src=twsrc%5Etfw">#NoSQL</a><br><br>Navigate to your Lambda Function -&gt; Configuration -&gt; Triggers and add new. Then go to additional settings.</p>&mdash; Kirk Kirkconnell (@NoSQLKnowHow) <a href="https://twitter.com/NoSQLKnowHow/status/1466099088764518402?ref_src=twsrc%5Etfw">December 1, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
 
-We may now specify filters that Lambda applies before calling our function.
+We may now specify filters that Lambda applies BEFORE calling our function.
 
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Confirmed with <a href="https://twitter.com/ajaynairthinks?ref_src=twsrc%5Etfw">@ajaynairthinks</a> that the Lambda Service eats the polling cost, so you only get charged for what makes it into your function.</p>&mdash; Jeremy Daly (@jeremy_daly) <a href="https://twitter.com/jeremy_daly/status/1466171465733062657?ref_src=twsrc%5Etfw">December 1, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -36,20 +36,20 @@ That article now needs an update, as there are more options, and more automation
 
 ### S3 - Glacier
 
-[Link to announcement](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-s3-glacier-instant-retrieval-storage-class/)
+["Announcing the new Amazon S3 Glacier Instant Retrieval storage class - the lowest cost archive storage with milliseconds retrieval"](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-s3-glacier-instant-retrieval-storage-class/)
 
-There's a new S3 Glacier Instant Retrieval with "the same throughput and milliseconds access as the S3 Standard".
-If you don't need fast retrieval and stick with the previous tier, you pay 10% less for storage.
+There's the new S3 Glacier Instant Retrieval with "the same throughput and milliseconds access as the S3 Standard".
+If you stick with the previous S3 Glacier tier, you pay 10% less for storage.
 The previous tier is now called S3 Glacier Flexible Retrieval and offers "retrieval in minutes or free bulk retrievals in 5-12 hours".
 
 This is great if you have data like medical images or tax receipts. You rarely need to access them, but if so, you need them immediately.
 This is now possible with Glacier which has a far lower cost than the standard S3 tiers.
 
-S3 Glacier Deep Archive did not change and offers "data retrieval from 12-48 hours".
+S3 Glacier Deep Archive did not change with this announcement and continues to offer "data retrieval from 12-48 hours" at the lowest storage prices of S3.
 
 ### S3 - Intelligent Tiering
 
-[Link to announcement](https://aws.amazon.com/about-aws/whats-new/2021/11/s3-intelligent-tiering-archive-instant-access-tier/)
+["Announcing the new S3 Intelligent-Tiering Archive Instant Access tier - Automatically save up to 68% on storage costs"](https://aws.amazon.com/about-aws/whats-new/2021/11/s3-intelligent-tiering-archive-instant-access-tier/)
 
 If you don't know the access patterns for your S3 data, then the Intelligent Tiering comes in handy.
 Intelligent Tiering picks the best storage tier for your objects, and now also includes the archived tier.
@@ -59,12 +59,12 @@ This can lead to cost reduction for you, but keep in mind that you get charged f
 
 ### DynamoDB
 
+I heard you like not pay less. DynamoDB joins the party with the Infrequent Access table class.
+This is available for On-Demand capacity only.
+
 {% raw %}
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Well, looky there. AWS just cut costs by 60% for infrequently accessed data on <a href="https://twitter.com/dynamodb?ref_src=twsrc%5Etfw">@dynamodb</a>.<br><br>That&#39;s great news for <a href="https://twitter.com/totogi?ref_src=twsrc%5Etfw">@totogi</a> who&#39;s built their charging system on <a href="https://twitter.com/dynamodb?ref_src=twsrc%5Etfw">@dynamodb</a>! WOO HOO!<a href="https://twitter.com/hashtag/singletabledesign?src=hash&amp;ref_src=twsrc%5Etfw">#singletabledesign</a> <a href="https://twitter.com/hashtag/reinvent?src=hash&amp;ref_src=twsrc%5Etfw">#reinvent</a><a href="https://t.co/zb7EAcIKrJ">https://t.co/zb7EAcIKrJ</a></p>&mdash; Danielle Royston (@TelcoDR) <a href="https://twitter.com/TelcoDR/status/1466104180813139968?ref_src=twsrc%5Etfw">December 1, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endraw %}
-
-I heard you like not paying much for data that you don't use often. DynamoDB joins the party with a the Infrequent Access table class.
-This is available for On-Demand capacity only.
 
 By switching from the default class to the infrequent access class, you get the following price changes:
 
@@ -76,7 +76,7 @@ There seems to be no constraint to switching table classes, so you can flip it b
 
 ## Kinesis On-Demand
 
-[Link to announcement](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-kinesis-data-streams-on-demand/)
+["Announcing Amazon Kinesis Data Streams On-Demand"](https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-kinesis-data-streams-on-demand/)
 
 Kinesis has a new On-Demand mode where you're charged by the hour and for throughput. Gone are the days of having to manage shards.
 
