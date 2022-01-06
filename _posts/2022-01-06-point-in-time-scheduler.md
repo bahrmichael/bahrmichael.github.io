@@ -59,32 +59,32 @@ Once [signed in](https://app.point-in-time-scheduler.com) you can register an ap
 An application gives the scheduler information about where to send messages, and how to authorize itself.
 The authorization that you specify here is the one that your endpoint requires.
 
-![register your first application](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-1.png)
+![register your first application](https://bahr.dev/pictures/scheduler-register-1.png)
 
 In the first step choose the integration type REST. Then click on next.
 
 Currently, the scheduler only supports REST endpoints. SQS, EventBridge and SNS will be become available in the next weeks. Let me know what I should add first!
 
-![choose the integration type REST](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-2.png)
+![choose the integration type REST](https://bahr.dev/pictures/scheduler-register-2.png)
 
 In the next step enter the URL of the endpoint for receiving messages. If you have an API with an endpoint `https://example.com/callback`,
 that would be the URL you put in when registering an application.
 
-![enter the URL of the endpoint](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-3.png)
+![enter the URL of the endpoint](https://bahr.dev/pictures/scheduler-register-3.png)
 
 In the following step you specify the authentication as a header name and header value. You can use an `Authorization` header,
 an `x-api-key` header, or anything else.
 
-![specify the authentication](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-4.png)
+![specify the authentication](https://bahr.dev/pictures/scheduler-register-4.png)
 
 Give your app a name and description, something like "Test App" is enough to later remember what this was for. The
 description is optional.
 
-![Give your app a name and description](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-5.png)
+![Give your app a name and description](https://bahr.dev/pictures/scheduler-register-5.png)
 
 In the last step, you will see an Application ID and an API key. You will need those later to send messages to the scheduler. For this article lets assume we have the Application ID "123" and the API key "S3crEt!".
 
-![Generate api key](https://github.com/bahrmichael/scheduler-demo-rest/blob/main/docs/img/register-6.png)
+![Generate api key](https://bahr.dev/pictures/scheduler-register-6.png)
 
 ### Schedule a Message
 
