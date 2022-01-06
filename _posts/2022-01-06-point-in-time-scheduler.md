@@ -125,7 +125,9 @@ Below are some examples. Remember to use your own Application ID and API key.
 
 **curl**
 
+```
 curl -X POST -H "Authorization: Basic MTIzOlMzY3JFdCE=" -d '{"payload": "test", "sendAt": "2022-01-05T18:32:42.124Z"}' https://api.point-in-time-scheduler.com/message
+```
 
 **TypeScript with axios**
 
