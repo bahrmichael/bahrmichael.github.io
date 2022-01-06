@@ -31,7 +31,7 @@ There are some properties of existing AWS services that may help you:
 
 Didn't find a match or don't want to operate it yourself? Then this announcement is for you!
 
-**Today I'm proud to announce the public preview of the Point In Time Scheduler.**
+**Today I'm proud to announce the public preview of the [Point In Time Scheduler](https://point-in-time-scheduler.com).**
 
 ![Scheduler high level](https://bahr.dev/pictures/scheduler-high-level.png)
 
@@ -42,7 +42,7 @@ You can also reach me via [Twitter](https://twitter.com/bahrdev).
 
 ## Getting Started
 
-To start using the Point In Time Scheduler, head over to [https://app.point-in-time-scheduler.com](https://app.point-in-time-scheduler.com) and sign in with your GitHub account.
+To start using the Point In Time Scheduler, head over to [the dashboard](https://app.point-in-time-scheduler.com) and sign in with your GitHub account.
 
 There are four main steps:
 
