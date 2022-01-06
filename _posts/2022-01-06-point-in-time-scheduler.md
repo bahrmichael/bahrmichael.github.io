@@ -138,6 +138,31 @@ await axios.post(`https://api.point-in-time-scheduler.com/message`, {
 });
 ```
 
+**Python with requests**
+
+```python
+import json
+import requests
+from datetime import datetime
+
+message = {
+    "payload": "test",
+    "sendAt": datetime.now().isoformat()
+}
+
+headers = {
+    "Authorization": "Basic MTIzOlMzY3JFdCE="
+}
+
+response = requests.post(
+    'https://api.point-in-time-scheduler.com/message',
+    data=json.dumps(message),
+    headers=headers
+)
+
+print(response.status_code)
+```
+
 ### Receive the Message
 
 Open the logs of your endpoint and wait until the timestamp specified above passes.
