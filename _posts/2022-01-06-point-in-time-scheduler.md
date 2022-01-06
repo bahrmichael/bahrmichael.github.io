@@ -33,6 +33,8 @@ Didn't find a match or don't want to operate it yourself? Then this announcement
 
 **Today I'm proud to announce the public preview of the Point In Time Scheduler.**
 
+![Scheduler high level](https://bahr.dev/pictures/scheduler-high-level.png)
+
 With the Point In Time Scheduler developers can specify when and how their endpoint should be invoked. They can do so for any time into the future, be it minutes, weeks, or years. Messages come back with latency of no more than 5 seconds. You only pay for what you use, and don't have to waste engineering time operating a scheduler.
 
 For feedback, I invite you to use [ZipMessage](https://zipmessage.com/gwcyvrb1). You can send text, audio, video and share your screen.
