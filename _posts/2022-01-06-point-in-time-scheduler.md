@@ -134,7 +134,7 @@ curl -X POST -H "Authorization: Basic MTIzOlMzY3JFdCE=" -d '{"payload": "test", 
 ```typescript
 import axios from 'axios';
 
-await _axios.post(`https://api.point-in-time-scheduler.com/messages`, {
+await axios.post(`https://api.point-in-time-scheduler.com/messages`, {
     payload: 'test',
     sendAt: new Date().toISOString(),
   }, {
