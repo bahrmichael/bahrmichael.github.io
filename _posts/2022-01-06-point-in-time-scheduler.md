@@ -92,7 +92,7 @@ The scheduler has a REST API with which you can schedule messages:
 
 ```
 POST
-https://api.point-in-time-scheduler.com/message
+https://api.point-in-time-scheduler.com/messages
 
 Content-Type: application/json
 Authorization: Basic MTIzOlMzY3JFdCE=
@@ -126,7 +126,7 @@ Below are some examples. Remember to use your own Application ID and API key.
 **curl**
 
 ```
-curl -X POST -H "Authorization: Basic MTIzOlMzY3JFdCE=" -d '{"payload": "test", "sendAt": "2022-01-05T18:32:42.124Z"}' https://api.point-in-time-scheduler.com/message
+curl -X POST -H "Authorization: Basic MTIzOlMzY3JFdCE=" -d '{"payload": "test", "sendAt": "2022-01-05T18:32:42.124Z"}' https://api.point-in-time-scheduler.com/messages
 ```
 
 **TypeScript with axios**
@@ -134,7 +134,7 @@ curl -X POST -H "Authorization: Basic MTIzOlMzY3JFdCE=" -d '{"payload": "test", 
 ```typescript
 import axios from 'axios';
 
-await _axios.post(`https://api.point-in-time-scheduler.com/message`, {
+await _axios.post(`https://api.point-in-time-scheduler.com/messages`, {
     payload: 'test',
     sendAt: new Date().toISOString(),
   }, {
