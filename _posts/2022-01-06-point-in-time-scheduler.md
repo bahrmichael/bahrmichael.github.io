@@ -31,7 +31,7 @@ There are some properties of existing AWS services that may help you:
 
 Didn't find a match or don't want to operate it yourself? Then this announcement is for you!
 
-Today I'm proud to announce the public preview of the Point In Time Scheduler.
+**Today I'm proud to announce the public preview of the Point In Time Scheduler.**
 
 With the Point In Time Scheduler developers can specify when and how their endpoint should be invoked. They can do so for any time into the future, be it minutes, weeks, or years. Messages come back with latency of no more than 5 seconds. You only pay for what you use, and don't have to waste engineering time operating a scheduler.
 
@@ -59,13 +59,11 @@ Once [signed in](https://app.point-in-time-scheduler.com) you can register an ap
 An application gives the scheduler information about where to send messages, and how to authorize itself.
 The authorization that you specify here is the one that your endpoint requires.
 
-![register your first application](https://bahr.dev/pictures/scheduler-register-1.png)
-
 In the first step choose the integration type REST. Then click on next.
 
-Currently, the scheduler only supports REST endpoints. SQS, EventBridge and SNS will be become available in the next weeks. Let me know what I should add first!
-
 ![choose the integration type REST](https://bahr.dev/pictures/scheduler-register-2.png)
+
+Currently, the scheduler only supports REST endpoints. SQS, EventBridge and SNS will be become available in the next weeks. Let me know what I should add first!
 
 In the next step enter the URL of the endpoint for receiving messages. If you have an API with an endpoint `https://example.com/callback`,
 that would be the URL you put in when registering an application.
@@ -103,14 +101,14 @@ Authorization: Basic MTIzOlMzY3JFdCE=
 }
 ```
 
-To schedule a message, you need a string payload (max. 1 KB), a `sendAt` timestamp (ISO 8601), and an `Authorization` header.
+To schedule a message, you need a string `payload` (max. 1 KB), a `sendAt` timestamp (ISO 8601), and an `Authorization` header.
 
 The `payload` can for example be an ID that maps to a workload in your application. Please don't send sensitive data.
 
 The timestamp `sendAt` must be an ISO formatted string (ISO 8601). If you use Node.JS, you can use `new Date().toISOString()`.
 
 To build the `Authorization` header, we need three steps. First, take the app ID and the api key, and concatenate them with a colon `:`. For example `123` and `S3crEt!` become `123:S3crEt!`.
-Secondly, base64 encode the concatenated string. For example `123:S3crEt!` becomes `MTIzOlMzY3JFdCE=`.
+Then base64 encode the concatenated string. For example `123:S3crEt!` becomes `MTIzOlMzY3JFdCE=`.
 Finally, set the encoded value as a Basic Authorization header. In our example this would look like the following:
 
 ```
@@ -171,6 +169,10 @@ Once a message has failed, you can redrive it.
 You may abort messages up until the last moment. Please note that this is on a best effort basis, and messages may already be in flight
 if you abort it within the last seconds (REST) or minutes (SQS).
 
+The scheduler is currently located in AWS' us-east-1, and will soon be available in other AWS regions as well.
+In case of an outage, you may not be able to schedule new messages for a while.
+Already scheduled messages will keep the at-least-once delivery guarantee. They will arrive at your endpoint as things recover.
+
 ## Service Limits
 
 There are soft and hard limits. If you want to raise a soft limit, [please send a request](https://zipmessage.com/gwcyvrb1).
@@ -194,13 +196,6 @@ Please consider adding your own queuing mechanism (e.g. with SQS) if you expect 
 
 The public preview's purpose is to collect feedback, and get more data on usage and cost.
 You're not charged at the moment, but once the Point In Time Scheduler reaches general availability, there will be a usage based pricing.
-
-## Resilience
-
-The scheduler is currently located in AWS' us-east-1, and will soon be available in other AWS regions as well.
-
-In case of an outage, you may not be able to schedule new messages for a while.
-Already scheduled messages will keep the at-least-once delivery guarantee. They will arrive at your endpoint as things recover.
 
 ## Shouldn't cloud providers offer this serverless primitive?
 
