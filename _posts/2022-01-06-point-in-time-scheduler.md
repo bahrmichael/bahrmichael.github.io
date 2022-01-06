@@ -51,8 +51,10 @@ There are four main steps:
 3. Schedule a message
 4. Receive a message
 
-If you don't have an endpoint for callbacks yet, [there's a demo for you](https://github.com/bahrmichael/scheduler-demo-rest).
-It's built with the Serverless Framework and you can deploy within minutes, if you already have an AWS account.
+If you don't have an endpoint for callbacks yet, you can use [webhook.site](https://webhook.site/).
+
+There is also [a demo application for you](https://github.com/bahrmichael/scheduler-demo-rest) that sends and receives messages.
+The demo is built with the Serverless Framework and you can deploy within minutes, if you already have an AWS account.
 The demo has functions for sending and receiving messages, so you only have to deploy it, configure it, and wait for metrics to arrive in CloudWatch.
 
 ### Register an Application
