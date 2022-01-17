@@ -105,7 +105,7 @@ Authorization: Basic MTIzOlMzY3JFdCE=
 }
 ```
 
-To schedule a message, you need a string `payload` (max. 1 KB), a `sendAt` timestamp (ISO 8601), and an `Authorization` header.
+To schedule a message, you need a `payload` (max. 1 KB) which can be a string or an object, a `sendAt` timestamp (ISO 8601), and an `Authorization` header.
 
 The `payload` can for example be an ID that maps to a workload in your application. Please don't send sensitive data.
 
