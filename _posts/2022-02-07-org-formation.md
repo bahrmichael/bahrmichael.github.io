@@ -1,4 +1,9 @@
-# How to get started with OrgFormation
+---
+layout: post
+title: "How to get started with OrgFormation"
+description: "In this article we will set up OrgFormation with a CI/CD pipeline. It will help us with creating accounts, setting up billing alerts, and using AWS SSO to sign in to accounts."
+backgroundUrl: "https://images.unsplash.com/photo-1589320011103-48e428abcbae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
+---
 
 In a [recent article](https://www.lastweekinaws.com/blog/the-aws-service-i-hate-the-most/) Corey Quinn told us about the AWS service he hates the most: Isengard.
 This is because AWS is giving its engineers a great tool to manage accounts, but doesn't offer it to the rest of us.
