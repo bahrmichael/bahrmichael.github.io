@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to get started with OrgFormation"
-description: "In this article we will set up OrgFormation with a CI/CD pipeline. It will help us with creating accounts, setting up billing alerts, and using AWS SSO to sign in to accounts."
+description: "In this article we will set up OrgFormation with a CI/CD pipeline. It will help us with creating AWS accounts, setting up billing alerts, and using AWS SSO to sign in to accounts."
 backgroundUrl: "https://images.unsplash.com/photo-1589320011103-48e428abcbae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
