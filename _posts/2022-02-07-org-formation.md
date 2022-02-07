@@ -17,29 +17,35 @@ it may be hard to put the pieces together in a way that works. I want to build f
 Furthermore, I read that AWS Control Tower is not where it should be. I did not carefully read through the Control Tower features/documentation though.
 
 > AWS Control Tower is improving but it’s still painful, as well as not generally recommended for enterprises at large scale.
-- https://www.lastweekinaws.com/blog/the-aws-service-i-hate-the-most/
+
+- [Last week in AWS](https://www.lastweekinaws.com/blog/the-aws-service-i-hate-the-most/)
 
 > [AWS Control Tower] only has limited facilities when it comes to updating and maintaining these resources
-- https://github.com/org-formation/org-formation-cli
 
-That's when I stumbled upon AWS Organization Formation (OrgFormation) by Olaf Conijn.
+- [OrgFormation CLI](https://github.com/org-formation/org-formation-cli)
 
-## 1 Prerequisites
+That's when I stumbled upon [AWS Organization Formation (OrgFormation)](https://github.com/org-formation/org-formation-cli) by [Olaf Conijn](https://twitter.com/OConijn).
+
+## 1. Prerequisites
 
 This article assumes that you have some experience working with the AWS console and Git.
-You should know how to create IAM users and how to get the credentials into a profile on your local machine.
 
-## 2 What is OrgFormation?
+You should also know how to create IAM users and how to get the credentials into a profile on your local machine.
+
+## 2. What is OrgFormation?
 
 OrgFormation is a community driven Infrastructure as Code (IaC) tool for managing AWS Organizations.
 It's open source on [GitHub](https://github.com/org-formation/org-formation-cli) and available on [NPM](https://www.npmjs.com/package/aws-organization-formation).
 With IaC you reduce the friction that engineers experience when creating new accounts. You can also set up rules and guidelines for your whole AWS organization.
 
-OrgFormation has many features, like restricting unused regions and large EC2 instances, offering a nice login experience with AWS SSO, and managing service quotas via code.
+OrgFormation has many features, like [restricting unused regions](https://github.com/org-formation/org-formation-reference/blob/master/src/templates/010-scps/deny-unsupported-regions.yml)
+and [large EC2 instances](https://github.com/org-formation/org-formation-reference/blob/master/src/templates/010-scps/deny-large-ec2.yml),
+offering a [nice login experience with AWS SSO](https://github.com/org-formation/org-formation-reference/tree/master/src/templates/100-aws-sso),
+and [managing service quotas](https://github.com/org-formation/org-formation-reference/tree/master/src/templates/030-service-quotas) via code.
 
-In this article we will set up an OrgFormation pipeline. It will help us with creating accounts, setting up billing alerts, and using AWS SSO to sign in to accounts.
+In this article we will set up an OrgFormation CI/CD pipeline. It will help us with creating accounts, setting up billing alerts, and using AWS SSO to sign in to accounts.
 
-## 3 Why should you use OrgFormation?
+## 3. Why should you use OrgFormation?
 
 OrgFormation is a big deal because I can automate the setup. No more tedious manual steps where I might forget to do things correctly here and there.
 There are still some manual steps with AWS SSO, but nothing around account management.
@@ -53,7 +59,7 @@ Perfect to take a short walk, or have a coffee.
 You can install OrgFormation on your local machine and update your organization from there, but an even better option is to set up a pipeline.
 Everytime you push a change, the pipeline will apply changes in a consistent manner.
 
-## 4 Getting Started with the OrgFormation Pipeline
+## 4. Getting Started with the OrgFormation Pipeline
 
 CI/CD support is a hidden gem of OrgFormation that is only mentioned in a side note. It should be the main way you use OrgFormation!
 
@@ -80,14 +86,14 @@ If your account already has one, and maybe even some accounts in the organizatio
 There are some pitfalls around not being able to integrate existing accounts into the new organization, that I don't want to trouble you with.
 I don't think I fully understand them either. You can still try, but I suggest you take the easy route with an account that doesn't have an AWS organization yet.
 
-Quick side step: To speed things up later, go to the Cost Explorer and click on "Launch Cost Explorer".
-By the time we get to the Budget Alerts, the cost explorer may be ready for you.
+*Side note: To speed things up later, go to the Cost Explorer and click on "Launch Cost Explorer".
+By the time we get to the Budget Alerts, the cost explorer may be ready for you.*
 
 ### 4.3 Install the OrgFormation CLI on your local machine
 
 To initialize a pipeline we first need to install the OrgFormation CLI with NPM: `npm install -g aws-organization-formation`
 
-We will assume that you already have a management account that will own the organization.
+We will assume that you already have a management account that will own the organization. If possible, use a fresh account. That will remove a lot of problems with existing resources.
 
 Please [create an Administrator user in IAM](https://docs.aws.amazon.com/mediapackage/latest/ug/setting-up-create-iam-user.html)
 and attach the AdministratorAccess policy.
@@ -103,12 +109,12 @@ OrgFormation requires that you manually create an AWS Organization. To do so, go
 You'll get a verification mail that you need to confirm.
 
 After installing the OrgFormation CLI, run `org-formation init-pipeline --region <YOUR-REGION>` to create a CodeCommit repository and a CodePipeline.
-This command will use the default profile, or whatever profile you specify via AWS_PROFILE.
+This command will use the default profile, or whatever profile you specify via `AWS_PROFILE`.
 Once the command completes, you will see a new repository in CodeCommit and a new pipeline in CodePipeline.
 
 ![A repository in CodeCommit](https://bahr.dev/pictures/org-formation-repo.png)
 
-When you navigate to CodePipeline you will see that the pipeline has started with the initial commit. If you want to rerun a CodePipeline, you have to click on the "Release Change" button.
+When you navigate to CodePipeline you will see that the pipeline has started with the initial commit. If you want to rerun a CodePipeline, you have to select it and click on the "Release Change" button.
 
 ![A pipeline in CodePipeline](https://bahr.dev/pictures/org-formation-pipeline.png)
 
@@ -124,20 +130,21 @@ To clone from CodeCommit you need a repository URL that follows the format below
 
 When you clone with a given profile, that one will be used to push future changes.
 Start by [creating an IAM user](https://docs.aws.amazon.com/mediapackage/latest/ug/setting-up-create-iam-user.html) with
-the managed policy AWSCodeCommitPowerUser. You can later update this IAM user with a refined policy.
+the managed policy [AWSCodeCommitPowerUser](https://docs.aws.amazon.com/codecommit/latest/userguide/security-iam-awsmanpol.html).
+You can later update this IAM user with a refined policy.
 
 Let's call the IAM user `awsorg-codecommit`, and put its credentials in our `~/.aws/credentials` file.
 
-With the IAM role prepared, and our repository located in us-east-1, we can finally check out the code with the following command:
+With the IAM role prepared, and our repository located in `us-east-1`, we can finally check out the code with the following command:
 
 `git clone codecommit::us-east-1://awsorg-codecommit@organization-formation`
 
 Have a look at the code and familiarize yourself with the structure of the configuration. In the next step we will add a new account to the organization.
 
-## 5 Getting started with Managing Accounts through OrgFormation
+## 5. Getting started with Managing Accounts through OrgFormation
 
-Each account needs a unique e-mail address. Some webmail providers like gmail or hotmail allow you to add a + into your address.
-If your address is michael@gmail.com, mail to michael+1@gmail.com will also arrive in your inbox.
+AWS requires each account to have a unique e-mail address. Some webmail providers like gmail or hotmail allow you to add a + into your address.
+If your address is michael@gmail.com, then mail to michael+1@gmail.com will also arrive in your inbox.
 
 ### 5.1 Add your first account
 
@@ -158,7 +165,7 @@ Organization:
      RootEmail: michael+test-account-1@gmail.com
 ```
 
-Knowing that we'll do some trial and error, we'll also create organization units (OU) for active and suspended accounts.
+Knowing that we'll do some trial and error, we'll also create organizational units (OU) for active and suspended accounts.
 OUs allow us to group accounts, and apply common properties to all accounts in a unit.
 
 ```yaml
@@ -186,9 +193,9 @@ Organization:
      Accounts: []
 ```
 
-What's the `78G8F7G` about? Account alias must be globally unique, just like S3 buckets. That's why I'm adding some random characters which hopefully no one else used yet.
+What's the `78G8F7G` about? The account alias must be globally unique, just like S3 bucket names. That's why I'm adding some random characters which hopefully no one else uses yet.
 
-*Site note: At this stage you should be able to omit the account alias, and still get things to work. There are however parts of the OrgFormation ecosystem, which require the alias.
+*Side note: At this stage you should be able to omit the account alias, and still get things to work. There are however parts of the OrgFormation ecosystem, which require the alias.
 An example here is the `NoDefaultVpcRp` type, where it fails if the alias is missing.*
 
 Commit, push, and let the pipeline apply the changes. Once the pipeline has finished, go to AWS Organizations.
@@ -213,16 +220,14 @@ We are now going to create a folder `040-budgets` with a `_tasks.yml` and a `bud
 I've uploaded the [tasks](https://gist.github.com/bahrmichael/8e45d43b97c477fc74f9fca2ba7c8f46)
 and [budgets](https://gist.github.com/bahrmichael/e3ff88b2e31e3eb9f4c019d872983594) file for you on GitHub.
 
-You're free to pick any number other than `040`.
+You're free to pick any numeric prefix other than `040`.
 Have a look at the [OrgFormation reference templates](https://github.com/org-formation/org-formation-reference/tree/master/src/templates) to
 see what you might add in the future.
 
 There is a lot going on in the `budgets.yml` file. The gist of it is that you'll get a budget notification in one of the following three cases:
 
 - Actual spending is greater than 80% of the threshold.
-
 - Forecasted spending is 100% of the threshold.
-
 - Actual spending is greater than 100% of the threshold.
 
 Budget alerts only work with USD.
@@ -247,7 +252,7 @@ Budgets:
  Path: ./040-budgets/_tasks.yml
 ```
 
-Now the pipeline will execute the budget alerts task for all accounts with the tag `budget-alarm-threshold`. We will update our accounts in the next section.
+From now on the pipeline will execute the budget alerts task for all accounts with the tag `budget-alarm-threshold`. We will update our accounts in the next section.
 
 Commit, push, and let the pipeline run. It should not break anything because this new task doesn't apply anywhere yet.
 But it's better to find problems early, and your pipeline should only take 1-2 minutes at this point anyway.
@@ -257,11 +262,12 @@ But it's better to find problems early, and your pipeline should only take 1-2 m
 With OrgFormation you can specify tags as account properties.
 With the tags `budget-alarm-threshold` and `budget-alarm-threshold-email-recipient` we give OrgFormation the right information for the budget alerts task.
 
-Unfortunately the pipeline will fail when you apply a budget alert to an account.
+Unfortunately the pipeline will currently fail when you apply a budget alert to an account.
 Unless you did this before, you now need to go to the AWS console of the management account,
 and [launch the Cost Explorer](https://console.aws.amazon.com/cost-management/home).
-Then give it a bit of time. In my case it was ready after less than 1 hour.
-Until then, you may see a budget related error in the pipeline. Check out the troubleshooting section at the end of this article.
+It will take a bit of time for the Cost Explorer to be ready. In my case it was ready after less than 1 hour.
+Until then, you may see a budget related error in the pipeline. If you're impatient, just rerun it every 10 minutes, no matter what the Cost Explorer UI says.
+Check out the troubleshooting section at the end of this article.
 
 An empty account should not do much, so I'll go with a threshold 5 USD here.
 I will also use a dedicated email for billing alerts, so I can better separate them from the AWS marketing mails.
@@ -388,27 +394,27 @@ You can now follow the link to the user portal, and use the One-time password to
 Once you signed in you will see the following landing page. Here you can choose an account, and a role that's available you.
 You can then either sign in to the management console, or get programmatic credentials.
 
-![SSO landing page](https://bahr.dev/pictures/org-formation-sso-landing-page.png)
+![SSO landing page](https://bahr.dev/pictures/org-formation-sso-landing.png)
 
 Note how we don't see the management account here, because we don't have access to it. Following our setup only Administrators can access the management account.
 
-Congratulations to setting up your Organization, accounts with tasks, and SSO landing page!
+Congratulations to setting up your AWS organization, accounts with tasks, and the SSO landing page!
 
 Below you can find some troubleshooting for problems you may encounter along the way. There are also some resources for further reading.
 
-## 6 Raise Your Account Service Limit
+## 6. Raise Your Account Service Limit
 
 By default, you can have up to 10 accounts in your organization. Request a service limit increase early, so that you don't get stuck
 waiting multiple days for AWS support to take care of your request.
 
-## 7 Next Steps
+## 7. Next Steps
 
 There's a lot that OrgFormation can help you with. [Check out the templates of the OrgFormation reference repository!](https://github.com/org-formation/org-formation-reference/tree/master/src/templates)
 
 For example, you can [deny large EC2 instances](https://github.com/org-formation/org-formation-reference/blob/master/src/templates/010-scps/deny-large-ec2.yml),
 or [send a notification when a new account is created](https://github.com/org-formation/org-formation-reference/tree/master/src/templates/050-account-creation).
 
-## 8 Troubleshooting
+## 8. Troubleshooting
 
 > Cannot read property 'region' of undefined
 
@@ -441,7 +447,7 @@ Didn't have further problems from there.
 You have to delete the old organization first. Otherwise, the invite isn't visible in the invited account.
 [Contributed by Wojtek Gawroński](https://twitter.com/afronski/status/1489223345375694848).
 
-## 9 Resources
+## 9. Resources
 
 - [Managing AWS Organizations using the open source org-formation tool — Part 1](https://aws.amazon.com/blogs/opensource/managing-aws-organizations-using-the-open-source-org-formation-tool-part-1/)
 - [OrgFormation Slack](https://join.slack.com/t/org-formation/shared_invite/enQtOTA5NjM3Mzc4ODUwLTMxZjYxYzljZTE5YWUzODE2MTNmYjM5NTY5Nzc3MzljNjVlZGQ1ODEzZDgyMWVkMDg3Mzk1ZjQ1ZjM4MDhlOGM)
