@@ -26,6 +26,10 @@ Furthermore, I read that AWS Control Tower is not where it should be. I did not 
 
 That's when I stumbled upon [AWS Organization Formation (OrgFormation)](https://github.com/org-formation/org-formation-cli) by [Olaf Conijn](https://twitter.com/OConijn).
 
+{% raw %}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Understanding all the services and concepts needed to setup a secure <a href="https://twitter.com/hashtag/AWS?src=hash&amp;ref_src=twsrc%5Etfw">#AWS</a> landing zone can be hard. After chatting to <a href="https://twitter.com/theburningmonk?ref_src=twsrc%5Etfw">@theburningmonk</a> and following a great article by <a href="https://twitter.com/bahrdev?ref_src=twsrc%5Etfw">@bahrdev</a>, I decided to explore this using <a href="https://twitter.com/hashtag/orgformation?src=hash&amp;ref_src=twsrc%5Etfw">#orgformation</a>, an <a href="https://twitter.com/hashtag/opensource?src=hash&amp;ref_src=twsrc%5Etfw">#opensource</a> tool by <a href="https://twitter.com/OConijn?ref_src=twsrc%5Etfw">@OConijn</a></p>&mdash; Matt Lewis (@m_lewis) <a href="https://twitter.com/m_lewis/status/1506611336331026432?ref_src=twsrc%5Etfw">March 23, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endraw %}
+
 ## 1. Prerequisites
 
 This article assumes that you have some experience working with the AWS console and Git.
@@ -450,6 +454,7 @@ You have to delete the old organization first. Otherwise, the invite isn't visib
 ## 9. Resources
 
 - [Managing AWS Organizations using the open source org-formation tool — Part 1](https://aws.amazon.com/blogs/opensource/managing-aws-organizations-using-the-open-source-org-formation-tool-part-1/)
+- Series: [Setting up a multi-account AWS environment](https://dev.to/aws-heroes/setting-up-a-multi-account-aws-environment-1h67) and [Adding AWS SSO and controlling permissions](https://dev.to/aws-heroes/adding-aws-sso-and-controlling-permissions-56ga)
 - [OrgFormation Slack](https://join.slack.com/t/org-formation/shared_invite/enQtOTA5NjM3Mzc4ODUwLTMxZjYxYzljZTE5YWUzODE2MTNmYjM5NTY5Nzc3MzljNjVlZGQ1ODEzZDgyMWVkMDg3Mzk1ZjQ1ZjM4MDhlOGM)
 - [Off to a great start with AWS Organizations](https://github.com/org-formation/org-formation-cli/blob/master/docs/articles/aws-organizations.md)
 - [Hear about org-formation in Real-World Serverless podcast #5](https://open.spotify.com/episode/0VPwObFeQ68oImfqW3lIge?si=VNluO9ZaTc-p3cpps6IBQg)
