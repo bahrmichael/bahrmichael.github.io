@@ -315,7 +315,8 @@ const healthCheck = new CfnHealthCheck(this, `${region}HealthCheck`, {
 Starting from the first line of the snippet, we build a URL like `https://{restapi_id}.execute-api.{region}.amazonaws.com/{stage_name}/`.
 This URL directly targets the API Gateway instance of the region we deploy this stack to.
 Once we have the `executeApiDomainName`, we pass it to the `CfnHealthCheck` construct,
-which is an [L1 CDK construct that directly represents a CloudFormation resource](https://docs.aws.amazon.com/cdk/v2/guide/constructs.html#constructs_l1_using).
+which is an [L1 CDK construct that directly represents a CloudFormation resource](https://docs.aws.amazon.com/cdk/v2/guide/constructs.html#constructs_l1_using).\
+Since 2019 there's an [open issue](https://github.com/aws/aws-cdk/issues/4391) to make this available as an L2 construct.
 You can learn more about the health check on the [CloudFormation documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-healthcheck.html).
 
 The property `resourcePath` tells the health check which endpoint to use. If your health endpoint is different to `/health`, you can change it here.
@@ -378,7 +379,7 @@ a serverless application global with CDK. Don't worry if DNS doesn't work on the
 
 If you need help, then check out the [proof of concept on GitHub](https://github.com/bahrmichael/multi-region-active-active-cdk), or reach out to me [via Twitter](https://twitter.com/bahrdev).
 
-I'd like to give a thank you to my coworkers, and esp. [Rafal Wilinski](https://twitter.com/rafalwilinski) with whom I worked on this recently.
+I'd like to give a thank you to my coworkers, and especially [Rafal Wilinski](https://twitter.com/rafalwilinski) with whom I worked on this recently.
 It took us less than one week of engineering effort to turn one of our applications global.
 
 Did you find something that can be optimized, or know guides for other services like AppSync? Please let me know!
@@ -390,3 +391,5 @@ Did you find something that can be optimized, or know guides for other services 
 - [CloudFormation for Route53](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/AWS_Route53.html)
 - [Summary of the AWS Service Event in the Northern Virginia (US-EAST-1) Region](https://aws.amazon.com/message/12721/)
 - [AWS CDK Tutorial for Beginners](https://bobbyhadz.com/blog/aws-cdk-tutorial-typescript)
+- [AWS CDK: Use Lambda with Application Load Balancer](https://sbstjn.com/blog/aws-cdk-lambda-loadbalancer-vpc-certificate/)
+- [CDK and Route 53 Failover](https://repost.aws/questions/QUfRU5dvaoQRC97y4F9A9UwA/cdk-and-route-53-failover)
