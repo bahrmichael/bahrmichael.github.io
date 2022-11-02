@@ -161,6 +161,6 @@ Below you can see the result for a Lambda function:
 
 In this article you've learned how to go from zero to a good default setup for a project with the Serverless Framework and TypeScript.
 
-Your project now is a bit more stable, secure, and easier to understand.
+Your project now is a bit more stable, secure, and easier to debug.
 
 You can see all the manual changes I did after creating the project [by looking at this diff](https://github.com/bahrmichael/trade-game-backend/compare/acebdbcaac7d51c33a3722a6c51512a5289ac90c...7cff198d19a2336b1e9cf93106ed6e0e3a70161b).
