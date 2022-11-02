@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Great Defaults for a Serverless Framework Project with TypeScript"
-description: "Learn how to go from zero to a good default setup for a project with Serverless Framework and TypeScript."
+description: "Learn how to improve the default template for a project with Serverless Framework and TypeScript."
 backgroundUrl: "https://images.unsplash.com/photo-1614624532983-4ce03382d63d?ixlib=rb-1.2.1&auto=format&q=80&fit=crop"
 ---
 
