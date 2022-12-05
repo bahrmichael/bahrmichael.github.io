@@ -135,7 +135,7 @@ Furthermore, we add a label for Mergify so that it can handle major upgrades dif
   "addLabels": [
     "major-upgrade"
   ]
-},
+}
 ```
 
 Finally, we use [`packageRules`](https://docs.renovatebot.com/configuration-options/#packagerules) to treat 0.x.x packages with upgrades of their minor version like major upgrades.
