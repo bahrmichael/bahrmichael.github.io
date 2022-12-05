@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Automatic Dependency Upgrades on GitHub"
-description: "Stop the tedious work! Learn how to automate your dependency upgrades on GitHub."
+description: "Automating dependency upgrades can lead to more efficient and effective code management! Learn how to automate your dependency upgrades on GitHub."
 backgroundUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-1.2.1&auto=format&q=80&fit=crop"
 ---
 
