@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to go multi-region with AWS Serverless and CDK"
-description: "Join me on a journey where we turn a serverless application global, with just about 100 lines of CDK code!"
+description: "Join me in deploying a serverless application to multiple regions, with just about 100 lines of CDK code!"
 backgroundUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&q=80"
 ---
 
@@ -226,7 +226,7 @@ Doing that through the console requires a lot of clicking, and that's why using 
 
 Speaking of CDK, let's turn the above into code.
 
-### 10.1: Add parameters for domain name and hosted zone
+### 10.1. Add parameters for domain name and hosted zone
 
 We started with an existing hosted zone for our domain. How do we tell CDK which hosted zone it should use?
 
@@ -252,7 +252,7 @@ export class GlobalApplication extends Stack {
         // ...
 ```
 
-### 10.2: Each region's API Gateway gets their own certificate
+### 10.2. Each region's API Gateway gets their own certificate
 
 To connect API Gateways with our domain in Route53, we need custom domain names.
 For that we first create certificates, then connect them with API Gateway and finally add an API Gateway Domain Name.
@@ -290,7 +290,7 @@ Note that this only tells API Gateway how to handle requests that reach it, but 
 
 With the last line and the function call `addBasePathMapping` we connect our REST API with the domain name.
 
-### 10.3: Create a health check
+### 10.3. Create a health check
 
 Route53 has to know which APIs are healthy, and how fast they respond. To provide that information, we create a HealthCheck.
 
@@ -326,7 +326,7 @@ By default, the health check runs every 30 seconds. You can add the parameter `r
 
 The health check can only check to the regions `us-east-1 | us-west-1 | us-west-2 | eu-west-1 | ap-southeast-1 | ap-southeast-2 | ap-northeast-1 | sa-east-1` ([Source](https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html)).
 
-### 10.4: Add an ARecord to Route53
+### 10.4. Add an ARecord to Route53
 
 This is the last step, before our application is multi-region capable. We now add an ARecord that uses the health check to
 help Route53 figure out what region it should route to:
@@ -349,7 +349,7 @@ There's no high level support in CDK for attaching health checks, so we use the 
 Then we configure the region and pass a reference to the health check that shall be used for this ARecord.
 You can read more about the record set on the [CloudFormation documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html).
 
-### 10.5: Deploy and verify
+### 10.5. Deploy and verify
 
 Now deploy the application, and check the newly created record in Route53. If all went well, it should look similar to the picture below:
 

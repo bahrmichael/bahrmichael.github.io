@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "How To Paginate DynamoDB Tables With The AWS SDK For JavaScript"
+title: "How To Paginate DynamoDB Tables With The AWS SDK For TypeScript on NodeJS"
 backgroundUrl: "https://images.unsplash.com/photo-1564669722947-c89159202d19?auto=format&fit=crop&q=80"
-description: "This article has DynamoDB pagination examples in TypeScript that you can copy and paste."
+description: "This article has DynamoDB pagination examples in TypeScript on NodeJS that you can copy and paste."
 ---
 
 [Python library boto3 has built in paginators](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#paginators),

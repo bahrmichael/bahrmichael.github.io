@@ -5,6 +5,8 @@ backgroundUrl: "https://images.unsplash.com/photo-1421789497144-f50500b5fcf0?ixl
 frontPageCategory: scheduling
 ---
 
+> Update: In November 2022 AWS has released the EventBridge Scheduler. It does what I expect from a serverless scheduler, and has a free tier of 14 million invocations per month.
+
 ## Introduction
 
 This article describes a serverless approach to schedule AWS Lambda invocations through the usage of AWS DynamoDB TTL attributes and streams. At the time of writing there was no way to schedule an irregular point of time execution of a lambda execution (e.g. “run this function once in 2 days and 10 hours and then again in 4 days”) without [abusing CloudWatch crons](https://forums.aws.amazon.com/thread.jspa?messageID=902484) (see Alternatives for more info).

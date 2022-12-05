@@ -4,6 +4,8 @@ title: "Cost Analysis: Serverless scheduling of irregular invocations"
 backgroundUrl: "https://images.unsplash.com/photo-1513596846216-48ae70153834?ixlib=rb-1.2.1&auto=format&q=80&fit=crop"
 ---
 
+> Update: In November 2022 AWS has released the EventBridge Scheduler. It does what I expect from a serverless scheduler, and has a free tier of 14 million invocations per month.
+
 In the article [Serverless scheduling of irregular invocations](https://bahr.dev/2019/05/29/scheduling-ddb/) we used the TTL attribute of DynamoDB to schedule irregular lambda executions. This follow up article takes a look at the operational cost of that approach.
 
 ## Service Prices

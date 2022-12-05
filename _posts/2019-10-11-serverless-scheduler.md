@@ -6,6 +6,8 @@ backgroundUrl: "https://bahr.dev/pictures/serverless-scheduler-headline.png"
 frontPageCategory: scheduling
 ---
 
+> Update: In November 2022 AWS has released the EventBridge Scheduler. It does what I expect from a serverless scheduler, and has a free tier of 14 million invocations per month. Therefore, I'm deprecating this project.
+
 AWS offers many great services, but when it comes to ad hoc scheduling there is still potential. We use the term ad hoc scheduling for irregular point in time invocations, e.g. one in 32 hours and another one in 4 days.
 
 ![Comparison of regular and irregular invocations](https://bahr.dev/pictures/serverless-scheduler-1.png)

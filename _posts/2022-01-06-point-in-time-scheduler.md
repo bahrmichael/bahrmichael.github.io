@@ -5,6 +5,8 @@ description: "With the Point In Time Scheduler developers can specify when and h
 backgroundUrl: "https://images.unsplash.com/photo-1558469070-b0bb906830a2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
+> Update: In November 2022 AWS has released the EventBridge Scheduler. It does what I expect from a serverless scheduler, and has a free tier of 14 million invocations per month. Therefore, I'm deprecating this project.
+
 Back in 2019 we've seen a lot of articles covering mechanisms for serverless ad-hoc scheduling. It's clear that developers
 want to schedule events while benefiting from serverless principles like pay-per-usage, scaling to zero, and not having to run yet
 another cluster yourself.

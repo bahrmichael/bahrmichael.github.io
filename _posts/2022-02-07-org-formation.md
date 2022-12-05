@@ -5,6 +5,8 @@ description: "In this article we will set up OrgFormation with a CI/CD pipeline.
 backgroundUrl: "https://images.unsplash.com/photo-1589320011103-48e428abcbae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
+> Update: Since the release of this article, AWS released an [API to close accounts](https://docs.aws.amazon.com/organizations/latest/APIReference/API_CloseAccount.html).
+
 In a [recent article](https://www.lastweekinaws.com/blog/the-aws-service-i-hate-the-most/) Corey Quinn told us about the AWS service he hates the most: Isengard.
 This is because AWS is giving its engineers a great tool to manage accounts, but doesn't offer it to the rest of us.
 As a former AWS engineer turned customer again, I miss the simplicity and the features it gave me.

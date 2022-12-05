@@ -30,6 +30,8 @@ Now let's jump into the changes to the generated template.
 
 ## Upgrade to Node16
 
+> Update: AWS has released Node18 runtime for Lambda since this article was published.
+
 [Since May 2022 Lambda supports Node16](https://aws.amazon.com/about-aws/whats-new/2022/05/aws-lambda-adds-support-node-js-16).
 Thus, we're going to update the project to use Node16.
 

@@ -5,6 +5,8 @@ description: "I tried out the new Serverless Cloud offering, and share my experi
 backgroundUrl: "https://images.unsplash.com/photo-1516382799247-87df95d790b7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&q=80"
 ---
 
+> Update: [Serverless Cloud has been spun off into Ampt](https://www.serverless.com/blog/serverless-cloud-spins-off-as-ampt). Since you will have to migrate applications over, I suggest you wait until [getampt.com](https://getampt.com/) is in general availability.
+
 [Serverless Cloud](https://www.serverless.com/cloud) is a new initiative by [Serverless Inc.](https://www.serverless.com/)
 and [entered public preview on October 13th, 2021](https://twitter.com/goserverless/status/1448313005331005443).
 Many of us already know and love the serverless framework. The Serverless Cloud project makes serverless development even easier and faster.
