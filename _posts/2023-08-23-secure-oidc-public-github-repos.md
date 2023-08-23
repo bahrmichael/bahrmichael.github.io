@@ -99,7 +99,7 @@ The IAM policies described in the articles I linked above can be further restric
 
 Before adding the condition the IAM policy may look like this example:
 
-```json5
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -128,7 +128,7 @@ To allow only our own GitHub user (in my case `bahrmichael`) we can add the cond
 
 The result may look like below:
 
-```json5
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -177,4 +177,4 @@ If you have any questions or feedback, please raise them in [GitHub](https://git
 - [Understanding the OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token)
 - [Keeping your GitHub Actions and workflows secure Part 1: Preventing pwn requests](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/)
 - [Keeping your GitHub Actions and workflows secure Part 2: Untrusted input](https://securitylab.github.com/research/github-actions-untrusted-input/)
-- [https://securitylab.github.com/research/github-actions-building-blocks/](https://securitylab.github.com/research/github-actions-building-blocks/)
+- [Keeping your GitHub Actions and workflows secure Part 3: How to trust your building blocks](https://securitylab.github.com/research/github-actions-building-blocks/)
