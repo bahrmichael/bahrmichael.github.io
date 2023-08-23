@@ -142,7 +142,7 @@ The result may look like below:
                 "StringEquals": {
                     "token.actions.githubusercontent.com:sub": "repo:bahrmichael/my-repo:*",
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-                    "token.actions.githubusercontent.com:actor": "bahrmichael" // This line changed
+                    "token.actions.githubusercontent.com:actor": "bahrmichael"
                 }
             }
         }
