@@ -68,7 +68,8 @@ There are two options to fix the problem:
 2. The second one uses IAM Conditions to add a restriction from AWS' side.
 
 Personally I find the second one more secure, because it uses a mechanism that is unlikely to change (i.e. needs a
-breaking API change) and is well documented.
+breaking API change) and is well documented. It should also work well with automatic dependency upgrades, because
+you can include bots.
 However only the first seems to be viable for organizations, since I haven't found a way to get the
 GitHub organization name of a user (not the repo!) from the OIDC token.
 
@@ -83,14 +84,14 @@ What are outside collaborators?
 The easier option is to click a radio box in your repository's settings. Go to https://github.com/<YOUR_USERNAME>/<YOUR_REPOSITORY>/settings/actions,
 click on "Require approval for all outside collaborators", and click on Save.
 
-![Downloader Pattern](https://bahr.dev/pictures/deny-outside-collaborators.png)
+![A GitHub setting showing options on whom to allow triggering workflows](https://bahr.dev/pictures/deny-outside-collaborators.png)
 
 People who are not part of your GitHub organization should now not be able to start workflows with pull requests in your repository,
 and therefore not be able to assume credentials for your AWS account via OIDC. I guess that for repositories without a GitHub organization,
 this means that only you can start workflows. I have not found further documentation on what outside collaborators mean without
 organizations. I assume that for personal repositories this means if you invited a collaborator or not. If you know more please let me know.
 
-Unfortunately that means you can't invite bots to your repository for [automating your dependency upgrades](https://bahr.dev/2022/12/05/automatic-depdency-upgrades/).
+Unfortunately that means you can't invite bots to your repository to [automate your dependency upgrades](https://bahr.dev/2022/12/05/automatic-depdency-upgrades/).
 Bots end with a `[bot]` in their username. `dependabot-bot` is not the bot user `dependabot[bot]`. Be careful with those!
 
 ## Option 2: Harden the IAM Policy
@@ -111,7 +112,7 @@ Before adding the condition the IAM policy may look like this example:
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
               "StringEquals": {
-                "token.actions.githubusercontent.com:sub": "repo:bahrmichael/my-repo:*",
+                "token.actions.githubusercontent.com:sub": "repo:bahrmichael/my-repo:main",
                 "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
               }
             }
@@ -124,7 +125,11 @@ You can see that there already are some conditions, e.g. for the repository.
 
 The [OIDC token contains amongst others a field for the `actor`](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token). That's our GitHub user.
 
-To allow only our own GitHub user (in my case `bahrmichael`) we can add the condition `"token.actions.githubusercontent.com:actor": "bahrmichael"`.
+To allow only certain GitHub users (in my case `bahrmichael` and some `bots`) we can modify the conditions.
+
+1. Replace the `sub` reference with a `StringLike` pointing to your repo with a trailing wildcard, to allow the role to be assumed from all branches, not just `main`.
+2. Introduce a `ForAllValies:StringEquals` to allow `StringEquals` conditions to also contain arrays.
+3. Add an `actor` reference with an array of allowed values. Here you can list contributors and bots that are allowed to contribute to your repository.
 
 The result may look like below:
 
@@ -139,10 +144,12 @@ The result may look like below:
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
-                "StringEquals": {
-                    "token.actions.githubusercontent.com:sub": "repo:bahrmichael/my-repo:*",
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:bahrmichael/my-repo:*"
+                },
+                "ForAllValues:StringEquals": {
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-                    "token.actions.githubusercontent.com:actor": "bahrmichael"
+                    "token.actions.githubusercontent.com:actor": ["bahrmichael", "renovate[bot]", "dependabot[bot]", "mergify[bot]"]
                 }
             }
         }
@@ -150,7 +157,8 @@ The result may look like below:
 }
 ```
 
-This approach allows anyone to create a pull request, but only pull requests created by `bahrmichael` are allowed to assume the role and therefore deploy into the AWS account.
+This approach allows anyone to create a pull request, but only pull requests created by `bahrmichael` or the `bots` are
+allowed to assume the role and therefore deploy into the AWS account.
 
 ## Test It
 
@@ -161,9 +169,6 @@ and watch it fail. This is a clear indication that your safeguard is working!
 ## Conclusion
 
 Congratulations! By following this guide you blocked anonymous malicious actors from accessing your AWS account via OIDC roles in GHA workflows.
-
-Unfortunately this safeguard doesn't work well with dependency automation. If you want to keep your dependencies up to date,
-then a private repository may be a better approach.
 
 If you have any questions or feedback, please raise them in [GitHub](https://github.com/bahrmichael/bahrmichael.github.io).
 
