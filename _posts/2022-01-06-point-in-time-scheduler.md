@@ -95,7 +95,7 @@ The scheduler has a REST API with which you can schedule messages:
 
 ```
 POST
-https://<api-endpoint>/message
+https://<api-endpoint>/messages
 
 Content-Type: application/json
 Authorization: Basic MTIzOlMzY3JFdCE=
@@ -131,7 +131,7 @@ Below are some examples. Remember to use your own Application ID and API key.
 ```typescript
 import axios from 'axios';
 
-await axios.post(`https://<api-endpoint>/message`, {
+await axios.post(`https://<api-endpoint>/messages`, {
     payload: 'test',
     sendAt: new Date().toISOString(),
   }, {
@@ -158,7 +158,7 @@ headers = {
 }
 
 response = requests.post(
-    'https://<api-endpoint>/message',
+    'https://<api-endpoint>/messages',
     data=json.dumps(message),
     headers=headers
 )
