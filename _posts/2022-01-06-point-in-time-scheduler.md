@@ -33,18 +33,17 @@ There are some properties of existing AWS services that may help you:
 
 Didn't find a match or don't want to operate it yourself? Then this announcement is for you!
 
-**Today I'm proud to announce the public preview of the [Point In Time Scheduler](https://point-in-time-scheduler.com).**
+**Today I'm proud to announce the public preview of the Point In Time Scheduler.**
 
 ![Scheduler high level](https://bahr.dev/pictures/scheduler-high-level.png)
 
 With the Point In Time Scheduler developers can specify when and how their endpoint should be invoked. They can do so for any time into the future, be it minutes, weeks, or years. Messages come back with latency of no more than 5 seconds. You only pay for what you use, and don't have to waste engineering time operating a scheduler.
 
-For feedback, I invite you to use [ZipMessage](https://zipmessage.com/gwcyvrb1). You can send text, audio, video and share your screen.
-You can also reach me via [Twitter](https://twitter.com/bahrdev).
+For feedback, you can reach me via [Twitter](https://twitter.com/bahrdev).
 
 ## Getting Started
 
-To start using the Point In Time Scheduler, head over to [the dashboard](https://app.point-in-time-scheduler.com) and sign in with your GitHub account.
+To start using the Point In Time Scheduler, head over to the dashboard and sign in.
 
 There are four main steps:
 
@@ -61,7 +60,7 @@ The demo has functions for sending and receiving messages, so you only have to d
 
 ### Register an Application
 
-Once [signed in](https://app.point-in-time-scheduler.com) you can register an application.
+Once signed in you can register an application.
 An application gives the scheduler information about where to send messages, and how to authorize itself.
 The authorization that you specify here is the one that your endpoint requires.
 
@@ -96,7 +95,7 @@ The scheduler has a REST API with which you can schedule messages:
 
 ```
 POST
-https://api.point-in-time-scheduler.com/message
+https://<api-endpoint>/message
 
 Content-Type: application/json
 Authorization: Basic MTIzOlMzY3JFdCE=
@@ -132,7 +131,7 @@ Below are some examples. Remember to use your own Application ID and API key.
 ```typescript
 import axios from 'axios';
 
-await axios.post(`https://api.point-in-time-scheduler.com/message`, {
+await axios.post(`https://<api-endpoint>/message`, {
     payload: 'test',
     sendAt: new Date().toISOString(),
   }, {
@@ -159,7 +158,7 @@ headers = {
 }
 
 response = requests.post(
-    'https://api.point-in-time-scheduler.com/message',
+    'https://<api-endpoint>/message',
     data=json.dumps(message),
     headers=headers
 )
@@ -174,7 +173,7 @@ Within a few seconds of the timestamp the message should arrive at your endpoint
 Received your message? Congratulations! It's that simple!
 
 If the message doesn't arrive, please make sure your endpoint is publicly accessible, and that you specified the right authorization parameters.
-Feel free to [reach out to me](https://zipmessage.com/gwcyvrb1) to debug issues as well.
+Feel free to reach out to me to debug issues as well.
 
 In the dashboard of the scheduler you can also navigate to the application, and then view its messages.
 It will tell you if a message is pending, successful, or has failed.
@@ -200,19 +199,19 @@ Already scheduled messages will keep the at-least-once delivery guarantee. They 
 
 ## Service Limits
 
-There are soft and hard limits. If you want to raise a soft limit, [please send a request](https://zipmessage.com/gwcyvrb1).
-If you think a hard limit is too limiting, [please share your thoughts](https://zipmessage.com/gwcyvrb1)!
+There are soft and hard limits. If you want to raise a soft limit, please send a request.
+If you think a hard limit is too limiting, please share your thoughts!
 
 ### Soft Limits
 
-Each account can register up to 10 applications. This is a soft limit and [can be raised](https://zipmessage.com/gwcyvrb1).
+Each account can register up to 10 applications. This is a soft limit and can be raised.
 
 The scheduler API has a default throttling limit of 100 messages per second, and a quota 10,000 messages per day.
-This is a soft limit and [can be raised](https://zipmessage.com/gwcyvrb1).
+This is a soft limit and can be raised.
 
 ### Hard Limits
 
-Each payload must be no more than 1 KB large. This is currently a hard limit, but may be changed based on [your feedback](https://zipmessage.com/gwcyvrb1).
+Each payload must be no more than 1 KB large. This is currently a hard limit, but may be changed based on your feedback.
 
 Your API must finish the request within 2 seconds. The scheduler will not wait longer, and mark the message as failed.
 Please consider adding your own queuing mechanism (e.g. with SQS) if you expect tasks to take longer.
@@ -229,6 +228,6 @@ Until then, I'll try my best to help you with this offering.
 
 ## Share your feedback!
 
-Please share your feedback on [Twitter](https://twitter.com/bahrdev) or use [ZipMessage to start a conversation](https://zipmessage.com/gwcyvrb1).
+Please share your feedback on [Twitter](https://twitter.com/bahrdev).
 
 I'm looking forward to hearing from you!
